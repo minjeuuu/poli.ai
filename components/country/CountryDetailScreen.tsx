@@ -3,7 +3,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { 
     Globe, MessageCircle, Flag, Map as MapIcon, Users, Crown, Vote, Gavel, Coins, Truck, 
     Shield, History, Brain, Image as ImageIcon, BookOpen, Layers, GraduationCap,
-    Leaf, Cpu, Music, Plane, Palette, Heart
+    Leaf, Cpu, Music, Plane, Palette, Heart, Newspaper, Building2
 } from 'lucide-react';
 import { fetchCountryDeepDive } from '../../services/countryService';
 import { CountryDeepDive, CountryMapData, DetailedTimelineEvent } from '../../types';
@@ -40,6 +40,14 @@ import { CultureProfile } from './culture/CultureProfile';
 import { HealthProfile } from './health/HealthProfile';
 import { EducationProfile } from './education/EducationProfile';
 import { WorldBankWidget } from './economy/WorldBankWidget';
+import { RestCountriesWidget } from './external/RestCountriesWidget';
+import { OpenStreetMapWidget } from './external/OpenStreetMapWidget';
+import { OpenMeteoWidget } from '../external/OpenMeteoWidget';
+import { GDELTWidget } from '../external/GDELTWidget';
+import { ArtInstituteChicagoWidget } from '../external/ArtInstituteChicagoWidget';
+import { DOAJWidget } from '../external/DOAJWidget';
+import { SemanticScholarWidget } from '../external/SemanticScholarWidget';
+import { LibraryOfCongressWidget } from '../external/LibraryOfCongressWidget';
 
 interface CountryDetailScreenProps {
   countryName: string;
@@ -109,7 +117,7 @@ const CountryDetailScreen: React.FC<CountryDetailScreenProps> = ({ countryName, 
 
   if (loading) return (
       <div className="fixed inset-0 top-16 z-[60] bg-academic-bg dark:bg-stone-950 flex items-center justify-center">
-          <LoadingScreen message={`Reconstructing ${countryName} via Titan Omega v16...`} />
+          <LoadingScreen message={`Reconstructing ${countryName} via Poli Archive V1...`} />
       </div>
   );
 
@@ -323,7 +331,25 @@ const CountryDetailScreen: React.FC<CountryDetailScreenProps> = ({ countryName, 
                        </div>
                    </div>
                    <TradePartners data={data.economy} onNavigate={onNavigate} />
-                   <WorldBankWidget countryName={countryName} />
+                   <div className="mt-8">
+                       <RestCountriesWidget countryName={countryName} />
+                       <WorldBankWidget countryName={countryName} />
+                   </div>
+              </SectionWrapper>
+
+              {/* LOCAION (NEW) */}
+              <SectionWrapper id="geography" title="Geography & Mapping" icon={Building2} isVisible={true}>
+                   <OpenStreetMapWidget countryName={countryName} />
+                   <OpenMeteoWidget locationName={data.capital || countryName} />
+              </SectionWrapper>
+
+              {/* EXTERNAL NEWS & RESOURCES */}
+              <SectionWrapper id="news" title="Extended Monitor & Archives" icon={Newspaper} isVisible={true}>
+                   <GDELTWidget queryText={countryName} />
+                   <LibraryOfCongressWidget queryText={countryName} />
+                   <SemanticScholarWidget queryText={countryName} />
+                   <DOAJWidget queryText={countryName} />
+                   <ArtInstituteChicagoWidget queryText={countryName} />
               </SectionWrapper>
 
               {/* TECHNOLOGY (NEW) */}

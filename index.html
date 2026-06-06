@@ -4,7 +4,12 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <meta name="theme-color" content="#ffffff" />
     <title>POLI - Political Science Foundation</title>
+    <link rel="icon" href="/icon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/icon.svg" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Merriweather:ital,wght@0,300;0,400;0,700;1,300;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -63,6 +68,44 @@
             will-change: transform, opacity;
             backface-visibility: hidden;
         }
+
+        /* User Preference overrides */
+        .debug-grid * {
+            outline: 1px solid rgba(255, 0, 0, 0.1);
+        }
+
+        .reduce-motion * {
+            transition-duration: 0s !important;
+            animation-duration: 0s !important;
+        }
+
+        .typography-sans * { font-family: 'Inter', sans-serif !important; }
+        .typography-mono * { font-family: 'JetBrains Mono', monospace !important; }
+        .typography-system * { font-family: system-ui, -apple-system, sans-serif !important; }
+        .typography-serif * { font-family: 'Merriweather', serif !important; }
+
+        /* User Preference: Border Radius */
+        :root[data-radius="None"] * { border-radius: 0px !important; }
+        :root[data-radius="Small"] * { border-radius: 2px !important; }
+        /* Medium is default */
+        :root[data-radius="Large"] * { border-radius: 12px !important; }
+        :root[data-radius="Full"] * { border-radius: 9999px !important; }
+
+        /* User Preference: Density */
+        :root[data-density="Compact"] .p-6 { padding: 1rem !important; }
+        :root[data-density="Compact"] .gap-4 { gap: 0.5rem !important; }
+        :root[data-density="Compact"] .py-4 { padding-top: 0.5rem !important; padding-bottom: 0.5rem !important; }
+        :root[data-density="Spacious"] .p-6 { padding: 2.5rem !important; }
+        :root[data-density="Spacious"] .gap-4 { gap: 1.5rem !important; }
+        /* User Preference: Blur Effects */
+        :root[data-blur="false"] {
+             --tw-backdrop-blur: blur(0px) !important;
+        }
+
+        /* User Preference: Reader Width */
+        :root[data-reader-width="Narrow"] .max-w-4xl { max-width: 600px !important; }
+        :root[data-reader-width="Wide"] .max-w-4xl { max-width: 1200px !important; }
+        :root[data-reader-width="Full"] .max-w-4xl { max-width: 100% !important; }
     </style>
   <script type="importmap">
 {
@@ -85,5 +128,16 @@
     <div id="root"></div>
     <script type="module" src="./index.tsx"></script>
   <script type="module" src="/index.tsx"></script>
+  <script type="text/javascript">
+    function googleTranslateElementInit() {
+      new google.translate.TranslateElement({pageLanguage: 'en', autoDisplay: false}, 'google_translate_element');
+    }
+  </script>
+  <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+  <div id="google_translate_element" style="display:none;"></div>
+  <style>
+      .skiptranslate { display: none !important; }
+      body { top: 0px !important; }
+  </style>
 </body>
 </html>

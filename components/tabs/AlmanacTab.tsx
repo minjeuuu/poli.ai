@@ -73,20 +73,20 @@ const AlmanacTab: React.FC<AlmanacTabProps> = ({ onNavigate }) => {
     <div className="h-full flex flex-col bg-academic-bg dark:bg-stone-950 overflow-hidden animate-in fade-in">
         
         {/* HEADER */}
-        <div className="flex-none p-6 border-b border-academic-line dark:border-stone-800 bg-white dark:bg-stone-900 shadow-sm sticky top-0 z-20">
-            <div className="flex justify-between items-center mb-6">
+        <div className="flex-none p-4 sm:p-6 border-b border-academic-line dark:border-stone-800 bg-white dark:bg-stone-900 shadow-sm relative z-20">
+            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-4 sm:mb-6">
                 <div className="flex items-center gap-3">
-                    <div className="p-2 bg-rose-500 text-white rounded-lg shadow-md">
-                        <Calendar className="w-6 h-6" />
+                    <div className="p-2 bg-rose-500 text-white rounded-lg shadow-md hidden sm:block">
+                        <Calendar className="w-5 h-5 sm:w-6 sm:h-6" />
                     </div>
                     <div>
-                        <h1 className="text-2xl font-serif font-bold text-academic-text dark:text-stone-100">Political Almanac</h1>
-                        <p className="text-xs font-mono text-stone-500 uppercase tracking-widest">The Living Record</p>
+                        <h1 className="text-xl sm:text-2xl font-serif font-bold text-academic-text dark:text-stone-100">Political Almanac</h1>
+                        <p className="text-[10px] sm:text-xs font-mono text-stone-500 uppercase tracking-widest">The Living Record</p>
                     </div>
                 </div>
-                <div className="flex bg-stone-100 dark:bg-stone-800 p-1 rounded-lg">
-                    <button onClick={() => setActiveView('Day')} className={`px-4 py-1.5 text-xs font-bold uppercase rounded-md transition-colors ${activeView === 'Day' ? 'bg-white dark:bg-stone-700 shadow-sm text-academic-accent dark:text-indigo-400' : 'text-stone-400'}`}>Day View</button>
-                    <button onClick={() => setActiveView('Calendar')} className={`px-4 py-1.5 text-xs font-bold uppercase rounded-md transition-colors ${activeView === 'Calendar' ? 'bg-white dark:bg-stone-700 shadow-sm text-academic-accent dark:text-indigo-400' : 'text-stone-400'}`}>Upcoming</button>
+                <div className="flex bg-stone-100 dark:bg-stone-800 p-1 rounded-lg self-start sm:self-auto">
+                    <button onClick={() => setActiveView('Day')} className={`px-3 sm:px-4 py-1.5 text-[10px] sm:text-xs font-bold uppercase rounded-md transition-colors ${activeView === 'Day' ? 'bg-white dark:bg-stone-700 shadow-sm text-academic-accent dark:text-indigo-400' : 'text-stone-400'}`}>Day View</button>
+                    <button onClick={() => setActiveView('Calendar')} className={`px-3 sm:px-4 py-1.5 text-[10px] sm:text-xs font-bold uppercase rounded-md transition-colors ${activeView === 'Calendar' ? 'bg-white dark:bg-stone-700 shadow-sm text-academic-accent dark:text-indigo-400' : 'text-stone-400'}`}>Upcoming</button>
                 </div>
             </div>
 

@@ -1,3 +1,4 @@
+import { ImageWithFallback } from '../atoms/ImageWithFallback';
 
 import React, { useState, useMemo, useRef, useEffect } from 'react';
 import { SocialPost, Comment } from '../../types';
@@ -324,7 +325,7 @@ const SocialTab: React.FC<SocialTabProps> = ({ onNavigate, user }) => {
                 ></iframe>
              ) : (
                 <>
-                    <img 
+                    <ImageWithFallback 
                         src={`https://img.youtube.com/vi/${post.videoUrl}/hqdefault.jpg`} 
                         alt="Video Thumbnail" 
                         className="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:opacity-60 transition-opacity"

@@ -176,16 +176,16 @@ const PersonsTab: React.FC<PersonsTabProps> = ({ onNavigate, onAddToCompare, onT
          )}
 
          {/* 2. NAVIGATION BAR */}
-         <div className="sticky top-0 z-20 bg-academic-paper dark:bg-stone-900 border-b border-academic-line dark:border-stone-800 p-4 shadow-sm transition-colors flex-none">
-              <div className="flex items-center justify-between gap-4">
-                  <div className="flex items-center gap-4 flex-1">
+         <div className="relative md:sticky md:top-0 z-20 bg-academic-paper dark:bg-stone-900 border-b border-academic-line dark:border-stone-800 p-3 sm:p-4 shadow-sm transition-colors flex-none">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
+                  <div className="flex items-center gap-2 sm:gap-4 flex-1">
                        {navStack.length > 0 && (
-                          <button onClick={goBack} className="p-2 -ml-2 rounded-full hover:bg-stone-100 dark:hover:bg-stone-800 text-stone-500 dark:text-stone-400 transition-colors">
-                              <ArrowLeft className="w-5 h-5" />
+                          <button onClick={goBack} className="p-1 sm:p-2 -ml-1 sm:-ml-2 rounded-full hover:bg-stone-100 dark:hover:bg-stone-800 text-stone-500 dark:text-stone-400 transition-colors">
+                              <ArrowLeft className="w-4 h-4 sm:w-5 sm:h-5" />
                           </button>
                        )}
                        <div>
-                           <h1 className="font-serif font-bold text-lg text-academic-text dark:text-stone-100 leading-tight line-clamp-1">{currentTitle}</h1>
+                           <h1 className="font-serif font-bold text-base sm:text-lg text-academic-text dark:text-stone-100 leading-tight line-clamp-1">{currentTitle}</h1>
                            {navStack.length > 0 && (
                                <div className="flex items-center gap-1 text-[9px] uppercase tracking-wider text-stone-400 dark:text-stone-500">
                                    <button onClick={resetNav} className="hover:text-academic-accent dark:hover:text-indigo-400">Root</button>
@@ -196,20 +196,22 @@ const PersonsTab: React.FC<PersonsTabProps> = ({ onNavigate, onAddToCompare, onT
                        </div>
                   </div>
 
-                  <div className="relative group w-48 md:w-64">
-                      <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-stone-400 dark:text-stone-500 group-focus-within:text-academic-accent dark:group-focus-within:text-indigo-400 transition-colors" />
-                      <input 
-                          type="text" 
-                          placeholder="Filter..."
-                          className="w-full pl-10 pr-4 py-2 bg-stone-50 dark:bg-stone-800 border border-stone-200 dark:border-stone-700 rounded-full text-sm font-serif focus:border-academic-accent dark:focus:border-indigo-500 outline-none w-32 focus:w-48 transition-all text-academic-text dark:text-stone-200 placeholder-stone-400"
-                          value={searchQuery}
-                          onChange={(e) => setSearchQuery(e.target.value)}
-                      />
-                  </div>
-                  
-                  <div className="flex bg-stone-100 dark:bg-stone-900 rounded-lg p-1 border border-stone-200 dark:border-stone-800 flex-shrink-0">
-                      <button onClick={() => setViewMode('grid')} className={`p-1.5 rounded-md transition-all ${viewMode === 'grid' ? 'bg-white dark:bg-stone-800 shadow-sm text-academic-accent dark:text-white' : 'text-stone-400'}`}><LayoutGrid className="w-4 h-4" /></button>
-                      <button onClick={() => setViewMode('list')} className={`p-1.5 rounded-md transition-all ${viewMode === 'list' ? 'bg-white dark:bg-stone-800 shadow-sm text-academic-accent dark:text-white' : 'text-stone-400'}`}><List className="w-4 h-4" /></button>
+                  <div className="flex items-center justify-between sm:justify-end gap-3 sm:gap-4">
+                      <div className="relative group w-full sm:w-48 md:w-64">
+                          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-stone-400 dark:text-stone-500 group-focus-within:text-academic-accent dark:group-focus-within:text-indigo-400 transition-colors" />
+                          <input 
+                              type="text" 
+                              placeholder="Filter..."
+                              className="w-full pl-9 sm:pl-10 pr-2 sm:pr-4 py-1.5 sm:py-2 bg-stone-50 dark:bg-stone-800 border border-stone-200 dark:border-stone-700 rounded-full text-xs sm:text-sm font-serif focus:border-academic-accent dark:focus:border-indigo-500 outline-none sm:w-32 focus:sm:w-48 transition-all text-academic-text dark:text-stone-200 placeholder-stone-400"
+                              value={searchQuery}
+                              onChange={(e) => setSearchQuery(e.target.value)}
+                          />
+                      </div>
+                      
+                      <div className="flex bg-stone-100 dark:bg-stone-900 rounded-lg p-1 border border-stone-200 dark:border-stone-800 flex-shrink-0">
+                          <button onClick={() => setViewMode('grid')} className={`p-1.5 rounded-md transition-all ${viewMode === 'grid' ? 'bg-white dark:bg-stone-800 shadow-sm text-academic-accent dark:text-white' : 'text-stone-400'}`}><LayoutGrid className="w-3.5 h-3.5 sm:w-4 sm:h-4" /></button>
+                          <button onClick={() => setViewMode('list')} className={`p-1.5 rounded-md transition-all ${viewMode === 'list' ? 'bg-white dark:bg-stone-800 shadow-sm text-academic-accent dark:text-white' : 'text-stone-400'}`}><List className="w-3.5 h-3.5 sm:w-4 sm:h-4" /></button>
+                      </div>
                   </div>
               </div>
          </div>
@@ -230,8 +232,8 @@ const PersonsTab: React.FC<PersonsTabProps> = ({ onNavigate, onAddToCompare, onT
                             <div className="space-y-12">
                                 {sortedKeys.map(letter => (
                                     <div key={letter} ref={el => { sectionRefs.current[letter] = el; }} className="scroll-mt-40">
-                                        <div className="sticky top-0 z-10 py-3 border-b border-stone-200 dark:border-stone-800 mb-6 bg-academic-bg/95 dark:bg-stone-950/95 backdrop-blur-sm flex items-center">
-                                            <span className="text-3xl font-serif font-bold text-academic-gold">{letter}</span>
+                                        <div className="sticky top-0 z-10 py-2 sm:py-3 border-b border-stone-200 dark:border-stone-800 mb-4 sm:mb-6 bg-academic-bg/95 dark:bg-stone-950/95 backdrop-blur-sm flex items-center">
+                                            <span className="text-xl sm:text-3xl font-serif font-bold text-academic-gold">{letter}</span>
                                         </div>
                                         <div className={`
                                             ${viewMode === 'grid' ? 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6' : 'flex flex-col gap-2'}

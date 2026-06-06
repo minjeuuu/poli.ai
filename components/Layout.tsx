@@ -10,9 +10,10 @@ interface LayoutProps {
   onTabChange: (tab: MainTab) => void;
   onNavigate: (type: string, payload: any) => void;
   themeMode?: SpecialTheme;
+  userPrefs?: any;
 }
 
-const Layout: React.FC<LayoutProps> = ({ children, activeTab, onTabChange, onNavigate, themeMode = 'Default' }) => {
+const Layout: React.FC<LayoutProps> = ({ children, activeTab, onTabChange, onNavigate, themeMode = 'Default', userPrefs }) => {
   const [isDark, setIsDark] = useState(false);
 
   // --- CONTEXTUAL THEME ENGINE ---
@@ -74,7 +75,67 @@ const Layout: React.FC<LayoutProps> = ({ children, activeTab, onTabChange, onNav
     if (accentMap[themeMode]) root.style.setProperty('--color-accent', accentMap[themeMode]);
     else root.style.removeProperty('--color-accent');
 
-  }, [isDark, themeMode]);
+    // Apply User Preferences safely
+    if (userPrefs) {
+         if (userPrefs.fontSize) root.style.fontSize = `${userPrefs.fontSize}px`;
+         else root.style.fontSize = '16px';
+
+         if (userPrefs.highContrast) root.classList.add('contrast-125');
+         else root.classList.remove('contrast-125');
+
+         if (userPrefs.reduceMotion) {
+             root.style.setProperty('--reduce-motion-duration', '0s');
+             root.classList.add('reduce-motion');
+         } else {
+             root.style.removeProperty('--reduce-motion-duration');
+             root.classList.remove('reduce-motion');
+         }
+         
+         if (userPrefs.showGridLines) root.classList.add('debug-grid');
+         else root.classList.remove('debug-grid');
+
+         root.classList.remove('typography-sans', 'typography-mono', 'typography-system', 'typography-serif');
+         if (userPrefs.typography) {
+             if (userPrefs.typography === 'Sans-Serif') root.classList.add('typography-sans');
+             else if (userPrefs.typography === 'Monospace') root.classList.add('typography-mono');
+             else if (userPrefs.typography === 'System') root.classList.add('typography-system');
+             else root.classList.add('typography-serif');
+         }
+
+         root.setAttribute('data-radius', userPrefs.borderRadius || 'Medium');
+         root.setAttribute('data-density', userPrefs.density || 'Comfortable');
+         root.setAttribute('data-blur', userPrefs.blurEffects !== false ? 'true' : 'false');
+         root.setAttribute('data-reader-width', userPrefs.readerWidth || 'Standard');
+
+         if (userPrefs.fontSize && userPrefs.fontSize !== 16) {
+             root.style.fontSize = `${userPrefs.fontSize}px`;
+         } else {
+             root.style.fontSize = '16px';
+         }
+
+         import('../services/common').then(({ setAppLanguage }) => {
+             if (userPrefs.language) {
+                 setAppLanguage(userPrefs.language);
+                 
+                 // Trigger Google Translate
+                 setTimeout(() => {
+                     const langMap: any = {
+                         'English': 'en', 'Spanish': 'es', 'French': 'fr', 'German': 'de', 'Chinese': 'zh-CN', 'Japanese': 'ja', 'Hindi': 'hi', 'Arabic': 'ar'
+                     };
+                     const targetLang = langMap[userPrefs.language] || 'en';
+                     const selectField = document.querySelector(".goog-te-combo") as HTMLSelectElement;
+                     if (selectField) {
+                         if (selectField.value !== targetLang) {
+                             selectField.value = targetLang;
+                             selectField.dispatchEvent(new Event('change'));
+                         }
+                     }
+                 }, 500);
+             }
+         });
+    }
+
+  }, [isDark, themeMode, userPrefs]);
 
   const toggleTheme = () => {
     setIsDark(!isDark);
@@ -108,7 +169,7 @@ const Layout: React.FC<LayoutProps> = ({ children, activeTab, onTabChange, onNav
           ${['War', 'Steampunk', 'Volcanic', 'Coffee'].includes(themeMode) ? 'bg-stone-900 border-red-900' : 
             ['Tech', 'Matrix', 'Cyberpunk', 'Neon'].includes(themeMode) ? 'bg-slate-950 border-cyan-900' : 
             'bg-white dark:bg-stone-900 border-stone-200 dark:border-stone-800'}`}>
-        <div className="flex justify-around items-center h-16 px-2 w-full max-w-md mx-auto sm:max-w-none sm:justify-center sm:gap-8">
+        <div className={`flex justify-around items-center ${userPrefs?.compactSidebar ? 'h-12' : 'h-16'} px-2 w-full max-w-md mx-auto sm:max-w-none sm:justify-center sm:gap-8 transition-spacing`}>
           {navItems.map((item) => {
             const isActive = activeTab === item.id;
             let activeColorClass = 'text-academic-accent dark:text-indigo-400';
@@ -128,10 +189,10 @@ const Layout: React.FC<LayoutProps> = ({ children, activeTab, onTabChange, onNav
                   ${isActive ? activeColorClass : 'text-stone-400 dark:text-stone-500 hover:text-stone-600 dark:hover:text-stone-300'}
                 `}
               >
-                <div className={`p-1.5 rounded-xl transition-all duration-300 mb-1 ${isActive ? `${activeBgClass} translate-y-[-2px]` : 'group-hover:bg-stone-50 dark:group-hover:bg-stone-800'}`}>
-                  <item.icon className={`w-6 h-6 ${isActive ? 'stroke-[2.5px]' : 'stroke-[2px]'}`} />
+                <div className={`p-1.5 rounded-xl transition-all duration-300 ${userPrefs?.compactSidebar ? 'mb-0.5' : 'mb-1'} ${isActive ? `${activeBgClass} translate-y-[-2px]` : 'group-hover:bg-stone-50 dark:group-hover:bg-stone-800'}`}>
+                  <item.icon className={`${userPrefs?.compactSidebar ? 'w-4 h-4' : 'w-6 h-6'} ${isActive ? 'stroke-[2.5px]' : 'stroke-[2px]'}`} />
                 </div>
-                <span className="text-[10px] font-bold uppercase tracking-widest opacity-80 mt-0.5">{item.label}</span>
+                <span className={`${userPrefs?.compactSidebar ? 'text-[8px]' : 'text-[10px]'} font-bold uppercase tracking-widest opacity-80 mt-0.5`}>{item.label}</span>
               </button>
             );
           })}

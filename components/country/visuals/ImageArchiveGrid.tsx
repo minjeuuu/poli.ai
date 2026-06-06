@@ -1,22 +1,7 @@
+import { ImageWithFallback } from '../../atoms/ImageWithFallback';
 
 import React, { useState } from 'react';
 import { CountryImageArchive } from '../../../types';
-
-const ImageWithFallback = ({ src, alt, className }: { src: string, alt: string, className: string }) => {
-    const [imgSrc, setImgSrc] = useState(src);
-    const [errored, setErrored] = useState(false);
-
-    const handleError = () => {
-        if (!errored) {
-            setErrored(true);
-            // Use a consistent seed based on alt text to get the same image for the same item
-            const seed = alt.replace(/\s+/g, '-').toLowerCase();
-            setImgSrc(`https://picsum.photos/seed/${seed}/400/400`);
-        }
-    };
-
-    return <img src={imgSrc} alt={alt} className={className} onError={handleError} referrerPolicy="no-referrer" />;
-};
 
 export const ImageArchiveGrid: React.FC<{ images: CountryImageArchive[] }> = ({ images }) => {
     if (!images || images.length === 0) return <div className="p-12 text-center border-2 border-dashed border-stone-200 dark:border-stone-800 rounded-xl text-stone-400">No archival images available.</div>;

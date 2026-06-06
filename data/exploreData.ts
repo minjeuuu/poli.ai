@@ -831,8 +831,6 @@ export const EXPLORE_HIERARCHY: Record<string, { category: string; icon?: string
         { name: "Earth Federation (Gundam)", type: "Org" },
         { name: "Principality of Zeon (Gundam)", type: "Org" },
         { name: "Holy Britannian Empire (Code Geass)", type: "Org" },
-        { name: "Marleyan Government (Attack on Titan)", type: "Org" },
-        { name: "Eldian Empire (Attack on Titan)", type: "Org" },
         { name: "World Government (One Piece)", type: "Org" },
         { name: "Gotei 13 (Bleach)", type: "Org" },
         { name: "Hidden Leaf Village Council (Naruto)", type: "Org" },

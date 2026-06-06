@@ -1,3 +1,4 @@
+import { ImageWithFallback } from './atoms/ImageWithFallback';
 
 import React, { useEffect, useState, useRef } from 'react';
 import { ArrowLeft, Calendar, MapPin, Users, FileText, CheckCircle, Activity, Globe, Scale, Bookmark, Download, Swords, Cloud, UserMinus, History, Clock, Image as ImageIcon, Search } from 'lucide-react';
@@ -5,6 +6,14 @@ import { EventDetail } from '../types';
 import { fetchEventDetail } from '../services/eventService';
 import LoadingScreen from './LoadingScreen';
 import PersonDetailScreen from './PersonDetailScreen';
+import { WikidataWidget } from './external/WikidataWidget';
+import { GDELTWidget } from './external/GDELTWidget';
+import { RedditWidget } from './external/RedditWidget';
+import { CrossrefWidget } from './external/CrossrefWidget';
+import { OpenLibraryWidget } from './external/OpenLibraryWidget';
+import { DOAJWidget } from './external/DOAJWidget';
+import { SemanticScholarWidget } from './external/SemanticScholarWidget';
+import { LibraryOfCongressWidget } from './external/LibraryOfCongressWidget';
 import { playSFX } from '../services/soundService';
 
 interface EventDetailScreenProps {
@@ -99,10 +108,12 @@ const EventDetailScreen: React.FC<EventDetailScreenProps> = ({ eventName, onClos
       <div className="flex-1 overflow-y-auto scroll-smooth pb-32 bg-stone-50 dark:bg-black">
           <div className="max-w-4xl mx-auto p-6 md:p-10 space-y-12">
             
+            <WikidataWidget queryText={data.title || eventName} />
+
             {/* HERO VISUAL */}
             <div className="relative aspect-video w-full rounded-2xl overflow-hidden shadow-2xl border border-stone-200 dark:border-stone-800 group bg-stone-200 dark:bg-stone-900">
                  {data.imageUrl ? (
-                     <img src={data.imageUrl} alt={data.title || eventName} className="w-full h-full object-cover" />
+                     <ImageWithFallback src={data.imageUrl} alt={data.title || eventName} className="w-full h-full object-cover" />
                  ) : (
                      <div className="w-full h-full flex flex-col items-center justify-center text-stone-400">
                          <History className="w-20 h-20 mb-4 opacity-50" />
@@ -207,6 +218,16 @@ const EventDetailScreen: React.FC<EventDetailScreenProps> = ({ eventName, onClos
                      <h3 className="text-xs font-bold uppercase tracking-widest text-academic-gold mb-4 flex items-center gap-2"><Globe className="w-4 h-4" /> Historical Legacy</h3>
                      <p className="font-serif text-lg leading-relaxed opacity-90">{data.significance}</p>
                 </div>
+            </div>
+
+            <div className="mt-12 space-y-8">
+                <GDELTWidget queryText={data.title || eventName} />
+                <RedditWidget queryText={data.title || eventName} />
+                <LibraryOfCongressWidget queryText={data.title || eventName} />
+                <SemanticScholarWidget queryText={data.title || eventName} />
+                <CrossrefWidget queryText={data.title || eventName} />
+                <DOAJWidget queryText={data.title || eventName} />
+                <OpenLibraryWidget queryText={data.title || eventName} />
             </div>
 
           </div>

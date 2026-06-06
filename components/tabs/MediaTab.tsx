@@ -1,3 +1,4 @@
+import { ImageWithFallback } from '../atoms/ImageWithFallback';
 
 import React, { useState } from 'react';
 import { MEDIA_DATA } from '../../data/homeData';
@@ -50,7 +51,7 @@ const MediaTab: React.FC = () => {
               >
                   <div className="w-32 h-20 bg-stone-200 dark:bg-stone-800 flex items-center justify-center text-stone-400 group-hover:text-academic-accent transition-colors relative overflow-hidden rounded-lg border border-stone-200 dark:border-stone-700">
                       {/* Thumbnail Placeholder using YouTube's high quality thumb */}
-                      <img 
+                      <ImageWithFallback 
                         src={`https://img.youtube.com/vi/${(item as any).videoId}/mqdefault.jpg`} 
                         alt="Thumbnail" 
                         className="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity"

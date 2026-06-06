@@ -12,6 +12,15 @@ import ReaderView from './ReaderView';
 import QuizView from './QuizView';
 import FlashcardView from './FlashcardView';
 import { IconRenderer } from './IconMap';
+import { WikidataWidget } from './external/WikidataWidget';
+import { OpenLibraryWidget } from './external/OpenLibraryWidget';
+import { ArXivWidget } from './external/ArXivWidget';
+import { RedditWidget } from './external/RedditWidget';
+import { DOAJWidget } from './external/DOAJWidget';
+import { SemanticScholarWidget } from './external/SemanticScholarWidget';
+import { ArtInstituteChicagoWidget } from './external/ArtInstituteChicagoWidget';
+import { TVMazeWidget } from './external/TVMazeWidget';
+import jsPDF from 'jspdf';
 import { playSFX } from '../services/soundService';
 
 interface IdeologyDetailScreenProps {
@@ -79,9 +88,47 @@ const IdeologyDetailScreen: React.FC<IdeologyDetailScreenProps> = ({ ideologyNam
     sectionRefs.current[id]?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
-  const handlePrint = () => {
-    playSFX('click');
-    window.print();
+  const handleDownloadDossier = async () => {
+      playSFX('click');
+      if (!data) return;
+      try {
+          const doc = new jsPDF();
+          let y = 20;
+          doc.setFontSize(10);
+          doc.setTextColor(150, 150, 150);
+          doc.text("POLI ACADEMIC DOSSIER", 20, y);
+          y += 10;
+          doc.setFontSize(24);
+          doc.setTextColor(40, 40, 40);
+          const safeName = data.name || "Unknown Ideology";
+          doc.text(safeName, 20, y);
+          y += 15;
+          doc.setFontSize(12);
+          doc.setTextColor(80, 80, 80);
+          const descLines = doc.splitTextToSize(data.description || "", 170);
+          doc.text(descLines, 20, y);
+          y += descLines.length * 7 + 10;
+          
+          doc.setFontSize(16);
+          doc.setTextColor(0, 0, 0);
+          doc.text("Core Tenets", 20, y);
+          y += 10;
+          doc.setFontSize(11);
+          doc.setTextColor(60, 60, 60);
+          data.coreTenets?.forEach((tenet, i) => {
+              const textLines = doc.splitTextToSize(`${i+1}. ${tenet}`, 170);
+              doc.text(textLines, 20, y);
+              y += textLines.length * 6 + 4;
+              if (y > 270) {
+                  doc.addPage();
+                  y = 20;
+              }
+          });
+          
+          doc.save(`${safeName.replace(/\s+/g, '_')}_Dossier.pdf`);
+      } catch (err) {
+          console.error("PDF generation failed:", err);
+      }
   };
 
   const renderProse = (text: string) => {
@@ -113,7 +160,7 @@ const IdeologyDetailScreen: React.FC<IdeologyDetailScreenProps> = ({ ideologyNam
              </div>
          </div>
          <div className="flex items-center gap-2">
-             <button onClick={handlePrint} className="p-2 rounded-full hover:bg-stone-100 dark:hover:bg-stone-800 text-stone-400 hover:text-academic-accent dark:hover:text-indigo-400 transition-colors" title="Print Dossier"><Printer className="w-4 h-4" /></button>
+             <button onClick={handleDownloadDossier} className="p-2 rounded-full hover:bg-stone-100 dark:hover:bg-stone-800 text-stone-400 hover:text-academic-accent dark:hover:text-indigo-400 transition-colors" title="Download Dossier"><Download className="w-4 h-4" /></button>
              <button onClick={onToggleSave} className={`p-2 rounded-full transition-colors ${isSaved ? 'text-academic-gold bg-stone-50 dark:bg-stone-800' : 'text-stone-400 hover:text-academic-accent hover:bg-stone-100 dark:hover:bg-stone-800'}`}><Bookmark className={`w-4 h-4 ${isSaved ? 'fill-current' : ''}`} /></button>
          </div>
       </div>
@@ -133,6 +180,8 @@ const IdeologyDetailScreen: React.FC<IdeologyDetailScreenProps> = ({ ideologyNam
 
       <div className="flex-1 overflow-y-auto scroll-smooth pb-32 bg-stone-50/30 dark:bg-black/20">
           <div className="max-w-4xl mx-auto p-6 md:p-10 space-y-12">
+
+          <WikidataWidget queryText={data.name} />
           
           {/* 1. OVERVIEW */}
           <div id="overview" ref={el => { sectionRefs.current['overview'] = el; }} className="bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-2xl p-8 shadow-sm">
@@ -300,6 +349,15 @@ const IdeologyDetailScreen: React.FC<IdeologyDetailScreenProps> = ({ ideologyNam
                         </div>
                     </div>
                 </div>
+            </div>
+            
+            <div className="mt-12 space-y-8">
+                <RedditWidget queryText={`${data.name} politics`} />
+                <SemanticScholarWidget queryText={data.name} />
+                <DOAJWidget queryText={data.name} />
+                <ArXivWidget queryText={data.name} />
+                <OpenLibraryWidget queryText={data.name} />
+                <ArtInstituteChicagoWidget queryText={data.name} />
             </div>
 
           </div>

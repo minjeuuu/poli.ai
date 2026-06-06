@@ -54,6 +54,76 @@ app.post('/api/upload', upload.single('file'), (req, res) => {
     res.json({ url: fileUrl, filename: req.file.originalname, type: req.file.mimetype });
 });
 
+import RSSParser from 'rss-parser';
+
+app.get('/api/news', async (req, res) => {
+    try {
+        const parser = new RSSParser({
+            customFields: {
+                item: ['media:content', 'media:group']
+            },
+            headers: {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+            }
+        });
+        const urls = [
+            'http://feeds.bbci.co.uk/news/world/rss.xml',
+            'http://feeds.bbci.co.uk/news/politics/rss.xml',
+            'https://www.aljazeera.com/xml/rss/all.xml',
+            'https://rss.nytimes.com/services/xml/rss/nyt/World.xml',
+            'https://rss.nytimes.com/services/xml/rss/nyt/Politics.xml',
+            'https://www.theguardian.com/world/rss',
+            'https://www.theguardian.com/politics/rss',
+            'https://feeds.npr.org/1004/rss.xml',
+            'https://feeds.npr.org/1012/rss.xml',
+            'https://moxie.foxnews.com/google-publisher/politics.xml',
+            'https://moxie.foxnews.com/google-publisher/world.xml',
+            'https://www.scmp.com/rss/91/feed',
+            'https://www.france24.com/en/rss',
+            'https://thehill.com/homenews/feed/',
+            'https://allafrica.com/tools/headlines/rdf/latest/headlines.rdf',
+            'https://www.euractiv.com/feed/',
+            'https://www.politico.eu/feed/',
+            'https://www.thehindu.com/news/international/feeder/default.rss',
+            'https://www.smh.com.au/rss/world.xml',
+            'https://rss.dw.com/rdf/rss-en-world',
+            'https://www.rt.com/rss/',
+            'https://foreignpolicy.com/feed/',
+            'https://www.cfr.org/rss/publication/1',
+            'https://www.chathamhouse.org/rss/articles',
+            'https://www.amnesty.org/en/rss/',
+            'https://www.spiegel.de/international/index.rss',
+            'https://www.japantimes.co.jp/feed/'
+        ];
+        
+        let allItems: any[] = [];
+        const results = await Promise.allSettled(urls.map(async (url) => {
+            const feed = await parser.parseURL(url);
+            return feed.items.map(item => ({
+                headline: item.title,
+                summary: item.contentSnippet || item.content || '',
+                source: feed.title || 'Global News',
+                date: item.pubDate ? new Date(item.pubDate).toISOString().split('T')[0] : new Date().toISOString().split('T')[0],
+                url: item.link
+            }));
+        }));
+        
+        for (const result of results) {
+            if (result.status === 'fulfilled') {
+                allItems = [...allItems, ...result.value];
+            }
+        }
+        
+        // Shuffle and take top 12
+        const shuffled = allItems.sort(() => 0.5 - Math.random());
+        const selected = shuffled.slice(0, 12);
+        
+        res.json(selected);
+    } catch(err: any) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
 app.get('/api/messages/:chatId', (req, res) => {
     const chatId = req.params.chatId;
     const chatMessages = messages.filter(m => m.chatId === chatId);
@@ -128,11 +198,19 @@ io.on('connection', (socket) => {
 
 // --- VITE MIDDLEWARE ---
 async function startServer() {
-    const vite = await createViteServer({
-        server: { middlewareMode: true },
-        appType: 'spa',
-    });
-    app.use(vite.middlewares);
+    if (process.env.NODE_ENV !== "production") {
+        const vite = await createViteServer({
+            server: { middlewareMode: true },
+            appType: 'spa',
+        });
+        app.use(vite.middlewares);
+    } else {
+        const distPath = path.join(process.cwd(), 'dist');
+        app.use(express.static(distPath));
+        app.get('*all', (req, res) => {
+            res.sendFile(path.join(distPath, 'index.html'));
+        });
+    }
 
     httpServer.listen(PORT, "0.0.0.0", () => {
         console.log(`Server running on http://localhost:${PORT}`);

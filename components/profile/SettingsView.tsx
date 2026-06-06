@@ -61,6 +61,33 @@ const Select = ({ value, options, onChange }: any) => (
 
 export const SettingsView: React.FC<SettingsViewProps> = ({ prefs, onUpdate }) => {
     const [activeSection, setActiveSection] = useState('appearance');
+    const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
+
+    React.useEffect(() => {
+        const handler = (e: any) => {
+            e.preventDefault();
+            setDeferredPrompt(e);
+        };
+        window.addEventListener('beforeinstallprompt', handler);
+        return () => window.removeEventListener('beforeinstallprompt', handler);
+    }, []);
+
+    const handleInstallApp = async () => {
+        if (deferredPrompt) {
+            deferredPrompt.prompt();
+            const { outcome } = await deferredPrompt.userChoice;
+            if (outcome === 'accepted') {
+                setDeferredPrompt(null);
+            }
+        } else {
+            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !(window as any).MSStream;
+            if (isIOS) {
+                alert('To install on iOS: tap the "Share" button at the bottom of Safari, then tap "Add to Home Screen".');
+            } else {
+                alert('App is either already installed, or your browser does not support automatic installation. Try using Chrome or Edge, or check your browser menu for "Install App".');
+            }
+        }
+    };
 
     const update = (key: keyof UserPreferences, val: any) => {
         playSFX('click');
@@ -103,6 +130,14 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ prefs, onUpdate }) =
         switch (activeSection) {
             case 'general': return (
                 <div className="space-y-2">
+                    <SettingRow label="Install Native App" desc="Install POLI to your home screen for an app-like experience on Mobile/Desktop.">
+                        <button 
+                            onClick={handleInstallApp}
+                            className={`px-4 py-2 font-bold uppercase tracking-widest text-xs rounded-lg transition-colors bg-stone-100 text-stone-600 dark:bg-stone-800 dark:text-stone-300 hover:bg-academic-accent hover:text-white`}
+                        >
+                            {deferredPrompt ? 'Install App' : 'How to Install'}
+                        </button>
+                    </SettingRow>
                     <SettingRow label="Primary Language" desc="Main interface language.">
                         <Select value={prefs.language} options={LANGUAGES} onChange={(v: string) => update('language', v)} />
                     </SettingRow>

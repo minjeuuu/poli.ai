@@ -57,22 +57,28 @@ export const NewsWidget: React.FC<NewsWidgetProps> = ({ news, onNavigate }) => {
 
                             <div className="pt-4 border-t border-stone-200/50 dark:border-stone-800 flex flex-wrap gap-2">
                                 <a 
-                                    href={`https://news.google.com/search?q=${encodeURIComponent(item.headline)}`} 
+                                    href={item.url || '#'} 
                                     target="_blank" 
                                     rel="noopener noreferrer" 
-                                    onClick={(e) => e.stopPropagation()}
+                                    onClick={(e) => {
+                                        if(!item.url || !item.url.startsWith('http')) e.preventDefault();
+                                        e.stopPropagation();
+                                    }}
                                     className="text-[10px] font-bold uppercase tracking-widest text-stone-500 hover:text-academic-gold dark:text-stone-400 dark:hover:text-white flex items-center gap-1 transition-colors"
                                 >
-                                    Search News <ExternalLink className="w-3 h-3" />
+                                    Read Article <ExternalLink className="w-3 h-3" />
                                 </a>
 
                                 {item.sources && item.sources.map((s, i) => (
                                     <a 
                                         key={i} 
-                                        href={s.uri.startsWith('http') ? s.uri : `https://news.google.com/search?q=${encodeURIComponent(s.title)}`} 
+                                        href={s.uri || '#'} 
                                         target="_blank" 
                                         rel="noopener noreferrer" 
-                                        onClick={(e) => e.stopPropagation()}
+                                        onClick={(e) => {
+                                            if(!s.uri || !s.uri.startsWith('http')) e.preventDefault();
+                                            e.stopPropagation();
+                                        }}
                                         className="text-[10px] font-bold uppercase tracking-widest text-stone-500 hover:text-academic-gold dark:text-stone-400 dark:hover:text-white flex items-center gap-1 transition-colors"
                                     >
                                         {s.title || 'Source'} <ExternalLink className="w-3 h-3" />

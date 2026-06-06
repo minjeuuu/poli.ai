@@ -1,3 +1,4 @@
+import { ImageWithFallback } from '../atoms/ImageWithFallback';
 
 import React from 'react';
 import { User, MapPin, Calendar, Link as LinkIcon, Edit3 } from 'lucide-react';
@@ -18,7 +19,7 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({ profile, onEdit })
                 {/* Avatar */}
                 <div className="w-32 h-32 rounded-full bg-academic-paper dark:bg-stone-800 border-4 border-white dark:border-stone-900 shadow-xl flex items-center justify-center text-stone-300 relative">
                     {profile.avatarUrl ? (
-                        <img src={profile.avatarUrl} alt={profile.displayName} className="w-full h-full object-cover rounded-full" />
+                        <ImageWithFallback src={profile.avatarUrl} alt={profile.displayName} className="w-full h-full object-cover rounded-full" />
                     ) : (
                         <User className="w-16 h-16" />
                     )}

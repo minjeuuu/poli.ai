@@ -1,3 +1,4 @@
+import { ImageWithFallback } from '../../atoms/ImageWithFallback';
 
 import React from 'react';
 import { User } from 'lucide-react';
@@ -6,7 +7,7 @@ export const HeadOfStateCard: React.FC<{ data: any, onNavigate: (t:string, p:any
    <div className="bg-white dark:bg-stone-900 p-6 rounded-2xl border border-stone-200 dark:border-stone-800 flex items-center gap-6 shadow-sm group hover:border-academic-gold transition-colors">
        <div className="w-24 h-24 rounded-full bg-stone-200 dark:bg-stone-800 overflow-hidden flex-shrink-0 border-4 border-white dark:border-stone-700 shadow-md">
            {data.imageUrl ? (
-               <img src={data.imageUrl} className="w-full h-full object-cover" alt={data.name} />
+               <ImageWithFallback src={data.imageUrl} className="w-full h-full object-cover" alt={data.name} />
            ) : (
                <div className="w-full h-full flex items-center justify-center"><User className="w-8 h-8 text-stone-400" /></div>
            )}

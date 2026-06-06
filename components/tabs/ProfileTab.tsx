@@ -179,13 +179,13 @@ const ProfileTab: React.FC<ProfileTabProps> = ({
         <div className="h-full flex flex-col bg-stone-50/50 dark:bg-black/20 overflow-hidden">
             
             {/* 1. VIEW SWITCHER (Sub-nav) */}
-            <div className="flex-none bg-white dark:bg-stone-900 border-b border-stone-200 dark:border-stone-800 px-6 py-2 sticky top-0 z-30 flex justify-between items-center">
-                 <div className="flex gap-2">
+            <div className="flex-none bg-white dark:bg-stone-900 border-b border-stone-200 dark:border-stone-800 px-3 sm:px-6 py-2 sticky top-0 z-30 flex justify-between items-center">
+                 <div className="flex gap-1 sm:gap-2 overflow-x-auto no-scrollbar">
                      {navItems.map(item => (
                          <button
                             key={item.id}
                             onClick={() => { setView(item.id as any); playSFX('click'); }}
-                            className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-widest transition-all
+                            className={`flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg text-[10px] sm:text-xs font-bold uppercase tracking-widest transition-all whitespace-nowrap
                             ${view === item.id 
                                 ? 'bg-academic-bg dark:bg-stone-800 text-academic-accent dark:text-indigo-400 shadow-sm' 
                                 : 'text-stone-400 hover:bg-stone-50 dark:hover:bg-stone-800 hover:text-stone-600'}`}

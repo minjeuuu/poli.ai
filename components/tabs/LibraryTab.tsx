@@ -1,3 +1,4 @@
+import { ImageWithFallback } from '../atoms/ImageWithFallback';
 
 import React, { useState, useMemo } from 'react';
 import { 
@@ -495,9 +496,9 @@ const LibraryTab: React.FC<LibraryTabProps> = ({ onNavigate, onAddToCompare, onT
     <div className="h-full flex flex-col bg-academic-bg dark:bg-stone-950 relative" onClick={() => setActiveMenu(null)}>
         
         {/* 1. HEADER (Search & Breadcrumbs) */}
-        <div className="bg-academic-paper dark:bg-stone-900 border-b border-academic-line dark:border-stone-800 p-4 shadow-sm z-20 sticky top-0 transition-colors">
-            <div className="flex items-center gap-4 mb-3">
-                <div className="p-2 bg-academic-gold/10 rounded-lg text-academic-gold">
+        <div className="bg-academic-paper dark:bg-stone-900 border-b border-academic-line dark:border-stone-800 p-3 sm:p-4 shadow-sm z-20 sticky top-0 transition-colors">
+            <div className="flex items-center gap-3 sm:gap-4 mb-2 sm:mb-3">
+                <div className="p-2 bg-academic-gold/10 rounded-lg text-academic-gold hidden sm:block">
                     <Library className="w-5 h-5" />
                 </div>
                 <div className="relative flex-1">
@@ -644,9 +645,9 @@ const LibraryTab: React.FC<LibraryTabProps> = ({ onNavigate, onAddToCompare, onT
                                             >
                                                 <div className="flex justify-between items-start mb-2">
                                                     {item.coverUrl ? (
-                                                        <img src={item.coverUrl} alt="cover" className="w-12 h-12 object-cover rounded shadow-sm border border-stone-200 dark:border-stone-700" />
+                                                        <ImageWithFallback src={item.coverUrl} alt="cover" className="w-12 h-12 object-cover rounded shadow-sm border border-stone-200 dark:border-stone-700" />
                                                     ) : item.cover_i ? (
-                                                        <img src={`https://covers.openlibrary.org/b/id/${item.cover_i}-S.jpg`} alt="cover" className="w-8 h-12 object-cover rounded shadow-sm border border-stone-200 dark:border-stone-700" />
+                                                        <ImageWithFallback src={`https://covers.openlibrary.org/b/id/${item.cover_i}-S.jpg`} alt="cover" className="w-8 h-12 object-cover rounded shadow-sm border border-stone-200 dark:border-stone-700" />
                                                     ) : (
                                                         <div className={`p-2 rounded-lg bg-white dark:bg-stone-700 shadow-sm text-stone-400 dark:text-stone-400 group-hover:text-academic-accent dark:group-hover:text-indigo-400 transition-colors`}>
                                                             {activeRootTab === 'Anthems' ? <Music className="w-4 h-4" /> : activeRootTab === 'Arts' ? <ImageIcon className="w-4 h-4" /> : activeRootTab === 'Universities' ? <Landmark className="w-4 h-4" /> : <BookOpen className="w-4 h-4" />}

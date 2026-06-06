@@ -173,22 +173,22 @@ const TheoryTab: React.FC<TheoryTabProps> = ({ onNavigate, onAddToCompare, onTog
       return (
           <div className="h-full flex flex-col bg-academic-bg dark:bg-stone-950 relative animate-in slide-in-from-right duration-500" onClick={() => setActiveMenu(null)}>
               {/* HEADER */}
-              <div className="sticky top-0 z-20 bg-academic-paper dark:bg-stone-900 border-b border-academic-line dark:border-stone-800 p-4 flex items-center justify-between shadow-sm transition-colors">
-                  <div className="flex items-center gap-4">
-                      <button onClick={handleBack} className="p-2 -ml-2 rounded-full hover:bg-stone-100 dark:hover:bg-stone-800 text-stone-500 dark:text-stone-400 transition-colors">
-                          <ArrowLeft className="w-5 h-5" />
+              <div className="sticky top-0 z-20 bg-academic-paper dark:bg-stone-900 border-b border-academic-line dark:border-stone-800 p-3 sm:p-4 flex flex-col sm:flex-row sm:items-center justify-between shadow-sm transition-colors gap-3 sm:gap-4">
+                  <div className="flex items-center gap-3 sm:gap-4 w-full sm:w-auto">
+                      <button onClick={handleBack} className="p-1 sm:p-2 -ml-1 sm:-ml-2 rounded-full hover:bg-stone-100 dark:hover:bg-stone-800 text-stone-500 dark:text-stone-400 transition-colors">
+                          <ArrowLeft className="w-4 h-4 sm:w-5 sm:h-5" />
                       </button>
-                      <div>
-                          <h2 className="font-serif font-bold text-lg text-academic-text dark:text-stone-100 leading-tight">{activeCategory.category}</h2>
+                      <div className="flex-1">
+                          <h2 className="font-serif font-bold text-base sm:text-lg text-academic-text dark:text-stone-100 leading-tight line-clamp-1">{activeCategory.category}</h2>
                           <p className="text-[10px] text-stone-400 dark:text-stone-500 uppercase tracking-widest">{activeCategory.items.length} Entries</p>
                       </div>
                   </div>
-                  <div className="relative">
+                  <div className="relative w-full sm:w-auto self-end sm:self-auto">
                       <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-stone-400 dark:text-stone-500" />
                       <input 
                           type="text" 
                           placeholder="Filter..." 
-                          className="pl-9 pr-4 py-2 bg-stone-50 dark:bg-stone-800 border border-stone-200 dark:border-stone-700 rounded-full text-sm font-serif focus:border-academic-accent dark:focus:border-indigo-500 outline-none w-32 focus:w-48 transition-all text-academic-text dark:text-stone-200 placeholder-stone-400"
+                          className="w-full sm:w-32 focus:sm:w-48 pl-9 pr-4 py-1.5 sm:py-2 bg-stone-50 dark:bg-stone-800 border border-stone-200 dark:border-stone-700 rounded-full text-xs sm:text-sm font-serif focus:border-academic-accent dark:focus:border-indigo-500 outline-none transition-all text-academic-text dark:text-stone-200 placeholder-stone-400"
                           value={searchQuery}
                           onChange={(e) => setSearchQuery(e.target.value)}
                       />
@@ -201,8 +201,8 @@ const TheoryTab: React.FC<TheoryTabProps> = ({ onNavigate, onAddToCompare, onTog
                       <div className="space-y-10">
                           {sortedKeys.map(letter => (
                               <div key={letter} id={`section-${letter}`} className="scroll-mt-20">
-                                  <div className="flex items-center gap-4 mb-6 border-b border-stone-100 dark:border-stone-800 pb-2 sticky top-0 bg-academic-bg/95 dark:bg-stone-950/95 backdrop-blur-sm z-10">
-                                      <span className="text-4xl font-serif font-bold text-stone-200 dark:text-stone-800">{letter}</span>
+                                  <div className="flex items-center gap-4 mb-4 sm:mb-6 border-b border-stone-100 dark:border-stone-800 pb-2 sticky top-[10px] sm:top-0 bg-academic-bg/95 dark:bg-stone-950/95 backdrop-blur-sm z-10">
+                                      <span className="text-2xl sm:text-4xl font-serif font-bold text-stone-200 dark:text-stone-800">{letter}</span>
                                   </div>
                                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                                       {groupedItems[letter].map((item, i) => {
@@ -306,14 +306,28 @@ const TheoryTab: React.FC<TheoryTabProps> = ({ onNavigate, onAddToCompare, onTog
                                 {cat.description}
                             </p>
 
-                            <div className="flex flex-wrap gap-2 mt-auto">
-                                {cat.items.map((item, i) => (
-                                    <span key={i} className="text-[10px] font-bold uppercase tracking-wider text-stone-500 dark:text-stone-400 border border-stone-200 dark:border-stone-700 px-3 py-1.5 rounded-lg bg-white/50 dark:bg-stone-800/50">
-                                        {item.name}
-                                    </span>
-                                ))}
+                            <div className="flex flex-col gap-2 mt-auto">
+                                <div className="flex flex-wrap gap-2">
+                                    {cat.items.slice(0, 4).map((item, i) => (
+                                        <span key={i} className="text-[10px] font-bold uppercase tracking-wider text-stone-500 dark:text-stone-400 border border-stone-200 dark:border-stone-700 px-3 py-1.5 rounded-lg bg-white/50 dark:bg-stone-800/50">
+                                            {item.name}
+                                        </span>
+                                    ))}
+                                </div>
                                 {cat.items.length > 4 && (
-                                    <span className="text-[10px] font-bold text-academic-gold px-2 py-1.5">+{cat.items.length - 4} more</span>
+                                    <details className="group/details">
+                                        <summary className="text-[10px] font-bold text-academic-gold cursor-pointer inline-flex items-center gap-1 hover:text-orange-500 transition-colors list-none">
+                                            <span className="group-open/details:hidden">+{cat.items.length - 4} more</span>
+                                            <span className="hidden group-open/details:inline">Hide</span>
+                                        </summary>
+                                        <div className="flex flex-wrap gap-2 mt-2">
+                                            {cat.items.slice(4).map((item, i) => (
+                                                <span key={i + 4} className="text-[10px] font-bold uppercase tracking-wider text-stone-500 dark:text-stone-400 border border-stone-200 dark:border-stone-700 px-3 py-1.5 rounded-lg bg-white/50 dark:bg-stone-800/50">
+                                                    {item.name}
+                                                </span>
+                                            ))}
+                                        </div>
+                                    </details>
                                 )}
                             </div>
                         </div>

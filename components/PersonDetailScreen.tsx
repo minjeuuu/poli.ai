@@ -1,10 +1,17 @@
+import { ImageWithFallback } from './atoms/ImageWithFallback';
 
 import React, { useEffect, useState, useRef } from 'react';
 import { ArrowLeft, User, Book, Flag, ExternalLink, Calendar, Lightbulb, Quote, Bookmark, Download, Search, BookOpen, Bell, ArrowRightLeft, Clock, Users, GraduationCap, MapPin, Target, Zap, Share2, Swords, Heart, AlertCircle, Award, Brain } from 'lucide-react';
 import { PersonDetail } from '../types';
 import { fetchPersonDetail } from '../services/personService';
+import { WikidataWidget } from './external/WikidataWidget';
+import { OpenLibraryWidget } from './external/OpenLibraryWidget';
+import { RedditWidget } from './external/RedditWidget';
 import LoadingScreen from './LoadingScreen';
 import ReaderView from './ReaderView';
+import { TVMazeWidget } from './external/TVMazeWidget';
+import { FederalRegisterWidget } from './external/FederalRegisterWidget';
+import { SpaceflightNewsWidget } from './external/SpaceflightNewsWidget';
 import { playSFX } from '../services/soundService';
 import { IconRenderer } from './IconMap';
 
@@ -113,12 +120,14 @@ const PersonDetailScreen: React.FC<PersonDetailScreenProps> = ({ personName, onC
       <div className="flex-1 overflow-y-auto scroll-smooth pb-32 bg-stone-50/30 dark:bg-black/20">
           <div className="max-w-5xl mx-auto p-6 md:p-10 space-y-12">
               
+              <WikidataWidget queryText={data.name} />
+
               {/* HERO SECTION */}
               <div id="biography" ref={el => { sectionRefs.current['biography'] = el; }} className="grid grid-cols-1 md:grid-cols-3 gap-8">
                   <div className="md:col-span-1">
                       <div className="aspect-[3/4] bg-stone-200 dark:bg-stone-800 rounded-2xl overflow-hidden shadow-lg border border-stone-200 dark:border-stone-700 relative group">
                           {data.imageUrl ? (
-                              <img src={data.imageUrl} alt={data.name} className="w-full h-full object-cover" />
+                              <ImageWithFallback src={data.imageUrl} alt={data.name} className="w-full h-full object-cover" />
                           ) : (
                               <div className="w-full h-full flex flex-col items-center justify-center text-stone-400">
                                   <User className="w-20 h-20 mb-4" />
@@ -389,6 +398,14 @@ const PersonDetailScreen: React.FC<PersonDetailScreenProps> = ({ personName, onC
                           ))}
                       </div>
                   </div>
+              </div>
+              
+              <div className="mt-12 space-y-8">
+                  <RedditWidget queryText={data.name} />
+                  <FederalRegisterWidget queryText={data.name} />
+                  <SpaceflightNewsWidget queryText={data.name} />
+                  <OpenLibraryWidget queryText={`author:"${data.name}"`} />
+                  <TVMazeWidget queryText={data.name} />
               </div>
 
           </div>

@@ -127,19 +127,19 @@ const RatesTab: React.FC = () => {
     <div className="h-full flex flex-col pb-24 bg-academic-bg dark:bg-stone-950 animate-in fade-in duration-700 ease-out">
         
         {/* HEADER AREA */}
-        <div className="flex-none p-6 border-b border-academic-line dark:border-stone-800 bg-white dark:bg-stone-900 shadow-sm sticky top-0 z-20 transition-colors duration-500">
+        <div className="flex-none p-4 sm:p-6 border-b border-academic-line dark:border-stone-800 bg-white dark:bg-stone-900 shadow-sm relative z-20 transition-colors duration-500">
             
             {/* Top Row: Title & Update */}
-            <div className="flex items-center justify-between mb-6">
-                <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-academic-gold to-orange-500 flex items-center justify-center text-white shadow-lg">
-                        <Coins className="w-6 h-6" />
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4 sm:mb-6">
+                <div className="flex items-center gap-3 sm:gap-4">
+                    <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-gradient-to-br from-academic-gold to-orange-500 flex items-center justify-center text-white shadow-lg hidden sm:flex">
+                        <Coins className="w-5 h-5 sm:w-6 sm:h-6" />
                     </div>
                     <div>
-                        <h1 className="text-2xl font-serif font-bold text-academic-text dark:text-stone-100 tracking-tight">Exchange</h1>
+                        <h1 className="text-xl sm:text-2xl font-serif font-bold text-academic-text dark:text-stone-100 tracking-tight">Exchange</h1>
                         <button 
                             onClick={() => setShowBaseSelector(true)}
-                            className="flex items-center gap-1.5 text-xs font-mono text-stone-500 dark:text-stone-400 hover:text-academic-accent dark:hover:text-indigo-400 transition-colors mt-0.5 group"
+                            className="flex items-center gap-1.5 text-[10px] sm:text-xs font-mono text-stone-500 dark:text-stone-400 hover:text-academic-accent dark:hover:text-indigo-400 transition-colors mt-0.5 group"
                         >
                             Base: <span className="font-bold text-academic-text dark:text-stone-200 border-b border-dotted border-stone-400 group-hover:border-academic-accent">{baseCurrencyCode} ({baseCurrencySymbol})</span> <RefreshCcw className="w-3 h-3 ml-1 opacity-50" />
                         </button>

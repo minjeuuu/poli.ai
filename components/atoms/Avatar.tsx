@@ -1,3 +1,4 @@
+import { ImageWithFallback } from './ImageWithFallback';
 
 import React from 'react';
 import { User } from 'lucide-react';
@@ -20,7 +21,7 @@ export const Avatar: React.FC<AvatarProps> = ({ src, alt, size = 'md', fallback 
     return (
         <div className={`${sizeClass} rounded-full bg-stone-200 dark:bg-stone-800 flex items-center justify-center overflow-hidden border border-stone-300 dark:border-stone-700`}>
             {src ? (
-                <img src={src} alt={alt || "Avatar"} className="w-full h-full object-cover" />
+                <ImageWithFallback src={src} alt={alt || "Avatar"} className="w-full h-full object-cover" />
             ) : (
                 <span className="font-bold text-stone-500 dark:text-stone-400">
                     {fallback ? fallback.charAt(0).toUpperCase() : <User className="w-1/2 h-1/2" />}

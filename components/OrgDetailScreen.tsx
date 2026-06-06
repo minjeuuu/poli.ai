@@ -1,3 +1,4 @@
+import { ImageWithFallback } from './atoms/ImageWithFallback';
 
 import React, { useEffect, useState, useRef } from 'react';
 import { ArrowLeft, Globe, Building2, Users, FileText, History, X, Flag, Scale, Brain, Search, BookOpen, Bookmark, Download, ChevronRight, Target, Zap, LayoutGrid, Award, Printer, ArrowRightLeft, Crown, Coins, AlertCircle } from 'lucide-react';
@@ -7,6 +8,10 @@ import LoadingScreen from './LoadingScreen';
 import CountryDetailScreen from './country/CountryDetailScreen';
 import ReaderView from './ReaderView';
 import ConceptDetailModal from './ConceptDetailModal';
+import { WikidataWidget } from './external/WikidataWidget';
+import { GDELTWidget } from './external/GDELTWidget';
+import { RedditWidget } from './external/RedditWidget';
+import jsPDF from 'jspdf';
 import { playSFX } from '../services/soundService';
 
 interface OrgDetailScreenProps {
@@ -76,9 +81,47 @@ const OrgDetailScreen: React.FC<OrgDetailScreenProps> = ({ orgName, onClose, isS
     sectionRefs.current[id]?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
-  const handlePrint = () => {
+  const handleDownloadDossier = async () => {
       playSFX('click');
-      window.print();
+      if (!data) return;
+      try {
+          const doc = new jsPDF();
+          let y = 20;
+          doc.setFontSize(10);
+          doc.setTextColor(150, 150, 150);
+          doc.text("POLI ACADEMIC DOSSIER", 20, y);
+          y += 10;
+          doc.setFontSize(24);
+          doc.setTextColor(40, 40, 40);
+          const safeName = data.name || "Unknown Org";
+          doc.text(safeName, 20, y);
+          y += 15;
+          doc.setFontSize(12);
+          doc.setTextColor(80, 80, 80);
+          const descLines = doc.splitTextToSize(data.description || "", 170);
+          doc.text(descLines, 20, y);
+          y += descLines.length * 7 + 10;
+          
+          doc.setFontSize(16);
+          doc.setTextColor(0, 0, 0);
+          doc.text("Key Activities", 20, y);
+          y += 10;
+          doc.setFontSize(11);
+          doc.setTextColor(60, 60, 60);
+          data.keyActivities?.forEach((act: string, i: number) => {
+              const textLines = doc.splitTextToSize(`${i+1}. ${act}`, 170);
+              doc.text(textLines, 20, y);
+              y += textLines.length * 6 + 4;
+              if (y > 270) {
+                  doc.addPage();
+                  y = 20;
+              }
+          });
+          
+          doc.save(`${safeName.replace(/\s+/g, '_')}_Dossier.pdf`);
+      } catch (err) {
+          console.error("PDF generation failed:", err);
+      }
   };
 
   const getFlagUrl = (isoCode?: string) => {
@@ -116,7 +159,7 @@ const OrgDetailScreen: React.FC<OrgDetailScreenProps> = ({ orgName, onClose, isS
           </div>
           <div className="flex items-center gap-2">
              <button onClick={() => { playSFX('click'); onAddToCompare(orgName, 'Org'); }} className="p-2 rounded-full hover:bg-stone-100 dark:hover:bg-stone-800 text-stone-400 hover:text-academic-accent dark:hover:text-indigo-400 transition-colors" title="Compare"><ArrowRightLeft className="w-4 h-4" /></button>
-             <button onClick={handlePrint} className="p-2 rounded-full hover:bg-stone-100 dark:hover:bg-stone-800 text-stone-400 hover:text-academic-accent dark:hover:text-indigo-400 transition-colors" title="Print Dossier"><Printer className="w-4 h-4" /></button>
+             <button onClick={handleDownloadDossier} className="p-2 rounded-full hover:bg-stone-100 dark:hover:bg-stone-800 text-stone-400 hover:text-academic-accent dark:hover:text-indigo-400 transition-colors" title="Download Dossier"><Download className="w-4 h-4" /></button>
              <button onClick={onToggleSave} className={`p-2 rounded-full transition-colors ${isSaved ? 'text-academic-gold bg-stone-50 dark:bg-stone-800' : 'text-stone-400 hover:text-academic-accent hover:bg-stone-100 dark:hover:bg-stone-800'}`}><Bookmark className={`w-4 h-4 ${isSaved ? 'fill-current' : ''}`} /></button>
           </div>
       </div>
@@ -138,12 +181,14 @@ const OrgDetailScreen: React.FC<OrgDetailScreenProps> = ({ orgName, onClose, isS
       <div className="flex-1 overflow-y-auto scroll-smooth pb-32 bg-stone-50/30 dark:bg-black/20">
           <div className="max-w-5xl mx-auto p-6 md:p-10 space-y-12">
           
+          <WikidataWidget queryText={data.name} />
+
           {/* 1. IDENTITY */}
           <div id="identity" ref={el => { sectionRefs.current['identity'] = el; }} className="bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-2xl p-8 shadow-sm">
                   <div className="flex flex-col md:flex-row gap-8 items-start animate-in fade-in duration-500">
                       <div className="w-32 h-32 bg-stone-50 dark:bg-stone-800 border border-stone-200 dark:border-stone-700 flex items-center justify-center p-4 relative overflow-hidden rounded-xl shadow-inner flex-shrink-0">
                            {data.logoUrl ? (
-                               <img src={data.logoUrl} alt={data.name} className="w-full h-full object-contain" />
+                               <ImageWithFallback src={data.logoUrl} alt={data.name} className="w-full h-full object-contain" />
                            ) : (
                                <Building2 className="w-16 h-16 text-stone-300 dark:text-stone-600" />
                            )}
@@ -311,7 +356,7 @@ const OrgDetailScreen: React.FC<OrgDetailScreenProps> = ({ orgName, onClose, isS
                            >
                                <div className="w-8 h-6 bg-stone-200 dark:bg-stone-700 rounded overflow-hidden flex-shrink-0 shadow-sm border border-stone-300 dark:border-stone-600">
                                    {member.isoCode ? (
-                                       <img src={getFlagUrl(member.isoCode) || ''} alt={member.name} className="w-full h-full object-cover" />
+                                       <ImageWithFallback src={getFlagUrl(member.isoCode) || ''} alt={member.name} className="w-full h-full object-cover" />
                                    ) : (
                                        <div className="w-full h-full flex items-center justify-center text-[8px] font-bold text-stone-400">?</div>
                                    )}
@@ -370,6 +415,11 @@ const OrgDetailScreen: React.FC<OrgDetailScreenProps> = ({ orgName, onClose, isS
                   </div>
               </div>
           )}
+
+            <div className="mt-12 space-y-8">
+                <GDELTWidget queryText={data.name} />
+                <RedditWidget queryText={data.name} />
+            </div>
 
           </div>
       </div>

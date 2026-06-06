@@ -17,7 +17,7 @@ const parseYear = (yearStr: string): number => {
 };
 
 export const fetchDailyContext = async (date: Date): Promise<DailyContext> => {
-    return withCache(`daily_poli_v1_${date.toDateString()}`, async () => {
+    return withCache(`daily_poli_v2_${date.toDateString()}_${getLanguageInstruction()}`, async () => {
         const contents = `
                 ROLE: POLI Chief Historian.
                 TASK: Daily Briefing for ${date.toDateString()}.
@@ -25,7 +25,7 @@ export const fetchDailyContext = async (date: Date): Promise<DailyContext> => {
                 
                 INSTRUCTIONS:
                 - **History**: Provide 2 major historical events for context. Local archives will supply the rest. Focus strictly on political, governmental, diplomatic, or military history.
-                - **News**: Provide 8 major global headlines. The news MUST span all major continents (Asia, Europe, Africa, Americas, Oceania). Do NOT focus solely on US news. Include news from a diverse array of global outlets (e.g. Al Jazeera, BBC, Reuters, Xinhua, France 24, allAfrica). If you lack current news, provide pivotal recent historical news. Must be strictly political.
+                - **News**: You MUST use the Google Search tool to fetch today's top 8 global political headlines. The news MUST span all major continents (Asia, Europe, Africa, Americas, Oceania). Include news from diverse global outlets. For EACH news item, you MUST provide the REAL, EXACT, functioning URL (e.g., https://www.bbc.com/news/..., not a search string). DO NOT invent URLs. If the search tool fails, just use accurate historical headlines with their real source URLs. Must be strictly political.
                 - **Trivia**: Provide 3 distinct obscure facts. ALL FACTS AND TRIVIA MUST BE STRICTLY RELATED TO POLITICAL SCIENCE, GOVERNANCE, GEOPOLITICS, ELECTIONS, STATECRAFT, OR INTERNATIONAL RELATIONS. Do NOT provide biology, animal, or random pop-culture trivia unless it has direct, undeniable political significance.
                 
                 JSON SCHEMA:
@@ -50,6 +50,7 @@ export const fetchDailyContext = async (date: Date): Promise<DailyContext> => {
                 model: model,
                 contents: contents,
                 config: { 
+                    tools: [{ googleSearch: {} }],
                     responseMimeType: "application/json",
                     maxOutputTokens: 4096
                 }
@@ -60,6 +61,19 @@ export const fetchDailyContext = async (date: Date): Promise<DailyContext> => {
             let response = await attemptFetch('gemini-3-flash-preview');
             const parsed = safeParse(response.text || '{}', FALLBACK_DAILY_CONTEXT) as any;
             
+            // FETCH REAL NEWS
+            try {
+                const newsRes = await fetch('/api/news');
+                if (newsRes.ok) {
+                    const realNews = await newsRes.json();
+                    if (realNews && realNews.length > 0) {
+                        parsed.news = realNews;
+                    }
+                }
+            } catch (newsErr) {
+                console.warn("Failed to fetch real news from /api/news", newsErr);
+            }
+
             // Generate local massive history
             const proceduralEvents = generateMassiveHistory(date);
             const archiveEvents = getMassiveArchive();
@@ -142,7 +156,7 @@ export const fetchDailyContext = async (date: Date): Promise<DailyContext> => {
 };
 
 export const fetchHighlightDetail = async (highlight: HighlightedEntity): Promise<HighlightDetail> => {
-    return withCache(`highlight_poli_v1_${highlight.title}`, async () => {
+    return withCache(`highlight_poli_v1_${highlight.title}_${getLanguageInstruction()}`, async () => {
         const contents = `
             Provide details for: ${highlight.title} (${highlight.category}).
             RAW JSON ONLY.

@@ -1,3 +1,4 @@
+import { ImageWithFallback } from '../atoms/ImageWithFallback';
 
 import React, { useState, useEffect, useRef } from 'react';
 import { Mail, Search, Edit3, Paperclip, Send, MoreVertical, Archive, Trash2, Phone, Video, Info, Download, Check, CheckCheck, X, FileText, Image as ImageIcon, Loader2 } from 'lucide-react';
@@ -274,7 +275,7 @@ const MessageTab: React.FC<MessageTabProps> = ({ onNavigate, user }) => {
                                         {msg.attachments && msg.attachments.map((att, idx) => (
                                             <div key={idx} className="mb-2">
                                                 {att.type === 'image' ? (
-                                                    <img src={att.url} alt="Attachment" className="rounded-lg max-w-full h-auto" />
+                                                    <ImageWithFallback src={att.url} alt="Attachment" className="rounded-lg max-w-full h-auto" />
                                                 ) : (
                                                     <a href={att.url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 bg-black/10 p-2 rounded text-sm underline">
                                                         <FileText className="w-4 h-4" /> {att.name}

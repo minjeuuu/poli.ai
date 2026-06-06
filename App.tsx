@@ -315,7 +315,7 @@ export default function App() {
   };
 
   return (
-    <Layout activeTab={activeTab} onTabChange={(t) => { setActiveTab(t); setOverlayStack([]); }} onNavigate={handleNavigate} themeMode={currentTheme}>
+    <Layout activeTab={activeTab} onTabChange={(t) => { setActiveTab(t); setOverlayStack([]); }} onNavigate={handleNavigate} themeMode={currentTheme} userPrefs={user?.preferences}>
       {renderOverlay()}
 
       <div className="h-full w-full relative">

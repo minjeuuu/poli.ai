@@ -1,3 +1,4 @@
+import { ImageWithFallback } from '../../atoms/ImageWithFallback';
 
 import React from 'react';
 import { ArrowLeft, Flag } from 'lucide-react';
@@ -15,7 +16,7 @@ export const CountryHero: React.FC<CountryHeroProps> = ({ data, onBack }) => (
         
         {data.imageArchive && data.imageArchive.length > 0 && (
             <div className="absolute inset-0 opacity-20 pointer-events-none">
-                 <img src={data.imageArchive[0].url} className="w-full h-full object-cover grayscale" alt="Background" />
+                 <ImageWithFallback src={data.imageArchive[0].url} className="w-full h-full object-cover grayscale" alt="Background" />
             </div>
         )}
 
@@ -23,7 +24,7 @@ export const CountryHero: React.FC<CountryHeroProps> = ({ data, onBack }) => (
             <div className="flex items-end gap-6">
                 <div className="w-32 h-20 bg-stone-800 rounded-lg shadow-2xl border-2 border-white dark:border-stone-700 overflow-hidden relative group-hover:scale-105 transition-transform duration-500">
                     {data.identity.flag?.imageUrl ? (
-                        <img src={data.identity.flag.imageUrl} className="w-full h-full object-cover" alt="Flag" />
+                        <ImageWithFallback src={data.identity.flag.imageUrl} className="w-full h-full object-cover" alt="Flag" />
                     ) : (
                         <div className="w-full h-full flex items-center justify-center bg-stone-200 text-stone-400"><Flag className="w-8 h-8" /></div>
                     )}

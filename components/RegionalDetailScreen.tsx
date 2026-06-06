@@ -1,8 +1,10 @@
+import { ImageWithFallback } from './atoms/ImageWithFallback';
 
 import React, { useEffect, useState } from 'react';
 import { ArrowLeft, Globe, Flag, AlertTriangle, Lightbulb } from 'lucide-react';
 import { RegionalDetail } from '../types';
 import { fetchRegionalDetail } from '../services/geminiService';
+import { WikidataWidget } from './external/WikidataWidget';
 import LoadingScreen from './LoadingScreen';
 
 interface RegionalDetailScreenProps {
@@ -54,13 +56,15 @@ const RegionalDetailScreen: React.FC<RegionalDetailScreenProps> = ({ region, dis
           </div>
           {data.imageUrl && (
               <div className="w-12 h-12 rounded-lg overflow-hidden border border-stone-200 shadow-sm flex-shrink-0">
-                  <img src={data.imageUrl} alt={region} className="w-full h-full object-cover" />
+                  <ImageWithFallback src={data.imageUrl} alt={region} className="w-full h-full object-cover" />
               </div>
           )}
       </div>
 
       <div className="p-6 max-w-3xl mx-auto space-y-12 pb-24">
           
+          <WikidataWidget queryText={region} />
+
           {/* SUMMARY */}
           <section className="animate-in fade-in duration-700 delay-100">
               <div className="flex items-center gap-3 mb-4 text-academic-muted">
