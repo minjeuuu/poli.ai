@@ -27,6 +27,7 @@ interface HomeTabProps {
   savedItems: SavedItem[];
   onDeleteSaved: (id: string) => void;
   initialSubTab?: 'Today' | 'Highlights' | 'History' | 'Saved';
+  myCountry?: string;
 }
 
 const flattenPersons = (nodes: any[]): any[] => {
@@ -48,7 +49,8 @@ const HomeTab: React.FC<HomeTabProps> = ({
     onNavigate,
     savedItems,
     onDeleteSaved,
-    initialSubTab
+    initialSubTab,
+    myCountry
 }) => {
   const [subTab, setSubTab] = useState<'Today' | 'Highlights' | 'History' | 'Saved'>('Today');
   const [selectedHighlight, setSelectedHighlight] = useState<HighlightedEntity | null>(null);
@@ -189,7 +191,7 @@ const HomeTab: React.FC<HomeTabProps> = ({
            exit={{ opacity: 0, y: -15 }}
            transition={{ duration: 0.4, ease: [0.19, 1, 0.22, 1] }}
         >
-            <HistoryFeed events={data.historicalEvents} onNavigate={onNavigate} currentDate={currentDate} />
+            <HistoryFeed events={data.historicalEvents} onNavigate={onNavigate} currentDate={currentDate} myCountry={myCountry} />
         </motion.div>
       );
   };

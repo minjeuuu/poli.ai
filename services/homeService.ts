@@ -24,7 +24,7 @@ export const fetchDailyContext = async (date: Date, userCountry?: string): Promi
                 PROTOCOL: POLI ARCHIVE V1.
                 
                 INSTRUCTIONS:
-                - **History**: Provide at least 4 major historical events that occurred EXACTLY ON THIS DAY IN HISTORY (${date.toLocaleString('default', { month: 'long' })} ${date.getDate()}). If a specific country is provided (${countryStr}), ensure AT LEAST 2 events are directly tied to that country's history. Focus strictly on political, governmental, diplomatic, or military history.
+                - **History**: Provide at least 4 major historical events that occurred EXACTLY ON THIS DAY IN HISTORY (${date.toLocaleString('default', { month: 'long' })} ${date.getDate()}). If a specific country is provided (${countryStr}), ensure AT LEAST 2 events are directly tied to that country's history. Focus strictly on political, governmental, diplomatic, or military history. In the JSON "location" field, ALWAYS specify the EXACT COUNTRY where the event occurred (do not just say "Global").
                 - **News**: You MUST use the Google Search tool to fetch today's top 8 global political headlines. The news MUST span all major continents (Asia, Europe, Africa, Americas, Oceania). Include news from diverse global outlets. For EACH news item, you MUST provide the REAL, EXACT, functioning URL (e.g., https://www.bbc.com/news/..., not a search string). DO NOT invent URLs. If the search tool fails, just use accurate historical headlines with their real source URLs. Must be strictly political.
                 - **Trivia**: Provide 3 distinct obscure facts. ALL FACTS AND TRIVIA MUST BE STRICTLY RELATED TO POLITICAL SCIENCE, GOVERNANCE, GEOPOLITICS, ELECTIONS, STATECRAFT, OR INTERNATIONAL RELATIONS. Do NOT provide biology, animal, or random pop-culture trivia unless it has direct, undeniable political significance.
 
@@ -74,42 +74,9 @@ export const fetchDailyContext = async (date: Date, userCountry?: string): Promi
             } catch (newsErr) {
                 console.warn("Failed to fetch real news from /api/news", newsErr);
             }
-
-            // FETCH WIKIPEDIA "ON THIS DAY"
-            let wikiEvents: DailyHistoryEvent[] = [];
-            try {
-                const mm = String(date.getMonth() + 1).padStart(2, '0');
-                const dd = String(date.getDate()).padStart(2, '0');
-                const wikiRes = await fetch(`https://en.wikipedia.org/api/rest_v1/feed/onthisday/all/${mm}/${dd}`, {
-                    headers: { 'Accept': 'application/json', 'Api-User-Agent': 'Poli-App/1.0' }
-                });
-                
-                if (wikiRes.ok) {
-                    const wikiData = await wikiRes.json();
-                    
-                    // Helper to map Wikipedia event to DailyHistoryEvent
-                    const mapWikiEvent = (item: any): DailyHistoryEvent => ({
-                        year: item.year ? item.year.toString() : "Unknown",
-                        event: item.text || item.description,
-                        location: "Global", // Wiki doesn't reliably provide exact location in root
-                        description: (item.pages && item.pages.length > 0) 
-                            ? item.pages[0].extract 
-                            : (item.text || "Historical record.")
-                    });
-
-                    if (wikiData.events) wikiEvents.push(...wikiData.events.map(mapWikiEvent));
-                    if (wikiData.selected) wikiEvents.push(...wikiData.selected.map(mapWikiEvent));
-                    if (wikiData.births) wikiEvents.push(...wikiData.births.map((b: any) => ({ ...mapWikiEvent(b), event: `Birth: ${b.text}` })));
-                    if (wikiData.deaths) wikiEvents.push(...wikiData.deaths.map((d: any) => ({ ...mapWikiEvent(d), event: `Death: ${d.text}` })));
-                }
-            } catch (wikiErr) {
-                console.warn("Wikipedia API failed.", wikiErr);
-            }
-            
-            // Combine all events
-            const allEvents = [...(parsed.historicalEvents || []), ...wikiEvents];
             
             // Deduplicate based on title/event
+            const allEvents = parsed.historicalEvents || [];
             const seen = new Set();
             const uniqueEvents: DailyHistoryEvent[] = [];
             for (const evt of allEvents) {

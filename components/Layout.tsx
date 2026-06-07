@@ -117,21 +117,6 @@ const Layout: React.FC<LayoutProps> = ({ children, activeTab, onTabChange, onNav
          import('../services/common').then(({ setAppLanguage }) => {
              if (userPrefs.language) {
                  setAppLanguage(userPrefs.language);
-                 
-                 // Trigger Google Translate
-                 setTimeout(() => {
-                     const langMap: any = {
-                         'English': 'en', 'Spanish': 'es', 'French': 'fr', 'German': 'de', 'Chinese': 'zh-CN', 'Japanese': 'ja', 'Hindi': 'hi', 'Arabic': 'ar'
-                     };
-                     const targetLang = langMap[userPrefs.language] || 'en';
-                     const selectField = document.querySelector(".goog-te-combo") as HTMLSelectElement;
-                     if (selectField) {
-                         if (selectField.value !== targetLang) {
-                             selectField.value = targetLang;
-                             selectField.dispatchEvent(new Event('change'));
-                         }
-                     }
-                 }, 500);
              }
          });
     }

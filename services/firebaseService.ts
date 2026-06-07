@@ -16,5 +16,10 @@ enableIndexedDbPersistence(db).catch((err) => {
 });
 
 export const auth = getAuth();
+auth.languageCode = 'en';
 export const googleProvider = new GoogleAuthProvider();
+googleProvider.setCustomParameters({
+    hl: 'en',
+    prompt: 'select_account'
+});
 export const facebookProvider = new FacebookAuthProvider();

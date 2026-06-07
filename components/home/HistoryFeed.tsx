@@ -7,15 +7,17 @@ interface HistoryFeedProps {
     events: DailyHistoryEvent[];
     onNavigate: (type: string, payload: any) => void;
     currentDate?: Date;
+    myCountry?: string;
 }
 
 const ERAS = ["All", "Ancient", "Medieval", "Modern", "20th Century", "21st Century"];
 
-export const HistoryFeed: React.FC<HistoryFeedProps> = ({ events, onNavigate, currentDate }) => {
+export const HistoryFeed: React.FC<HistoryFeedProps> = ({ events, onNavigate, currentDate, myCountry }) => {
     const [displayCount, setDisplayCount] = useState(1000);
     const [activeEra, setActiveEra] = useState("All");
 
     const formattedDate = currentDate ? currentDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric' }) : 'Today';
+    const regionName = myCountry && myCountry !== 'Global Citizen' ? myCountry : 'Global';
 
     const filteredEvents = useMemo(() => {
         if (activeEra === "All") return events;
@@ -44,7 +46,7 @@ export const HistoryFeed: React.FC<HistoryFeedProps> = ({ events, onNavigate, cu
         <div className="animate-in fade-in slide-in-from-right-4 duration-500 pb-20">
             <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 px-1 gap-4">
                 <h2 className="text-[10px] font-bold text-academic-muted dark:text-stone-500 uppercase tracking-[0.2em] flex items-center gap-2">
-                    <Calendar className="w-4 h-4" /> Global Timeline Archive: On This Day ({formattedDate})
+                    <Calendar className="w-4 h-4" /> {regionName} Timeline Archive: On This Day ({formattedDate})
                 </h2>
                 
                 <div className="flex gap-2 overflow-x-auto no-scrollbar pb-2 md:pb-0">

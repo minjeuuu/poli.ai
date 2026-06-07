@@ -154,6 +154,9 @@ export default function App() {
     
     setUser(finalUserData);
     setIsAuthenticated(true);
+    if (finalUserData.country) {
+        setMyCountry(finalUserData.country);
+    }
     if (finalUserData.preferences) {
         if (finalUserData.preferences.themeMode) setThemeMode(finalUserData.preferences.themeMode);
         if (finalUserData.preferences.themeScope) setThemeScope(finalUserData.preferences.themeScope);
@@ -356,7 +359,17 @@ export default function App() {
 
       <div className="h-full w-full relative">
         {activeTab === 'home' && (
-            <HomeTab data={dailyData} isLoading={isDailyLoading} currentDate={currentDate} onDateChange={setCurrentDate} savedItems={savedItems} onDeleteSaved={handleDeleteSaved} initialSubTab="Today" {...commonTabProps} />
+            <HomeTab 
+                data={dailyData} 
+                isLoading={isDailyLoading} 
+                currentDate={currentDate} 
+                onDateChange={setCurrentDate} 
+                savedItems={savedItems} 
+                onDeleteSaved={handleDeleteSaved} 
+                initialSubTab="Today" 
+                myCountry={myCountry}
+                {...commonTabProps} 
+            />
         )}
         {activeTab === 'almanac' && (
             <AlmanacTab onNavigate={handleNavigate} />
