@@ -3,6 +3,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { Home, Compass, Globe, Languages, Scale, BookOpen, Users, GraduationCap, DollarSign, User, Gamepad2, MessageSquare, Library, Mail, Calendar, Brain, Grid } from 'lucide-react';
 import { MainTab, SpecialTheme } from '../types';
 import GlobalHeader from './GlobalHeader';
+import { AnimatePresence, motion } from 'framer-motion';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -160,8 +161,19 @@ const Layout: React.FC<LayoutProps> = ({ children, activeTab, onTabChange, onNav
         {(themeMode === 'Tech' || themeMode === 'Matrix' || themeMode === 'Cyberpunk') && <div className="absolute inset-0 opacity-5 pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/circuit-board.png')]"></div>}
         {themeMode === 'Nature' && <div className="absolute inset-0 opacity-5 pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/wood-pattern.png')]"></div>}
 
-        {/* MAIN APP CONTENT */}
-        {children}
+        {/* MAIN APP CONTENT WITH TRANSITIONS */}
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={activeTab}
+            initial={{ opacity: 0, y: 10, filter: "blur(2px)" }}
+            animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+            exit={{ opacity: 0, y: -10, filter: "blur(2px)" }}
+            transition={{ duration: 0.3, ease: 'easeInOut' }}
+            className="h-full w-full"
+          >
+            {children}
+          </motion.div>
+        </AnimatePresence>
         
       </main>
 
@@ -190,7 +202,7 @@ const Layout: React.FC<LayoutProps> = ({ children, activeTab, onTabChange, onNav
                 `}
               >
                 <div className={`p-1.5 rounded-xl transition-all duration-300 ${userPrefs?.compactSidebar ? 'mb-0.5' : 'mb-1'} ${isActive ? `${activeBgClass} translate-y-[-2px]` : 'group-hover:bg-stone-50 dark:group-hover:bg-stone-800'}`}>
-                  <item.icon className={`${userPrefs?.compactSidebar ? 'w-4 h-4' : 'w-6 h-6'} ${isActive ? 'stroke-[2.5px]' : 'stroke-[2px]'}`} />
+                   <item.icon className={`${userPrefs?.compactSidebar ? 'w-4 h-4' : 'w-6 h-6'} ${isActive ? 'stroke-[2.5px]' : 'stroke-[2px]'}`} />
                 </div>
                 <span className={`${userPrefs?.compactSidebar ? 'text-[8px]' : 'text-[10px]'} font-bold uppercase tracking-widest opacity-80 mt-0.5`}>{item.label}</span>
               </button>

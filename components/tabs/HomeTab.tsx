@@ -8,6 +8,7 @@ import { PERSONS_HIERARCHY } from '../../data/personsData';
 import { THEORY_HIERARCHY } from '../../data/theoryData';
 import { playSFX } from '../../services/soundService';
 import LoadingScreen from '../LoadingScreen';
+import { motion, AnimatePresence } from 'framer-motion';
 
 // WIDGET IMPORTS
 import { HistoryFeed } from '../home/HistoryFeed';
@@ -124,7 +125,13 @@ const HomeTab: React.FC<HomeTabProps> = ({
       if (!data) return null;
       
       return (
-        <div className="space-y-12 animate-in fade-in slide-in-from-bottom-2 duration-500">
+        <motion.div 
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -15 }}
+            transition={{ duration: 0.4, ease: [0.19, 1, 0.22, 1] }}
+            className="space-y-12"
+        >
           
           {/* SURPRISE BUTTON */}
           <div className="flex justify-center px-4 md:px-0 mb-4">
@@ -169,18 +176,32 @@ const HomeTab: React.FC<HomeTabProps> = ({
 
           <SynthesisWidget text={data.synthesis} />
 
-        </div>
+        </motion.div>
       );
   };
 
   const renderHistory = () => {
       if (!data) return null;
-      return <HistoryFeed events={data.historicalEvents} onNavigate={onNavigate} currentDate={currentDate} />;
+      return (
+        <motion.div
+           initial={{ opacity: 0, y: 15 }}
+           animate={{ opacity: 1, y: 0 }}
+           exit={{ opacity: 0, y: -15 }}
+           transition={{ duration: 0.4, ease: [0.19, 1, 0.22, 1] }}
+        >
+            <HistoryFeed events={data.historicalEvents} onNavigate={onNavigate} currentDate={currentDate} />
+        </motion.div>
+      );
   };
 
   const renderSaved = () => {
       return (
-          <div className="animate-in fade-in duration-500">
+          <motion.div 
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -15 }}
+            transition={{ duration: 0.4, ease: [0.19, 1, 0.22, 1] }}
+          >
               {savedItems.length === 0 ? (
                   <div className="text-center py-20 opacity-50 flex flex-col items-center">
                       <Bookmark className="w-8 h-8 text-stone-300 dark:text-stone-600 mb-3" />
@@ -189,7 +210,13 @@ const HomeTab: React.FC<HomeTabProps> = ({
               ) : (
                   <div className="space-y-4">
                       {savedItems.map((item, i) => (
-                          <div key={item.id} className="bg-white dark:bg-stone-900 border border-academic-line dark:border-stone-800 p-4 flex justify-between items-start group hover:border-academic-accent dark:hover:border-indigo-500 transition-colors cursor-pointer relative rounded-lg shadow-sm">
+                          <motion.div 
+                              key={item.id} 
+                              initial={{ opacity: 0, x: -10 }}
+                              animate={{ opacity: 1, x: 0 }}
+                              transition={{ delay: i * 0.05 }}
+                              className="bg-white dark:bg-stone-900 border border-academic-line dark:border-stone-800 p-4 flex justify-between items-start group hover:border-academic-accent dark:hover:border-indigo-500 transition-colors cursor-pointer relative rounded-lg shadow-sm"
+                          >
                               <div 
                                 className="flex-1 pr-4"
                                 onClick={() => {
@@ -207,24 +234,31 @@ const HomeTab: React.FC<HomeTabProps> = ({
                                   <MoreHorizontal className="w-5 h-5" />
                               </button>
                               
-                              {activeMenuId === item.id && (
-                                  <div className="absolute right-4 top-10 bg-white dark:bg-stone-800 border border-stone-200 dark:border-stone-700 shadow-xl z-20 min-w-[120px] animate-in zoom-in-95 rounded-md overflow-hidden">
-                                      <button onClick={(e) => { e.stopPropagation(); handleArchive(item.id); }} className="w-full text-left px-4 py-2 text-xs font-bold uppercase tracking-wider text-stone-600 dark:text-stone-300 hover:bg-stone-50 dark:hover:bg-stone-700 flex items-center gap-2">
-                                          <Archive className="w-3 h-3" /> Archive
-                                      </button>
-                                      <button 
-                                        onClick={(e) => { e.stopPropagation(); handleDelete(item.id); }}
-                                        className="w-full text-left px-4 py-2 text-xs font-bold uppercase tracking-wider text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 flex items-center gap-2 border-t border-stone-100 dark:border-stone-700"
+                              <AnimatePresence>
+                                  {activeMenuId === item.id && (
+                                      <motion.div 
+                                          initial={{ opacity: 0, scale: 0.95 }}
+                                          animate={{ opacity: 1, scale: 1 }}
+                                          exit={{ opacity: 0, scale: 0.95 }}
+                                          className="absolute right-4 top-10 bg-white dark:bg-stone-800 border border-stone-200 dark:border-stone-700 shadow-xl z-20 min-w-[120px] rounded-md overflow-hidden"
                                       >
-                                          <Trash2 className="w-3 h-3" /> Delete
-                                      </button>
-                                  </div>
-                              )}
-                          </div>
+                                          <button onClick={(e) => { e.stopPropagation(); handleArchive(item.id); }} className="w-full text-left px-4 py-2 text-xs font-bold uppercase tracking-wider text-stone-600 dark:text-stone-300 hover:bg-stone-50 dark:hover:bg-stone-700 flex items-center gap-2">
+                                              <Archive className="w-3 h-3" /> Archive
+                                          </button>
+                                          <button 
+                                            onClick={(e) => { e.stopPropagation(); handleDelete(item.id); }}
+                                            className="w-full text-left px-4 py-2 text-xs font-bold uppercase tracking-wider text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 flex items-center gap-2 border-t border-stone-100 dark:border-stone-700"
+                                          >
+                                              <Trash2 className="w-3 h-3" /> Delete
+                                          </button>
+                                      </motion.div>
+                                  )}
+                              </AnimatePresence>
+                          </motion.div>
                       ))}
                   </div>
               )}
-          </div>
+          </motion.div>
       )
   }
 
@@ -261,18 +295,41 @@ const HomeTab: React.FC<HomeTabProps> = ({
       </div>
 
       <div className="p-4 md:p-8 pt-6">
-          {isLoading ? (
-              <div className="flex flex-col items-center justify-center py-20 h-full">
-                   <LoadingScreen message="Synthesizing Global Archive..." />
-              </div>
-          ) : (
-              <div className="min-h-full">
-                {subTab === 'Today' && renderToday()}
-                {subTab === 'History' && renderHistory()}
-                {subTab === 'Saved' && renderSaved()}
-                {subTab === 'Highlights' && <div className="text-center text-stone-400 dark:text-stone-600 py-10 font-serif italic flex items-center justify-center h-40">Curated highlights from global archives.</div>}
-              </div>
-          )}
+          <AnimatePresence mode="wait">
+              {isLoading ? (
+                  <motion.div 
+                      key="loading"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      className="flex flex-col items-center justify-center py-20 h-full"
+                  >
+                       <LoadingScreen message="Synthesizing Global Archive..." />
+                  </motion.div>
+              ) : (
+                  <motion.div 
+                      key="content"
+                      className="min-h-full"
+                  >
+                    <AnimatePresence mode="wait">
+                        {subTab === 'Today' && <motion.div key="today">{renderToday()}</motion.div>}
+                        {subTab === 'History' && <motion.div key="history">{renderHistory()}</motion.div>}
+                        {subTab === 'Saved' && <motion.div key="saved">{renderSaved()}</motion.div>}
+                        {subTab === 'Highlights' && (
+                            <motion.div 
+                                key="highlights"
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0 }}
+                                className="text-center text-stone-400 dark:text-stone-600 py-10 font-serif italic flex items-center justify-center h-40"
+                            >
+                                Curated highlights from global archives.
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
+                  </motion.div>
+              )}
+          </AnimatePresence>
       </div>
     </div>
   );

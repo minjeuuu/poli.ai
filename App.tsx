@@ -4,6 +4,8 @@ import { MainTab, DailyContext, SavedItem, UserProfile, ThemeScope, SpecialTheme
 import { fetchDailyContext } from './services/homeService';
 import { FALLBACK_DAILY_CONTEXT } from './data/homeData';
 import { db } from './services/database';
+import { onAuthStateChanged, signOut } from 'firebase/auth';
+import { auth } from './services/firebaseService';
 
 // Screens & Tabs
 import AuthScreen from './components/AuthScreen';
@@ -42,9 +44,9 @@ type OverlayItem = { type: string; payload: any; id: string };
 
 export default function App() {
   // Lifecycle State
-  const [hasLaunched, setHasLaunched] = useState(false);
+  const [hasLaunched, setHasLaunched] = useState(sessionStorage.getItem('poli_launched') === 'true');
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [showIntro, setShowIntro] = useState(true);
+  const [showIntro, setShowIntro] = useState(localStorage.getItem('poli_intro_done') !== 'true');
   
   // App State
   const [activeTab, setActiveTab] = useState<MainTab>('home');
@@ -73,6 +75,36 @@ export default function App() {
         }
     };
     initApp();
+  }, []);
+
+  // Auth State Listener
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+        if (firebaseUser) {
+            await db.init();
+            const res = await db.execute(`SELECT * FROM users WHERE email = '${firebaseUser.email}'`);
+            if (res.rows.length > 0) {
+                handleLogin(res.rows[0]);
+            } else {
+                handleLogin({
+                    id: firebaseUser.uid,
+                    username: firebaseUser.displayName || 'Scholar',
+                    email: firebaseUser.email,
+                    level: 1,
+                    xp: 0,
+                    coins: 100,
+                });
+            }
+        } else {
+            const isGuest = localStorage.getItem('poli_guest');
+            if (isGuest === 'true') {
+                setIsAuthenticated(true);
+            } else {
+                setIsAuthenticated(false);
+            }
+        }
+    });
+    return () => unsubscribe();
   }, []);
 
   // Calculate Dynamic Theme based on Context (Overrides manual setting if specific conditions met, otherwise uses manual)
@@ -137,11 +169,13 @@ export default function App() {
       }
   };
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    await signOut(auth);
+    localStorage.removeItem('poli_guest');
     setUser(null);
     setIsAuthenticated(false);
     setHasLaunched(false);
-    setShowIntro(true);
+    sessionStorage.removeItem('poli_launched');
   };
 
   const handleNavigate = (type: string, payload: any) => {
@@ -305,9 +339,9 @@ export default function App() {
       }
   };
 
-  if (!hasLaunched) return <LaunchScreen onComplete={() => setHasLaunched(true)} />;
-  if (!isAuthenticated) return <AuthScreen onLogin={handleLogin} onGuest={() => setIsAuthenticated(true)} />;
-  if (showIntro) return <IntroScreen onContinue={() => setShowIntro(false)} />;
+  if (!hasLaunched) return <LaunchScreen onComplete={() => { setHasLaunched(true); sessionStorage.setItem('poli_launched', 'true'); }} />;
+  if (!isAuthenticated) return <AuthScreen onLogin={handleLogin} onGuest={() => { localStorage.setItem('poli_guest', 'true'); setIsAuthenticated(true); }} />;
+  if (showIntro) return <IntroScreen onContinue={() => { setShowIntro(false); localStorage.setItem('poli_intro_done', 'true'); }} />;
 
   const commonTabProps = { 
     onNavigate: handleNavigate,
