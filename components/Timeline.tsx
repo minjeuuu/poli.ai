@@ -52,7 +52,7 @@ const Timeline: React.FC<TimelineProps> = ({ events, onEventClick }) => {
                 </span>
             </div>
 
-            <p className="text-stone-600 dark:text-stone-400 font-serif text-sm leading-relaxed max-w-prose mb-3 group-hover:text-stone-800 dark:group-hover:text-stone-200">
+            <p className="text-stone-600 dark:text-stone-400 font-serif text-sm leading-relaxed text-justify max-w-prose mb-3 group-hover:text-stone-800 dark:group-hover:text-stone-200">
               {safeText(event.description)}
             </p>
 

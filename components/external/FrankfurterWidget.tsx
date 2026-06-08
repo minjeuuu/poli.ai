@@ -46,7 +46,7 @@ export const FrankfurterWidget: React.FC<FrankfurterWidgetProps> = ({ baseCurren
         <div className="bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-2xl p-6 shadow-sm mb-6 animate-in fade-in">
             <div className="flex items-center justify-between mb-6">
                 <h3 className="text-sm font-bold uppercase tracking-widest text-stone-500 flex items-center gap-2">
-                    <DollarSign className="w-4 h-4 text-green-600" /> Forex Markets (Frankfurter API)
+                    <DollarSign className="w-4 h-4 text-green-600" /> Forex Markets
                 </h3>
                 <span className="text-[10px] font-mono text-stone-400">Base: 1 {rates.base} • Updated: {rates.date}</span>
             </div>

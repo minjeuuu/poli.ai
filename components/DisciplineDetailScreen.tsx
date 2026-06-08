@@ -16,7 +16,7 @@ import FlashcardView from './FlashcardView';
 import RegionalDetailScreen from './RegionalDetailScreen';
 import ConceptDetailModal from './ConceptDetailModal';
 import PersonDetailScreen from './PersonDetailScreen';
-import { WikidataWidget } from './external/WikidataWidget';
+import { WikipediaWidget } from './external/WikipediaWidget';
 import { OpenLibraryWidget } from './external/OpenLibraryWidget';
 import { ArXivWidget } from './external/ArXivWidget';
 import { RedditWidget } from './external/RedditWidget';
@@ -27,8 +27,8 @@ import { DictionaryWidget } from './external/DictionaryWidget';
 import { SemanticScholarWidget } from './external/SemanticScholarWidget';
 import { DOAJWidget } from './external/DOAJWidget';
 import { LibraryOfCongressWidget } from './external/LibraryOfCongressWidget';
-import { DBpediaWidget } from './external/DBpediaWidget';
 import { PubMedWidget } from './external/PubMedWidget';
+import { generateAestheticPDF } from '../utils/pdfGenerator';
 import { playSFX } from '../services/soundService';
 
 interface DisciplineDetailScreenProps {
@@ -116,7 +116,7 @@ const DisciplineDetailScreen: React.FC<DisciplineDetailScreenProps> = ({
       return text.split('\n\n').map((para, i) => {
           if (!para.trim()) return null;
           return (
-              <p key={i} className="mb-6 leading-loose text-stone-700 dark:text-stone-300 font-serif text-base md:text-lg">
+              <p key={i} className="mb-6 leading-loose text-justify text-stone-700 dark:text-stone-300 font-serif text-base md:text-lg">
                   {para.trim()}
               </p>
           );
@@ -127,92 +127,59 @@ const DisciplineDetailScreen: React.FC<DisciplineDetailScreenProps> = ({
       playSFX('success');
       if (!data) return;
       
-        const safeName = (data.name || disciplineName || "Discipline").toUpperCase();
+      const safeName = (data.name || disciplineName || "Discipline").toUpperCase();
       try {
-          const { jsPDF } = await import('jspdf');
-          const doc = new jsPDF();
+          const sections = [];
           
-          let y = 20;
+          if (data.overview) {
+               sections.push({ 
+                   title: "1. OVERVIEW", 
+                   content: [
+                       `Definition: ${data.overview.definition || 'N/A'}`,
+                       `Scope: ${data.overview.scope || 'N/A'}`,
+                       `Importance: ${data.overview.importance || 'N/A'}`,
+                       "",
+                       "Key Questions:",
+                       ...(data.overview.keyQuestions || []).map((q: string) => `  - ${q}`)
+                   ].join('\n')
+               });
+          }
 
-          // Header
-          doc.setFont("helvetica", "bold");
-          doc.setFontSize(22);
-          doc.setTextColor(44, 62, 80); // Dark slate
-          doc.text("POLI ACADEMIC SYLLABUS", 105, y, { align: "center" });
-          y += 12;
-          
-          doc.setFontSize(16);
-          doc.setTextColor(52, 73, 94);
-          doc.text(`DISCIPLINE: ${safeName}`, 105, y, { align: "center" });
-          y += 8;
+          if (data.coreTheories && data.coreTheories.length > 0) {
+               sections.push({ 
+                   title: "2. CORE THEORIES", 
+                   content: data.coreTheories.map((t: any) => `${t.name} (${t.year}): ${t.summary}`)
+               });
+          }
 
-          // Rule
-          doc.setDrawColor(200, 200, 200);
-          doc.setLineWidth(0.5);
-          doc.line(20, y, 190, y);
-          y += 12;
+          if (data.methods && data.methods.length > 0) {
+               sections.push({ 
+                   title: "3. RESEARCH METHODS", 
+                   content: data.methods.map((m: any) => `${m.name}: ${m.description}`)
+               });
+          }
 
-          doc.setFontSize(11);
-          doc.setFont("helvetica", "normal");
-          doc.setTextColor(60, 60, 60);
+          if (data.scholars && data.scholars.length > 0) {
+               sections.push({ 
+                   title: "4. KEY SCHOLARS", 
+                   content: data.scholars.map((s: any) => `${s.name} (${s.period}): ${s.contribution}`)
+               });
+          }
 
-          const helperText = (text: string, isHeader: boolean = false) => {
-              if (y > 270) {
-                  doc.addPage();
-                  y = 20;
-              }
-              if (isHeader) {
-                  doc.setFont("helvetica", "bold");
-                  doc.setFontSize(14);
-                  doc.setTextColor(41, 128, 185); // Academic Blue
-                  doc.text(text, 20, y);
-                  y += 2;
-                  doc.setDrawColor(41, 128, 185);
-                  doc.line(20, y, 190, y);
-                  y += 8;
-                  doc.setFont("helvetica", "normal");
-                  doc.setFontSize(11);
-                  doc.setTextColor(50, 50, 50);
-              } else {
-                  const splitLines = doc.splitTextToSize(text, 170);
-                  for (const sl of splitLines) {
-                      if (y > 280) { doc.addPage(); y = 20; }
-                      doc.text(sl, 20, y);
-                      y += 7;
-                  }
-              }
-          };
+          if (data.foundationalWorks && data.foundationalWorks.length > 0) {
+               sections.push({ 
+                   title: "5. FOUNDATIONAL READINGS", 
+                   content: data.foundationalWorks.map((w: any) => `"${w.title}" by ${w.author} (${w.year})`)
+               });
+          }
 
-          helperText("1. OVERVIEW", true);
-          helperText(`Definition: ${data.overview?.definition || 'N/A'}`);
-          helperText(`Scope: ${data.overview?.scope || 'N/A'}`);
-          helperText(`Importance: ${data.overview?.importance || 'N/A'}`);
-          helperText("");
-          helperText("Key Questions: ");
-          (data.overview?.keyQuestions || []).forEach(q => helperText(`- ${q}`));
-
-          y += 5;
-          helperText("2. CORE THEORIES", true);
-          (data.coreTheories || []).forEach(t => helperText(`- ${t.name} (${t.year}): ${t.summary}`));
-
-          y += 5;
-          helperText("3. RESEARCH METHODS", true);
-          (data.methods || []).forEach(m => helperText(`- ${m.name}: ${m.description}`));
-
-          y += 5;
-          helperText("4. KEY SCHOLARS", true);
-          (data.scholars || []).forEach(s => helperText(`- ${s.name} (${s.period}): ${s.contribution}`));
-
-          y += 5;
-          helperText("5. FOUNDATIONAL READINGS", true);
-          (data.foundationalWorks || []).forEach(w => helperText(`- "${w.title}" by ${w.author} (${w.year})`));
-
-          // Footer
-          doc.setFontSize(8);
-          doc.setTextColor(150, 150, 150);
-          doc.text(`Generated by POLI AI • ${new Date().toLocaleDateString()}`, 105, 290, { align: "center" });
-
-          doc.save(`${safeName.replace(/\s+/g, '_')}_Syllabus.pdf`);
+          generateAestheticPDF(
+              "POLI ACADEMIC SYLLABUS",
+              `DISCIPLINE: ${safeName}`,
+              data.overview?.definition || "No description provided.",
+              sections,
+              `${safeName.replace(/\s+/g, '_')}_Syllabus.pdf`
+          );
       } catch (e) {
           console.error("Failed to generate PDF", e);
       }
@@ -258,10 +225,8 @@ const DisciplineDetailScreen: React.FC<DisciplineDetailScreenProps> = ({
 
       {/* CONTENT */}
       <div className="flex-1 overflow-y-auto scroll-smooth pb-32 bg-stone-50/30 dark:bg-black/20">
-         <div className="max-w-4xl mx-auto p-6 md:p-10 space-y-12">
+         <div className="max-w-4xl mx-auto p-4 sm:p-6 md:p-10 space-y-12">
             
-            <WikidataWidget queryText={disciplineName} />
-
             {/* 1. OVERVIEW */}
             <div id="overview" ref={el => { sectionRefs.current['overview'] = el; }} className="bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-2xl p-8 shadow-sm">
                 <div className="flex flex-col md:flex-row gap-8 items-start">
@@ -270,7 +235,7 @@ const DisciplineDetailScreen: React.FC<DisciplineDetailScreenProps> = ({
                     </div>
                     <div className="flex-1">
                         <h1 className="text-5xl font-serif font-bold text-academic-text dark:text-stone-100 mb-4 leading-tight">{data.name}</h1>
-                        <p className="text-lg font-serif text-stone-600 dark:text-stone-300 leading-relaxed mb-6">
+                        <p className="text-lg font-serif text-stone-600 dark:text-stone-300 leading-relaxed text-justify mb-6">
                             {data.overview?.definition || "Definition currently unavailable."}
                         </p>
                         
@@ -355,7 +320,7 @@ const DisciplineDetailScreen: React.FC<DisciplineDetailScreenProps> = ({
                                 <h4 className="font-bold text-academic-text dark:text-stone-100 font-serif text-lg">{theory.name}</h4>
                                 <span className="text-xs font-mono text-stone-400">{theory.year}</span>
                             </div>
-                            <p className="text-sm text-stone-600 dark:text-stone-400 leading-relaxed">{theory.summary}</p>
+                            <p className="text-sm text-stone-600 dark:text-stone-400 leading-relaxed text-justify">{theory.summary}</p>
                         </div>
                     ))}
                 </div>
@@ -368,7 +333,7 @@ const DisciplineDetailScreen: React.FC<DisciplineDetailScreenProps> = ({
                     {data.methods?.map((method, i) => (
                         <div key={i} className="border-l-4 border-academic-accent dark:border-indigo-500 pl-4 py-2 bg-white dark:bg-stone-900 rounded-r-xl shadow-sm pr-4">
                             <h4 className="font-bold text-sm text-stone-800 dark:text-stone-200 mb-1">{method.name}</h4>
-                            <p className="text-xs text-stone-500 dark:text-stone-400 mb-2 leading-relaxed">{method.description}</p>
+                            <p className="text-xs text-stone-500 dark:text-stone-400 mb-2 leading-relaxed text-justify">{method.description}</p>
                             <div className="bg-stone-100 dark:bg-stone-800 p-2 rounded text-[10px] font-mono text-stone-600 dark:text-stone-300">
                                 Ex: {method.example}
                             </div>
@@ -409,7 +374,7 @@ const DisciplineDetailScreen: React.FC<DisciplineDetailScreenProps> = ({
                 {activeRegion && (
                     <div className="p-6 bg-stone-100 dark:bg-stone-800 rounded-xl animate-in fade-in slide-in-from-top-2 border border-stone-200 dark:border-stone-700">
                         <h4 className="font-bold text-sm text-stone-800 dark:text-stone-200 mb-2">{activeRegion}</h4>
-                        <p className="text-sm text-stone-600 dark:text-stone-400 leading-relaxed">{data.regionalFocus?.find(r => r.region === activeRegion)?.description}</p>
+                        <p className="text-sm text-stone-600 dark:text-stone-400 leading-relaxed text-justify">{data.regionalFocus?.find(r => r.region === activeRegion)?.description}</p>
                     </div>
                 )}
             </div>
@@ -466,19 +431,30 @@ const DisciplineDetailScreen: React.FC<DisciplineDetailScreenProps> = ({
                 </div>
             </div>
 
-            <div className="mt-12 space-y-8">
-                <DBpediaWidget queryText={disciplineName} />
-                <PubMedWidget queryText={disciplineName} />
-                <OpenAlexWidget queryText={disciplineName} />
-                <InternetArchiveWidget queryText={disciplineName} />
-                <DictionaryWidget queryText={disciplineName} />
-                <RedditWidget queryText={`${disciplineName} study`} />
-                <CrossrefWidget queryText={disciplineName} />
-                <SemanticScholarWidget queryText={disciplineName} />
-                <DOAJWidget queryText={disciplineName} />
-                <LibraryOfCongressWidget queryText={disciplineName} />
-                <ArXivWidget queryText={disciplineName} />
-                <OpenLibraryWidget queryText={disciplineName} />
+            <div className="mt-16 pt-8 border-t border-stone-200 dark:border-stone-800">
+                <h3 className="font-serif text-2xl font-bold mb-6 flex items-center gap-2">
+                    <Globe className="w-5 h-5 text-academic-gold" /> External Repositories & Data
+                </h3>
+                <div className="grid grid-cols-1 lg:grid-cols-3 md:grid-cols-2 gap-6">
+                    <div className="space-y-6">
+                        <WikipediaWidget title={disciplineName} description="academic discipline" />
+                        <PubMedWidget queryText={disciplineName} />
+                        <LibraryOfCongressWidget queryText={disciplineName} />
+                    </div>
+                    <div className="space-y-6">
+                        <OpenAlexWidget queryText={disciplineName} />
+                        <InternetArchiveWidget queryText={disciplineName} />
+                        <DictionaryWidget queryText={disciplineName} />
+                        <CrossrefWidget queryText={disciplineName} />
+                    </div>
+                    <div className="space-y-6">
+                        <RedditWidget queryText={`${disciplineName} study`} />
+                        <SemanticScholarWidget queryText={disciplineName} />
+                        <DOAJWidget queryText={disciplineName} />
+                        <ArXivWidget queryText={disciplineName} />
+                        <OpenLibraryWidget queryText={disciplineName} />
+                    </div>
+                </div>
             </div>
 
          </div>

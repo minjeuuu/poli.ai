@@ -22,7 +22,7 @@ const APPS = [
 export const HubTab: React.FC<HubTabProps> = ({ onNavigate }) => {
     return (
         <div className="flex-1 overflow-y-auto w-full h-full pb-32">
-            <div className="max-w-5xl mx-auto p-6 md:p-10">
+            <div className="max-w-5xl mx-auto p-4 sm:p-6 md:p-10">
                 <div className="flex flex-col items-center text-center gap-4 mb-12 animate-in slide-in-from-top-4 duration-500">
                     <div className="p-4 bg-academic-accent text-white rounded-2xl shadow-xl shadow-academic-accent/20">
                         <LayoutGrid className="w-8 h-8" />

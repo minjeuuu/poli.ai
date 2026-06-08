@@ -301,7 +301,7 @@ const QuizView: React.FC<QuizViewProps> = ({ topic, mode = 'Classic', onClose, o
                        <h4 className="text-[10px] font-bold uppercase tracking-widest text-academic-accent mb-2 flex items-center gap-2">
                            <Lightbulb className="w-3 h-3" /> Insight
                        </h4>
-                       <p className="text-sm font-serif text-stone-700 leading-relaxed">{currentQ.explanation}</p>
+                       <p className="text-sm font-serif text-stone-700 leading-relaxed text-justify">{currentQ.explanation}</p>
                    </div>
                    
                    <button 

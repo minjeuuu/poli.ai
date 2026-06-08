@@ -42,7 +42,7 @@ export const OpenMeteoWidget: React.FC<OpenMeteoWidgetProps> = ({ locationName }
     return (
         <div className="bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-2xl p-6 shadow-sm mb-8">
              <h3 className="text-sm font-bold uppercase tracking-widest text-stone-500 mb-4 flex items-center gap-2">
-                <Cloud className="w-4 h-4 text-academic-accent" /> Environmental Conditions (Open-Meteo API)
+                <Cloud className="w-4 h-4 text-academic-accent" /> Environmental Conditions
             </h3>
             
             <p className="text-[10px] font-bold uppercase tracking-widest text-stone-400 mb-3">Location resolved: {data.loc.name}, {data.loc.country}</p>

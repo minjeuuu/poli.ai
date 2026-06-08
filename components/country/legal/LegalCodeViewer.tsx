@@ -47,7 +47,7 @@ export const LegalCodeViewer: React.FC<LegalCodeViewerProps> = ({ data, countryN
                         <div>Adopted: {data.constitution?.adopted}</div>
                         <div>Amendments: {data.constitution?.amendments}</div>
                     </div>
-                    <p className="font-serif leading-relaxed opacity-90 border-t border-white/20 pt-6">
+                    <p className="font-serif leading-relaxed text-justify opacity-90 border-t border-white/20 pt-6">
                         {data.constitution?.summary}
                     </p>
                 </div>
@@ -75,7 +75,7 @@ export const LegalCodeViewer: React.FC<LegalCodeViewerProps> = ({ data, countryN
                                         <h5 className="font-serif font-bold text-stone-800 dark:text-stone-200">{consti.name}</h5>
                                         <span className="text-xs font-mono text-academic-gold">{consti.year}</span>
                                     </div>
-                                    <p className="text-sm text-stone-600 dark:text-stone-400 leading-relaxed">{consti.description}</p>
+                                    <p className="text-sm text-stone-600 dark:text-stone-400 leading-relaxed text-justify">{consti.description}</p>
                                 </div>
                             ))}
                         </div>
@@ -112,7 +112,7 @@ export const LegalCodeViewer: React.FC<LegalCodeViewerProps> = ({ data, countryN
                             <FileText className="w-4 h-4" />
                             <span className="text-[10px] font-bold uppercase tracking-widest">Query Result</span>
                         </div>
-                        <div className="prose prose-stone dark:prose-invert prose-sm max-w-none font-serif leading-relaxed whitespace-pre-line">
+                        <div className="prose prose-stone dark:prose-invert prose-sm max-w-none font-serif leading-relaxed text-justify whitespace-pre-line">
                             {result}
                         </div>
                     </div>

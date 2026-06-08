@@ -131,7 +131,7 @@ const Layout: React.FC<LayoutProps> = ({ children, activeTab, onTabChange, onNav
     { id: 'home', label: 'Home', icon: Home },
     { id: 'explore', label: 'Explore', icon: Compass },
     { id: 'hub', label: 'Hub', icon: Grid },
-    { id: 'rates', label: 'Mkts', icon: DollarSign },
+    { id: 'rates', label: 'Rates', icon: DollarSign },
     { id: 'profile', label: 'Profile', icon: User },
   ];
 

@@ -35,7 +35,7 @@ export const OpenFECWidget: React.FC<OpenFECWidgetProps> = ({ queryText }) => {
     return (
         <div className="bg-stone-50 dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-2xl p-6 shadow-sm mb-6 animate-in fade-in">
             <h3 className="text-sm font-bold uppercase tracking-widest text-[#156082] dark:text-[#4198c0] mb-4 flex items-center gap-2">
-                <BadgeDollarSign className="w-4 h-4" /> Campaign Finance (OpenFEC API / DEMO_KEY)
+                <BadgeDollarSign className="w-4 h-4" /> Campaign Finance
             </h3>
             <div className="space-y-3">
                 {candidates.map((cand, idx) => (

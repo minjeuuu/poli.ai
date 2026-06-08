@@ -12,7 +12,7 @@ export const OpenStreetMapWidget: React.FC<OpenStreetMapWidgetProps> = ({ countr
     return (
         <div className="bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-2xl p-6 shadow-sm mb-8">
             <h3 className="text-sm font-bold uppercase tracking-widest text-stone-500 mb-4 flex items-center gap-2">
-                <MapPin className="w-4 h-4 text-academic-accent" /> Geographic Embed (OpenStreetMap API)
+                <MapPin className="w-4 h-4 text-academic-accent" /> Geographic Embed
             </h3>
             <div className="w-full h-64 md:h-80 rounded-xl overflow-hidden shadow-inner border border-stone-200 dark:border-stone-800 bg-stone-100 dark:bg-stone-800">
                 <iframe 

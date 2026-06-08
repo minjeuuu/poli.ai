@@ -38,7 +38,7 @@ export const CertificateView: React.FC<CertificateViewProps> = ({ cert, onClose 
                         <h3 className="text-3xl md:text-4xl font-serif font-bold text-stone-900 border-b-2 border-stone-300 pb-2">{cert.recipient}</h3>
                         <p className="text-stone-500 font-serif italic text-lg">has successfully completed the module</p>
                         <h4 className="text-2xl font-serif font-bold text-academic-accent">{cert.course}</h4>
-                        <p className="text-sm font-serif text-stone-600 leading-relaxed mt-4">{cert.description}</p>
+                        <p className="text-sm font-serif text-stone-600 leading-relaxed text-justify mt-4">{cert.description}</p>
                     </div>
 
                     <div className="w-full flex justify-between items-end mt-8">

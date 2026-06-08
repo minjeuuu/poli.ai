@@ -120,7 +120,7 @@ const FlashcardView: React.FC<FlashcardViewProps> = ({ topic, onClose }) => {
                 className="absolute inset-0 bg-academic-gold text-white rounded-xl shadow-2xl flex flex-col items-center justify-center p-8 backface-hidden rotate-y-180"
               >
                   <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/50 mb-6">Definition</span>
-                  <p className="text-lg md:text-xl font-serif text-center leading-relaxed">{currentCard.back}</p>
+                  <p className="text-lg md:text-xl font-serif text-center leading-relaxed text-justify">{currentCard.back}</p>
                   {currentCard.category && <span className="absolute bottom-6 text-[10px] uppercase tracking-widest bg-white/10 px-2 py-1 rounded">{currentCard.category}</span>}
               </div>
           </div>

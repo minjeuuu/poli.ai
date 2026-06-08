@@ -30,7 +30,7 @@ export const CoinGeckoWidget: React.FC = () => {
     return (
         <div className="bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-2xl p-6 shadow-sm mb-6 animate-in fade-in">
             <h3 className="text-sm font-bold uppercase tracking-widest text-stone-500 mb-4 flex items-center gap-2">
-                <Activity className="w-4 h-4 text-emerald-600" /> Digital Assets Market (CoinGecko API)
+                <Activity className="w-4 h-4 text-emerald-600" /> Digital Assets Market
             </h3>
             
             <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">

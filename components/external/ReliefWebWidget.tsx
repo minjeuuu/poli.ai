@@ -33,7 +33,7 @@ export const ReliefWebWidget: React.FC<ReliefWebWidgetProps> = ({ queryText }) =
     return (
         <div className="bg-red-50 dark:bg-red-950/20 border border-red-100 dark:border-red-900/30 rounded-2xl p-6 shadow-sm mb-6 animate-in fade-in">
             <h3 className="text-sm font-bold uppercase tracking-widest text-red-600 dark:text-red-500 mb-4 flex items-center gap-2">
-                <AlertTriangle className="w-4 h-4" /> Humanitarian Reports (ReliefWeb API)
+                <AlertTriangle className="w-4 h-4" /> Humanitarian Reports
             </h3>
             <div className="space-y-3">
                 {reports.map((report, idx) => (

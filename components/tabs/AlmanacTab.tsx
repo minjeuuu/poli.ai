@@ -119,7 +119,7 @@ const AlmanacTab: React.FC<AlmanacTabProps> = ({ onNavigate }) => {
                     {/* CONTEXT */}
                     <section className="bg-academic-paper dark:bg-stone-900 p-8 rounded-2xl shadow-sm border-l-4 border-academic-gold">
                         <h3 className="text-xs font-bold uppercase tracking-widest text-academic-gold mb-4 flex items-center gap-2"><Globe className="w-4 h-4" /> Historical Synthesis</h3>
-                        <p className="font-serif text-lg leading-loose text-stone-800 dark:text-stone-200">{data.context}</p>
+                        <p className="font-serif text-lg leading-loose text-justify text-stone-800 dark:text-stone-200">{data.context}</p>
                     </section>
 
                     {/* CATEGORY GRID */}
@@ -226,7 +226,7 @@ const AlmanacSection = ({ title, icon: Icon, color, items, onNavigate }: any) =>
                              <span className="font-bold text-sm text-stone-800 dark:text-stone-200 group-hover:underline decoration-stone-300 underline-offset-4">{item.title}</span>
                              <span className="font-mono text-xs text-stone-400 bg-stone-50 dark:bg-stone-800 px-1.5 rounded">{item.year}</span>
                         </div>
-                        <p className="text-xs text-stone-500 dark:text-stone-400 leading-relaxed line-clamp-2 group-hover:text-stone-700 dark:group-hover:text-stone-300 transition-colors">
+                        <p className="text-xs text-stone-500 dark:text-stone-400 leading-relaxed text-justify line-clamp-2 group-hover:text-stone-700 dark:group-hover:text-stone-300 transition-colors">
                             {item.description}
                         </p>
                     </div>

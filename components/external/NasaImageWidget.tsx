@@ -33,7 +33,7 @@ export const NasaImageWidget: React.FC<NasaImageWidgetProps> = ({ queryText }) =
     return (
         <div className="bg-stone-950 border border-stone-800 rounded-2xl p-6 shadow-xl mb-6 animate-in fade-in">
             <h3 className="text-sm font-bold uppercase tracking-widest text-stone-400 mb-4 flex items-center gap-2">
-                <Rocket className="w-4 h-4 text-blue-500" /> Space Archives (NASA Image API)
+                <Rocket className="w-4 h-4 text-blue-500" /> Space Archives
             </h3>
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">

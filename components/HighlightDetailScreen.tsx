@@ -2,7 +2,9 @@
 import React, { useEffect, useState } from 'react';
 import { HighlightedEntity, HighlightDetail } from '../types';
 import { fetchHighlightDetail } from '../services/homeService';
-import { ArrowLeft, BookOpen, Link as LinkIcon, Share2, Bookmark, Check } from 'lucide-react';
+import { ArrowLeft, BookOpen, Link as LinkIcon, Share2, Bookmark, Check, Download } from 'lucide-react';
+import { generateAestheticPDF } from '../utils/pdfGenerator';
+import { playSFX } from '../services/soundService';
 
 interface HighlightDetailScreenProps {
   highlight: HighlightedEntity;
@@ -38,6 +40,32 @@ const HighlightDetailScreen: React.FC<HighlightDetailScreenProps> = ({ highlight
     setTimeout(() => {
       setToast(prev => ({ ...prev, visible: false }));
     }, 2500);
+  };
+
+  const handleDownload = () => {
+    playSFX('click');
+    if (!detail) return;
+    try {
+        const sections = [];
+        if (detail.content) {
+            sections.push({ title: "Content", content: detail.content });
+        }
+        if (detail.analysis) {
+            sections.push({ title: "Analysis", content: detail.analysis });
+        }
+        if (detail.keyTakeaways && detail.keyTakeaways.length > 0) {
+            sections.push({ title: "Key Takeaways", content: detail.keyTakeaways });
+        }
+        generateAestheticPDF(
+            highlight.title,
+            highlight.subtitle,
+            "",
+            sections,
+            `${highlight.title.replace(/\s+/g, '_')}_Highlight.pdf`
+        );
+    } catch (err) {
+        console.error("PDF generation failed:", err);
+    }
   };
 
   const handleShare = async () => {
@@ -94,7 +122,7 @@ const HighlightDetailScreen: React.FC<HighlightDetailScreenProps> = ({ highlight
       </div>
 
       {/* BODY */}
-      <div className="flex-1 overflow-y-auto p-6 scroll-smooth">
+      <div className="flex-1 overflow-y-auto p-4 sm:p-6 scroll-smooth">
         <div className="max-w-2xl mx-auto space-y-12 pb-24">
           
           {/* TITLE BLOCK */}
@@ -135,7 +163,7 @@ const HighlightDetailScreen: React.FC<HighlightDetailScreenProps> = ({ highlight
                    <h3 className="text-xs font-bold text-academic-muted uppercase tracking-widest mb-4 flex items-center gap-2">
                       <BookOpen className="w-4 h-4" /> Summary
                    </h3>
-                   <p className="font-serif text-academic-text leading-loose text-base md:text-lg">
+                   <p className="font-serif text-academic-text leading-loose text-justify text-base md:text-lg">
                       {detail.summary}
                    </p>
                 </section>
@@ -145,7 +173,7 @@ const HighlightDetailScreen: React.FC<HighlightDetailScreenProps> = ({ highlight
                     <h3 className="text-[10px] font-bold text-academic-muted uppercase tracking-widest mb-3">
                       Historical Background
                     </h3>
-                    <p className="font-serif text-stone-600 leading-relaxed text-sm">
+                    <p className="font-serif text-stone-600 leading-relaxed text-justify text-sm">
                        {detail.historicalBackground}
                     </p>
                 </section>
@@ -161,7 +189,7 @@ const HighlightDetailScreen: React.FC<HighlightDetailScreenProps> = ({ highlight
                           return (
                               <div key={i} className="p-4 bg-academic-paper border border-academic-line">
                                   <h4 className="font-bold text-academic-text text-sm mb-2">{concept.concept}</h4>
-                                  <p className="text-xs text-stone-500 leading-relaxed">{concept.definition}</p>
+                                  <p className="text-xs text-stone-500 leading-relaxed text-justify">{concept.definition}</p>
                               </div>
                           );
                       })}
@@ -173,7 +201,7 @@ const HighlightDetailScreen: React.FC<HighlightDetailScreenProps> = ({ highlight
                    <h3 className="text-[10px] font-bold text-academic-gold uppercase tracking-widest mb-3">
                       Why It Matters Today
                    </h3>
-                   <p className="font-serif text-academic-text leading-relaxed text-sm">
+                   <p className="font-serif text-academic-text leading-relaxed text-justify text-sm">
                        {detail.significance}
                    </p>
                 </section>
@@ -237,12 +265,20 @@ const HighlightDetailScreen: React.FC<HighlightDetailScreenProps> = ({ highlight
              <Bookmark className={`w-4 h-4 ${isSaved ? 'fill-academic-gold' : ''}`} />
              {isSaved ? 'Saved' : 'Save Highlight'}
          </button>
-         <button 
-           onClick={handleShare}
-           className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-stone-400 hover:text-academic-accent transition-colors"
-         >
-             <Share2 className="w-4 h-4" /> Share
-         </button>
+         <div className="flex items-center gap-4">
+           <button 
+             onClick={handleDownload}
+             className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-stone-400 hover:text-academic-accent transition-colors"
+           >
+               <Download className="w-4 h-4" /> Download
+           </button>
+           <button 
+             onClick={handleShare}
+             className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-stone-400 hover:text-academic-accent transition-colors"
+           >
+               <Share2 className="w-4 h-4" /> Share
+           </button>
+         </div>
       </div>
     </div>
   );

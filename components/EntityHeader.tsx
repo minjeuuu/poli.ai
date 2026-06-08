@@ -35,7 +35,7 @@ const EntityHeader: React.FC<EntityHeaderProps> = ({ entity, onNavigate }) => {
            <h1 className="text-5xl font-serif font-bold text-academic-text dark:text-stone-100 mb-3 tracking-tight">{entity.name}</h1>
            <h2 className="text-sm font-mono text-academic-muted dark:text-stone-400 uppercase tracking-wider mb-6">{entity.officialName}</h2>
            
-           <p className="text-lg font-serif text-stone-600 dark:text-stone-300 leading-relaxed max-w-2xl">
+           <p className="text-lg font-serif text-stone-600 dark:text-stone-300 leading-relaxed text-justify max-w-2xl">
                {entity.description}
            </p>
         </div>

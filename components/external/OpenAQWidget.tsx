@@ -42,7 +42,7 @@ export const OpenAQWidget: React.FC<OpenAQWidgetProps> = ({ countryName }) => {
     return (
         <div className="bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-2xl p-6 shadow-sm mb-6 animate-in fade-in">
             <h3 className="text-sm font-bold uppercase tracking-widest text-stone-500 mb-4 flex items-center gap-2">
-                <Wind className="w-4 h-4 text-emerald-500" /> Environment & Air Quality (OpenAQ API)
+                <Wind className="w-4 h-4 text-emerald-500" /> Environment & Air Quality
             </h3>
             <div className="space-y-4">
                 {aqData.map((station, idx) => (

@@ -35,7 +35,7 @@ export const HackerNewsWidget: React.FC = () => {
     return (
         <div className="bg-[#ff6600]/5 border border-[#ff6600]/20 rounded-2xl p-6 shadow-sm mb-6 animate-in fade-in">
             <h3 className="text-sm font-bold uppercase tracking-widest text-[#ff6600] mb-4 flex items-center gap-2">
-                <Newspaper className="w-4 h-4" /> Tech & Policy Signals (HackerNews API)
+                <Newspaper className="w-4 h-4" /> Tech & Policy Signals
             </h3>
             <div className="space-y-3">
                 {stories.map((story, idx) => (

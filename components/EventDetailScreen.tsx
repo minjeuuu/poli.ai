@@ -6,7 +6,7 @@ import { EventDetail } from '../types';
 import { fetchEventDetail } from '../services/eventService';
 import LoadingScreen from './LoadingScreen';
 import PersonDetailScreen from './PersonDetailScreen';
-import { WikidataWidget } from './external/WikidataWidget';
+import { WikipediaWidget } from './external/WikipediaWidget';
 import { GDELTWidget } from './external/GDELTWidget';
 import { RedditWidget } from './external/RedditWidget';
 import { CrossrefWidget } from './external/CrossrefWidget';
@@ -16,8 +16,8 @@ import { SemanticScholarWidget } from './external/SemanticScholarWidget';
 import { ReliefWebWidget } from './external/ReliefWebWidget';
 import { OpenAlexWidget } from './external/OpenAlexWidget';
 import { InternetArchiveWidget } from './external/InternetArchiveWidget';
-import { DBpediaWidget } from './external/DBpediaWidget';
 import { LibraryOfCongressWidget } from './external/LibraryOfCongressWidget';
+import { generateAestheticPDF } from '../utils/pdfGenerator';
 import { playSFX } from '../services/soundService';
 
 interface EventDetailScreenProps {
@@ -56,6 +56,34 @@ const EventDetailScreen: React.FC<EventDetailScreenProps> = ({ eventName, onClos
     load();
     return () => { mounted = false; };
   }, [eventName]);
+
+  const handleDownload = () => {
+      playSFX('click');
+      if (!data) return;
+      try {
+          const sections = [];
+          if (data.context) {
+              sections.push({ title: "Historical Context", content: data.context });
+          }
+          if (data.timeline && data.timeline.length > 0) {
+              const events = data.timeline.map((e: any) => `${e.date || ''}: ${e.event || ''}`);
+              sections.push({ title: "Chronology", content: events });
+          }
+          if (data.aftermath) {
+              sections.push({ title: "Aftermath", content: data.aftermath });
+          }
+
+          generateAestheticPDF(
+              data.title || eventName,
+              "Historical Event Dossier",
+              data.summary || "No description provided.",
+              sections,
+              `${(data.title || eventName).replace(/\s+/g, '_')}_Event.pdf`
+          );
+      } catch (err) {
+          console.error("PDF generation failed:", err);
+      }
+  };
 
   const scrollToSection = (id: string) => {
     playSFX('click');
@@ -98,6 +126,7 @@ const EventDetailScreen: React.FC<EventDetailScreenProps> = ({ eventName, onClos
                 </div>
             </div>
             <div className="flex items-center gap-2">
+                <button onClick={handleDownload} className="p-2 rounded-full hover:bg-stone-100 dark:hover:bg-stone-800 text-stone-400 transition-colors" title="Download Report"><Download className="w-5 h-5" /></button>
                 <button onClick={handleWebSearch} className="p-2 rounded-full hover:bg-stone-100 dark:hover:bg-stone-800 text-stone-400 transition-colors" title="Visual Evidence"><ImageIcon className="w-5 h-5" /></button>
                 <button onClick={onToggleSave} className={`p-2 rounded-full hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors ${isSaved ? 'text-academic-gold' : 'text-stone-400 dark:text-stone-500'}`}><Bookmark className={`w-5 h-5 ${isSaved ? 'fill-current' : ''}`} /></button>
             </div>
@@ -110,10 +139,8 @@ const EventDetailScreen: React.FC<EventDetailScreenProps> = ({ eventName, onClos
       </div>
 
       <div className="flex-1 overflow-y-auto scroll-smooth pb-32 bg-stone-50 dark:bg-black">
-          <div className="max-w-4xl mx-auto p-6 md:p-10 space-y-12">
+          <div className="max-w-4xl mx-auto p-4 sm:p-6 md:p-10 space-y-12">
             
-            <WikidataWidget queryText={data.title || eventName} />
-
             {/* HERO VISUAL */}
             <div className="relative aspect-video w-full rounded-2xl overflow-hidden shadow-2xl border border-stone-200 dark:border-stone-800 group bg-stone-200 dark:bg-stone-900">
                  {data.imageUrl ? (
@@ -142,7 +169,7 @@ const EventDetailScreen: React.FC<EventDetailScreenProps> = ({ eventName, onClos
                       <FileText className="w-5 h-5" />
                       <h3 className="text-xs font-bold uppercase tracking-widest">Executive Summary</h3>
                   </div>
-                  <p className="font-serif text-lg leading-loose text-stone-800 dark:text-stone-200 whitespace-pre-line">
+                  <p className="font-serif text-lg leading-loose text-justify text-stone-800 dark:text-stone-200 whitespace-pre-line">
                       {data.context}
                   </p>
             </div>
@@ -159,7 +186,7 @@ const EventDetailScreen: React.FC<EventDetailScreenProps> = ({ eventName, onClos
                             <div key={i} className="relative">
                                 <div className="absolute -left-[39px] top-1 w-3 h-3 bg-academic-gold rounded-full border-2 border-white dark:border-stone-900"></div>
                                 <span className="font-mono text-xs font-bold text-academic-gold block mb-1">{point.time || "Phase " + (i+1)}</span>
-                                <p className="font-serif text-stone-700 dark:text-stone-300 leading-relaxed">{point.description}</p>
+                                <p className="font-serif text-stone-700 dark:text-stone-300 leading-relaxed text-justify">{point.description}</p>
                             </div>
                         ))}
                     </div>
@@ -216,26 +243,37 @@ const EventDetailScreen: React.FC<EventDetailScreenProps> = ({ eventName, onClos
             <div id="aftermath" ref={el => { sectionRefs.current['aftermath'] = el; }} className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div className="bg-stone-50 dark:bg-stone-900/50 p-8 rounded-2xl border border-stone-200 dark:border-stone-800">
                      <h3 className="text-xs font-bold uppercase tracking-widest text-stone-500 mb-4 flex items-center gap-2"><CheckCircle className="w-4 h-4 text-green-500" /> Immediate Outcome</h3>
-                     <p className="font-serif text-lg text-stone-800 dark:text-stone-200 leading-relaxed">{data.outcome}</p>
+                     <p className="font-serif text-lg text-stone-800 dark:text-stone-200 leading-relaxed text-justify">{data.outcome}</p>
                 </div>
                 <div className="bg-academic-accent dark:bg-indigo-900 text-white p-8 rounded-2xl shadow-lg">
                      <h3 className="text-xs font-bold uppercase tracking-widest text-academic-gold mb-4 flex items-center gap-2"><Globe className="w-4 h-4" /> Historical Legacy</h3>
-                     <p className="font-serif text-lg leading-relaxed opacity-90">{data.significance}</p>
+                     <p className="font-serif text-lg leading-relaxed text-justify opacity-90">{data.significance}</p>
                 </div>
             </div>
 
-            <div className="mt-12 space-y-8">
-                <DBpediaWidget queryText={data.title || eventName} />
-                <ReliefWebWidget queryText={data.title || eventName} />
-                <OpenAlexWidget queryText={data.title || eventName} />
-                <InternetArchiveWidget queryText={data.title || eventName} />
-                <GDELTWidget queryText={data.title || eventName} />
-                <RedditWidget queryText={data.title || eventName} />
-                <LibraryOfCongressWidget queryText={data.title || eventName} />
-                <SemanticScholarWidget queryText={data.title || eventName} />
-                <CrossrefWidget queryText={data.title || eventName} />
-                <DOAJWidget queryText={data.title || eventName} />
-                <OpenLibraryWidget queryText={data.title || eventName} />
+            <div id="sources" ref={el => { sectionRefs.current['sources'] = el; }} className="mt-16 pt-8 border-t border-stone-200 dark:border-stone-800">
+                <h3 className="font-serif text-2xl font-bold mb-6 flex items-center gap-2">
+                    <Globe className="w-5 h-5 text-academic-gold" /> External Repositories & Data
+                </h3>
+                <div className="grid grid-cols-1 lg:grid-cols-3 md:grid-cols-2 gap-6">
+                    <div className="space-y-6">
+                        <WikipediaWidget title={data.title || eventName} description="historical event politics" />
+                        <ReliefWebWidget queryText={data.title || eventName} />
+                        <LibraryOfCongressWidget queryText={data.title || eventName} />
+                    </div>
+                    <div className="space-y-6">
+                        <OpenAlexWidget queryText={data.title || eventName} />
+                        <InternetArchiveWidget queryText={data.title || eventName} />
+                        <SemanticScholarWidget queryText={data.title || eventName} />
+                        <CrossrefWidget queryText={data.title || eventName} />
+                    </div>
+                    <div className="space-y-6">
+                        <GDELTWidget queryText={data.title || eventName} />
+                        <RedditWidget queryText={data.title || eventName} />
+                        <DOAJWidget queryText={data.title || eventName} />
+                        <OpenLibraryWidget queryText={data.title || eventName} />
+                    </div>
+                </div>
             </div>
 
           </div>

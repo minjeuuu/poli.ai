@@ -267,7 +267,7 @@ const TheoryTab: React.FC<TheoryTabProps> = ({ onNavigate, onAddToCompare, onTog
         <div className="p-10 bg-gradient-to-b from-white to-academic-bg dark:from-stone-900 dark:to-stone-950 border-b border-academic-line dark:border-stone-800 transition-colors">
             <div className="max-w-5xl mx-auto">
                 <h2 className="text-5xl md:text-6xl font-serif font-bold text-academic-text dark:text-stone-100 mb-6 tracking-tight">Political Theory</h2>
-                <p className="text-xl font-serif text-stone-500 dark:text-stone-400 max-w-2xl leading-relaxed">
+                <p className="text-xl font-serif text-stone-500 dark:text-stone-400 max-w-2xl leading-relaxed text-justify">
                     Explore the vast network of political thought, from ancient philosophies to contemporary critical theories.
                 </p>
             </div>
@@ -298,7 +298,7 @@ const TheoryTab: React.FC<TheoryTabProps> = ({ onNavigate, onAddToCompare, onTog
                             <h3 className="text-4xl md:text-5xl font-serif font-bold text-academic-text dark:text-stone-100 mb-4 group-hover:text-academic-accent dark:group-hover:text-indigo-400 transition-colors leading-tight">
                                 {cat.category}
                             </h3>
-                            <p className="text-xl md:text-2xl text-stone-500 dark:text-stone-400 font-serif leading-relaxed mb-8 flex-1">
+                            <p className="text-xl md:text-2xl text-stone-500 dark:text-stone-400 font-serif leading-relaxed text-justify mb-8 flex-1">
                                 {cat.description}
                             </p>
 

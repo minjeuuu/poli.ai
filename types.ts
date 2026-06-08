@@ -163,21 +163,20 @@ export interface UserPreferences {
     density: string;
     fontSize: number;
     fontFamily: string;
-    typography?: string;
     reduceMotion: boolean;
     highContrast: boolean;
     colorBlindMode?: string;
+    typography?: string;
     saturation: number;
     blurEffects: boolean;
     showGridLines: boolean;
     borderRadius: string;
     
+    emailNotifications?: boolean;
+    digestFrequency?: string;
     emailDigest: string;
     emailMarketing: boolean;
     emailSecurity: boolean;
-    pushNotifications?: boolean;
-    emailNotifications?: boolean;
-    digestFrequency?: string;
     pushAlerts: boolean;
     pushMentions: boolean;
     pushReplies: boolean;
@@ -250,7 +249,6 @@ export const DEFAULT_PREFS: UserPreferences = {
     reduceMotion: false,
     highContrast: false,
     colorBlindMode: 'None',
-    pushNotifications: true,
     emailNotifications: false,
     digestFrequency: 'Daily',
     saturation: 100,

@@ -1,0 +1,18 @@
+{
+  "name": "POLI",
+  "short_name": "POLI",
+  "description": "Political Intelligence Directorate",
+  "start_url": "/",
+  "display": "fullscreen",
+  "background_color": "#FDFBF7",
+  "theme_color": "#FDFBF7",
+  "display_override": ["fullscreen", "standalone", "minimal-ui"],
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

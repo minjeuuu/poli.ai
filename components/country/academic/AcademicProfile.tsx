@@ -9,7 +9,7 @@ export const AcademicProfileView: React.FC<{ data: AcademicProfile }> = ({ data 
         <div className="space-y-8">
             <div className="bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-2xl p-8">
                 <h4 className="text-xs font-bold uppercase tracking-widest text-stone-400 mb-4">Intellectual History</h4>
-                <p className="font-serif text-lg leading-loose text-stone-700 dark:text-stone-300">
+                <p className="font-serif text-lg leading-loose text-justify text-stone-700 dark:text-stone-300">
                     {data.intellectualTradition}
                 </p>
             </div>

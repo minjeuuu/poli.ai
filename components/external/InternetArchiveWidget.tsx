@@ -33,7 +33,7 @@ export const InternetArchiveWidget: React.FC<InternetArchiveWidgetProps> = ({ qu
     return (
         <div className="bg-stone-50 dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-2xl p-6 shadow-sm mb-6 animate-in fade-in">
             <h3 className="text-sm font-bold uppercase tracking-widest text-stone-500 mb-4 flex items-center gap-2">
-                <Database className="w-4 h-4 text-stone-700 dark:text-stone-300" /> Digital Artifacts (Internet Archive API)
+                <Database className="w-4 h-4 text-stone-700 dark:text-stone-300" /> Digital Artifacts
             </h3>
             <div className="space-y-3">
                 {items.map((item, idx) => (

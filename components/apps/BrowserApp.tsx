@@ -47,7 +47,7 @@ export const BrowserApp: React.FC = () => {
                             <Globe className="w-12 h-12" />
                         </div>
                         <h1 className="text-3xl font-serif font-bold text-stone-800 dark:text-stone-200">The Global Archive</h1>
-                        <p className="text-stone-500 dark:text-stone-400 font-serif leading-relaxed">
+                        <p className="text-stone-500 dark:text-stone-400 font-serif leading-relaxed text-justify">
                             Accessing restricted knowledge base at <strong>{url}</strong>. Connection secure.
                         </p>
                         

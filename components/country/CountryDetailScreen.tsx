@@ -62,6 +62,8 @@ import { DOAJWidget } from '../external/DOAJWidget';
 import { SemanticScholarWidget } from '../external/SemanticScholarWidget';
 import { LibraryOfCongressWidget } from '../external/LibraryOfCongressWidget';
 
+import { generateAestheticPDF } from '../../utils/pdfGenerator';
+
 interface CountryDetailScreenProps {
   countryName: string;
   onClose: () => void;
@@ -96,6 +98,26 @@ const CountryDetailScreen: React.FC<CountryDetailScreenProps> = ({ countryName, 
     load();
     return () => { mounted = false; };
   }, [countryName]);
+
+  const handleDownload = () => {
+    playSFX('click');
+    if (!data) return;
+    try {
+        const sections = [];
+        if (data.overview) sections.push({ title: "Overview", content: data.overview });
+        if (data.headOfState) sections.push({ title: "Head of State", content: `${data.headOfState.name} (${data.headOfState.title})` });
+
+        generateAestheticPDF(
+            countryName,
+            "National Dossier",
+            data.overview || "No description provided.",
+            sections,
+            `${countryName.replace(/\s+/g, '_')}_Dossier.pdf`
+        );
+    } catch (err) {
+        console.error("PDF generation failed:", err);
+    }
+  };
 
   const scrollTo = (id: string) => {
       playSFX('click');
@@ -158,8 +180,9 @@ const CountryDetailScreen: React.FC<CountryDetailScreenProps> = ({ countryName, 
                   />
               ))}
           </div>
-          <div className="p-4 border-t border-stone-200 dark:border-stone-800 bg-stone-50 dark:bg-stone-900/50">
-              <button onClick={() => { playSFX('click'); onAddToCompare(countryName, 'Country'); }} className="w-full py-2 bg-white dark:bg-stone-800 border border-stone-200 dark:border-stone-700 text-stone-600 dark:text-stone-300 rounded-lg text-xs font-bold uppercase tracking-wider mb-2 hover:border-academic-accent dark:hover:border-indigo-500 transition-colors">Compare</button>
+          <div className="p-4 border-t border-stone-200 dark:border-stone-800 bg-stone-50 dark:bg-stone-900/50 flex flex-col gap-2">
+              <button onClick={() => { playSFX('click'); onAddToCompare(countryName, 'Country'); }} className="w-full py-2 bg-white dark:bg-stone-800 border border-stone-200 dark:border-stone-700 text-stone-600 dark:text-stone-300 rounded-lg text-xs font-bold uppercase tracking-wider hover:border-academic-accent dark:hover:border-indigo-500 transition-colors">Compare</button>
+              <button onClick={handleDownload} className="w-full py-2 bg-white dark:bg-stone-800 border border-stone-200 dark:border-stone-700 text-stone-600 dark:text-stone-300 rounded-lg text-xs font-bold uppercase tracking-wider hover:border-academic-accent dark:hover:border-indigo-500 transition-colors">Download</button>
               <button onClick={onToggleSave} className={`w-full py-2 border rounded-lg text-xs font-bold uppercase tracking-wider transition-colors ${isSaved ? 'bg-academic-gold text-white border-academic-gold' : 'bg-transparent border-stone-200 dark:border-stone-700 text-stone-500 hover:border-academic-gold'}`}>{isSaved ? 'Saved' : 'Save Dossier'}</button>
           </div>
       </nav>
@@ -169,6 +192,7 @@ const CountryDetailScreen: React.FC<CountryDetailScreenProps> = ({ countryName, 
           
           {/* MOBILE NAV */}
           <div className="lg:hidden bg-white dark:bg-stone-900 border-b border-stone-200 dark:border-stone-800 overflow-x-auto no-scrollbar flex items-center gap-2 p-2 shadow-sm">
+              <button onClick={handleDownload} className="flex-none px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider whitespace-nowrap bg-stone-100 dark:bg-stone-800 text-stone-500">Download</button>
               {SECTIONS.map(s => (
                   <button
                       key={s.id}
@@ -182,7 +206,7 @@ const CountryDetailScreen: React.FC<CountryDetailScreenProps> = ({ countryName, 
 
           <CountryHero data={data} onBack={onClose} />
 
-          <div className="max-w-6xl mx-auto p-6 md:p-12 pb-32">
+          <div className="max-w-6xl mx-auto p-4 sm:p-6 md:p-12 pb-32">
 
               {/* OVERVIEW */}
               <SectionWrapper id="Overview" title="Overview" icon={Globe} setRef={setRef('Overview')}>
@@ -195,7 +219,7 @@ const CountryDetailScreen: React.FC<CountryDetailScreenProps> = ({ countryName, 
                   
                   <div className="bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-2xl p-8 mb-12 shadow-sm">
                       <h3 className="text-xs font-bold uppercase tracking-widest text-academic-gold mb-6 flex items-center gap-2"><Brain className="w-4 h-4" /> Strategic Synthesis</h3>
-                      <div className="prose prose-stone dark:prose-invert font-serif leading-loose text-base md:text-lg max-w-none">
+                      <div className="prose prose-stone dark:prose-invert font-serif leading-loose text-base md:text-lg max-w-none text-justify">
                           <p>{data.politicalScience.detailedAnalysis?.politicalCulture || data.history.politicalHistory[0]}</p>
                       </div>
                   </div>
@@ -344,32 +368,12 @@ const CountryDetailScreen: React.FC<CountryDetailScreenProps> = ({ countryName, 
                        </div>
                    </div>
                    <TradePartners data={data.economy} onNavigate={onNavigate} />
-                   <div className="mt-8">
-                       <FrankfurterWidget />
-                       <RestCountriesWidget countryName={countryName} />
-                       <WorldBankWidget countryName={countryName} />
-                   </div>
+                   
               </SectionWrapper>
 
-              {/* LOCAION (NEW) */}
-              <SectionWrapper id="geography" title="Geography & Mapping" icon={Building2} isVisible={true}>
-                   <OpenStreetMapWidget countryName={countryName} />
-                   <OpenMeteoWidget locationName={data.capital || countryName} />
-              </SectionWrapper>
+              
 
-              {/* EXTERNAL NEWS & RESOURCES */}
-              <SectionWrapper id="news" title="Extended Monitor & Archives" icon={Newspaper} isVisible={true}>
-                   <WorldBankIndicatorsWidget countryName={countryName} />
-                   <OpenAQWidget countryName={countryName} />
-                   <ReliefWebWidget queryText={countryName} />
-                   <OpenAlexWidget queryText={countryName} />
-                   <WikipediaWidget title={countryName} />
-                   <GDELTWidget queryText={countryName} />
-                   <LibraryOfCongressWidget queryText={countryName} />
-                   <SemanticScholarWidget queryText={countryName} />
-                   <DOAJWidget queryText={countryName} />
-                   <ArtInstituteChicagoWidget queryText={countryName} />
-              </SectionWrapper>
+              
 
               {/* TECHNOLOGY (NEW) */}
               <SectionWrapper id="Technology" title="Innovation & Tech" icon={Cpu} subtitle="Digital Infrastructure" setRef={setRef('Technology')}>
@@ -389,8 +393,8 @@ const CountryDetailScreen: React.FC<CountryDetailScreenProps> = ({ countryName, 
               {/* CULTURE (NEW) */}
               <SectionWrapper id="Culture" title="Cultural Heritage" icon={Palette} subtitle="Arts, Cuisine, Traditions" setRef={setRef('Culture')}>
                   <CultureProfile data={data.culture} onNavigate={onNavigate} />
-                  <MetMuseumWidget queryText={countryName} />
-                  <PublicHolidaysWidget countryName={countryName} />
+                  
+                  
               </SectionWrapper>
 
               {/* HEALTH (NEW) */}
@@ -401,7 +405,7 @@ const CountryDetailScreen: React.FC<CountryDetailScreenProps> = ({ countryName, 
               {/* EDUCATION (NEW) */}
               <SectionWrapper id="Education" title="Education System" icon={GraduationCap} subtitle="Literacy & Institutions" setRef={setRef('Education')}>
                   <EducationProfile data={data.education} onNavigate={onNavigate} />
-                  <UniversitiesWidget countryName={countryName} />
+                  
               </SectionWrapper>
 
               {/* TOURISM (NEW) */}
@@ -437,16 +441,46 @@ const CountryDetailScreen: React.FC<CountryDetailScreenProps> = ({ countryName, 
               {/* ANALYSIS */}
               <SectionWrapper id="Analysis" title="Strategic Analysis" icon={Brain} subtitle="Deep State Assessment" setRef={setRef('Analysis')}>
                   <div className="bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-2xl p-8 space-y-8">
-                      <div className="prose prose-stone dark:prose-invert max-w-none font-serif leading-loose">
+                      <div className="prose prose-stone dark:prose-invert max-w-none font-serif leading-loose text-justify">
                           <p>{data.analysis.strategicAnalysis}</p>
                       </div>
                   </div>
               </SectionWrapper>
 
               {/* VISUALS */}
-              <SectionWrapper id="Visuals" title="Visual Archive" icon={ImageIcon} subtitle="Historical & Cultural Imagery" setRef={setRef('Visuals')}>
-                  <ImageArchiveGrid images={data.imageArchive || []} />
-              </SectionWrapper>
+               <SectionWrapper id="Visuals" title="Visual Archive" icon={ImageIcon} subtitle="Historical & Cultural Imagery" setRef={setRef('Visuals')}>
+                   <ImageArchiveGrid images={data.imageArchive || []} />
+               </SectionWrapper>
+
+               {/* EXTERNAL NEWS & RESOURCES MULTI-GRID */}
+               <SectionWrapper id="news" title="External Repositories & Data" icon={Globe} isVisible={true}>
+                    <div className="grid grid-cols-1 lg:grid-cols-3 md:grid-cols-2 gap-6">
+                        <div className="space-y-6">
+                            <FrankfurterWidget />
+                            <RestCountriesWidget countryName={countryName} />
+                            <WorldBankWidget countryName={countryName} />
+                            <OpenStreetMapWidget countryName={countryName} />
+                            <OpenMeteoWidget locationName={data.capital || countryName} />
+                            <MetMuseumWidget queryText={countryName} />
+                        </div>
+                        <div className="space-y-6">
+                            <WorldBankIndicatorsWidget countryName={countryName} />
+                            <OpenAQWidget countryName={countryName} />
+                            <ReliefWebWidget queryText={countryName} />
+                            <OpenAlexWidget queryText={countryName} />
+                            <WikipediaWidget title={countryName} description="country nation politics" />
+                            <UniversitiesWidget countryName={countryName} />
+                        </div>
+                        <div className="space-y-6">
+                            <GDELTWidget queryText={countryName} />
+                            <LibraryOfCongressWidget queryText={countryName} />
+                            <SemanticScholarWidget queryText={countryName} />
+                            <DOAJWidget queryText={countryName} />
+                            <ArtInstituteChicagoWidget queryText={countryName} />
+                            <PublicHolidaysWidget countryName={countryName} />
+                        </div>
+                    </div>
+               </SectionWrapper>
 
           </div>
       </div>

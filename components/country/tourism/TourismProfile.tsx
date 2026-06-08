@@ -29,7 +29,7 @@ export const TourismProfile: React.FC<{ data: any, onNavigate?: (type: string, p
                 </div>
                 <div>
                     <h5 className="font-bold text-stone-800 dark:text-stone-200 text-sm mb-1">Visa Policy Overview</h5>
-                    <p className="text-xs font-serif text-stone-600 dark:text-stone-400 leading-relaxed">{data.visaPolicy}</p>
+                    <p className="text-xs font-serif text-stone-600 dark:text-stone-400 leading-relaxed text-justify">{data.visaPolicy}</p>
                 </div>
             </div>
         </div>

@@ -118,7 +118,7 @@ export const PoliverseGame: React.FC = () => {
                     <div className="max-w-5xl mx-auto">
                         <div className="mb-6 p-6 bg-white dark:bg-stone-900 border-l-4 border-academic-accent dark:border-indigo-500 rounded-r-xl shadow-sm">
                             <h3 className="text-sm font-bold uppercase tracking-widest text-stone-400 mb-2">Briefing</h3>
-                            <p className="font-serif text-lg text-stone-700 dark:text-stone-200 leading-relaxed">
+                            <p className="font-serif text-lg text-stone-700 dark:text-stone-200 leading-relaxed text-justify">
                                 {scenario.description}
                             </p>
                         </div>

@@ -1,11 +1,21 @@
 import { ImageWithFallback } from './atoms/ImageWithFallback';
 
 import React, { useEffect, useState } from 'react';
-import { ArrowLeft, Globe, Flag, AlertTriangle, Lightbulb } from 'lucide-react';
+import { ArrowLeft, Globe, Flag, AlertTriangle, Lightbulb, Download } from 'lucide-react';
 import { RegionalDetail } from '../types';
 import { fetchRegionalDetail } from '../services/geminiService';
-import { WikidataWidget } from './external/WikidataWidget';
+import { WikipediaWidget } from './external/WikipediaWidget';
+import { GDELTWidget } from './external/GDELTWidget';
+import { RedditWidget } from './external/RedditWidget';
+import { OpenAlexWidget } from './external/OpenAlexWidget';
+import { InternetArchiveWidget } from './external/InternetArchiveWidget';
+import { ReliefWebWidget } from './external/ReliefWebWidget';
+import { LibraryOfCongressWidget } from './external/LibraryOfCongressWidget';
+import { CrossrefWidget } from './external/CrossrefWidget';
+import { DOAJWidget } from './external/DOAJWidget';
 import LoadingScreen from './LoadingScreen';
+import { generateAestheticPDF } from '../utils/pdfGenerator';
+import { playSFX } from '../services/soundService';
 
 interface RegionalDetailScreenProps {
   region: string;
@@ -32,6 +42,28 @@ const RegionalDetailScreen: React.FC<RegionalDetailScreenProps> = ({ region, dis
     return () => { mounted = false; };
   }, [region, disciplineContext]);
 
+  const handleDownload = () => {
+    playSFX('click');
+    if (!data) return;
+    try {
+        const sections = [];
+        if (data.context) sections.push({ title: "Regional Context", content: data.context });
+        if (data.characteristics && data.characteristics.length > 0) sections.push({ title: "Characteristics", content: data.characteristics });
+        if (data.challenges && data.challenges.length > 0) sections.push({ title: "Challenges", content: data.challenges });
+        if (data.futureOutlook) sections.push({ title: "Future Outlook", content: data.futureOutlook });
+
+        generateAestheticPDF(
+            region,
+            `Regional Analysis: ${disciplineContext}`,
+            "",
+            sections,
+            `${region.replace(/\s+/g, '_')}_Analysis.pdf`
+        );
+    } catch (err) {
+        console.error("PDF generation failed:", err);
+    }
+  };
+
   if (loading) return (
       <div className="fixed inset-0 z-[60] bg-academic-bg">
           <LoadingScreen message={`Analyzing ${region} Context...`} />
@@ -54,24 +86,27 @@ const RegionalDetailScreen: React.FC<RegionalDetailScreenProps> = ({ region, dis
                   <span className="text-[10px] font-mono text-academic-gold uppercase tracking-widest">{disciplineContext}</span>
               </div>
           </div>
-          {data.imageUrl && (
-              <div className="w-12 h-12 rounded-lg overflow-hidden border border-stone-200 shadow-sm flex-shrink-0">
-                  <ImageWithFallback src={data.imageUrl} alt={region} className="w-full h-full object-cover" />
-              </div>
-          )}
+          <div className="flex items-center gap-2">
+              <button onClick={handleDownload} className="p-2 rounded-full text-stone-400 hover:text-academic-accent hover:bg-stone-100 transition-all" title="Download Report">
+                  <Download className="w-5 h-5" />
+              </button>
+              {data.imageUrl && (
+                  <div className="w-12 h-12 rounded-lg overflow-hidden border border-stone-200 shadow-sm flex-shrink-0">
+                      <ImageWithFallback src={data.imageUrl} alt={region} className="w-full h-full object-cover" />
+                  </div>
+              )}
+          </div>
       </div>
 
       <div className="p-6 max-w-3xl mx-auto space-y-12 pb-24">
           
-          <WikidataWidget queryText={region} />
-
           {/* SUMMARY */}
           <section className="animate-in fade-in duration-700 delay-100">
               <div className="flex items-center gap-3 mb-4 text-academic-muted">
                   <Globe className="w-5 h-5" />
                   <h3 className="text-xs font-bold uppercase tracking-widest">Regional Overview</h3>
               </div>
-              <p className="font-serif text-lg leading-relaxed text-academic-text">
+              <p className="font-serif text-lg leading-relaxed text-justify text-academic-text">
                   {data.summary}
               </p>
           </section>
@@ -125,6 +160,29 @@ const RegionalDetailScreen: React.FC<RegionalDetailScreenProps> = ({ region, dis
                   ))}
               </ul>
           </section>
+          
+          <div className="mt-16 pt-8 border-t border-stone-200 dark:border-stone-800">
+              <h3 className="font-serif text-2xl font-bold mb-6 flex items-center gap-2">
+                  <Globe className="w-5 h-5 text-academic-gold" /> External Repositories & Data
+              </h3>
+              <div className="grid grid-cols-1 lg:grid-cols-3 md:grid-cols-2 gap-6">
+                  <div className="space-y-6">
+                      <WikipediaWidget title={region} description={disciplineContext || "politics geography"} />
+                      <ReliefWebWidget queryText={region} />
+                      <LibraryOfCongressWidget queryText={region} />
+                  </div>
+                  <div className="space-y-6">
+                      <OpenAlexWidget queryText={region} />
+                      <InternetArchiveWidget queryText={region} />
+                      <CrossrefWidget queryText={region} />
+                  </div>
+                  <div className="space-y-6">
+                      <GDELTWidget queryText={region} />
+                      <RedditWidget queryText={region} />
+                      <DOAJWidget queryText={region} />
+                  </div>
+              </div>
+          </div>
 
       </div>
     </div>

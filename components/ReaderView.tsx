@@ -649,7 +649,7 @@ const ReaderView: React.FC<ReaderViewProps> = ({ title, author, onClose, onNavig
                </div>
 
                <div className="p-4 bg-black/50 border-t border-white/10">
-                   <div className="p-3 bg-stone-800/50 rounded-lg border border-white/5 mb-3 font-mono text-[10px] text-stone-300 break-words leading-relaxed">
+                   <div className="p-3 bg-stone-800/50 rounded-lg border border-white/5 mb-3 font-mono text-[10px] text-stone-300 break-words leading-relaxed text-justify">
                        {generatedCitation}
                    </div>
                    <button 
@@ -695,7 +695,7 @@ const ReaderView: React.FC<ReaderViewProps> = ({ title, author, onClose, onNavig
                    )}
                    
                    {aiResponse ? (
-                       <div className="prose prose-sm prose-p:leading-relaxed max-w-none">
+                       <div className="prose prose-sm prose-p:leading-relaxed text-justify max-w-none">
                            <p>{aiResponse}</p>
                        </div>
                    ) : (

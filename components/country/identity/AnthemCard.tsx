@@ -11,7 +11,7 @@ export const AnthemCard: React.FC<{ name?: string, lyrics?: string }> = ({ name,
                 <span className="font-bold text-sm text-academic-text dark:text-stone-200">{name || "National Anthem"}</span>
                 <Music className="w-4 h-4 text-academic-gold" />
             </div>
-            <p className="text-xs font-serif italic text-stone-600 dark:text-stone-400 leading-relaxed whitespace-pre-line border-l-2 border-stone-200 dark:border-stone-700 pl-4">
+            <p className="text-xs font-serif italic text-stone-600 dark:text-stone-400 leading-relaxed text-justify whitespace-pre-line border-l-2 border-stone-200 dark:border-stone-700 pl-4">
                 {lyrics.length > 300 ? `${lyrics.substring(0, 300)}...` : lyrics}
             </p>
         </div>

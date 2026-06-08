@@ -36,7 +36,7 @@ export const OpenLibraryWidget: React.FC<OpenLibraryWidgetProps> = ({ queryText 
     return (
         <div className="bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-2xl p-6 shadow-sm mb-8">
             <h3 className="text-sm font-bold uppercase tracking-widest text-stone-500 mb-4 flex items-center gap-2">
-                <BookOpen className="w-4 h-4 text-academic-accent" /> Literature Scan (Open Library API)
+                <BookOpen className="w-4 h-4 text-academic-accent" /> Literature Scan
             </h3>
             
             <div className="space-y-4">

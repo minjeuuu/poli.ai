@@ -161,7 +161,7 @@ const GamesTab: React.FC = () => {
                                     {game.difficulty > 3 && <div className="text-[9px] font-bold text-stone-400 flex gap-0.5">{[...Array(game.difficulty)].map((_,i)=><div key={i} className="w-1 h-1 bg-stone-400 rounded-full"></div>)}</div>}
                                 </div>
                                 <h4 className="font-bold text-sm text-stone-800 dark:text-stone-200 leading-tight mb-2 line-clamp-2 group-hover:text-academic-accent transition-colors">{game.title}</h4>
-                                <p className="text-[10px] text-stone-500 dark:text-stone-400 line-clamp-3 leading-relaxed">{game.description}</p>
+                                <p className="text-[10px] text-stone-500 dark:text-stone-400 line-clamp-3 leading-relaxed text-justify">{game.description}</p>
                             </div>
                             
                             <div className="flex flex-wrap gap-1 mt-2">

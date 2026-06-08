@@ -36,7 +36,7 @@ export const SpaceXWidget: React.FC<SpaceXWidgetProps> = ({ limit = 3 }) => {
     return (
         <div className="bg-stone-950 border border-stone-800 rounded-2xl p-6 shadow-xl mb-6 animate-in fade-in">
             <h3 className="text-sm font-bold uppercase tracking-widest text-stone-400 mb-4 flex items-center gap-2">
-                <Activity className="w-4 h-4 text-emerald-500" /> Orbital Operations (SpaceX API)
+                <Activity className="w-4 h-4 text-emerald-500" /> Orbital Operations
             </h3>
             
             <div className="space-y-3">

@@ -28,7 +28,7 @@ export const SimAdvisorModal: React.FC<SimAdvisorModalProps> = ({ onClose, advis
                     <div className="bg-stone-800/50 p-6 rounded-xl border-l-4 border-academic-gold text-left w-full">
                          <div className="flex items-start gap-3">
                              <MessageSquare className="w-5 h-5 text-stone-400 mt-1 flex-shrink-0" />
-                             <p className="text-stone-300 font-serif leading-relaxed text-sm italic">"{advice}"</p>
+                             <p className="text-stone-300 font-serif leading-relaxed text-justify text-sm italic">"{advice}"</p>
                          </div>
                     </div>
                     

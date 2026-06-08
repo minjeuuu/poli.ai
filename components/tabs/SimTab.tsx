@@ -139,7 +139,7 @@ const SimTab: React.FC = () => {
                       <div className="absolute top-0 right-0 w-32 h-32 bg-academic-gold/10 rounded-bl-full -mr-10 -mt-10"></div>
                       <h2 className="text-3xl font-serif font-bold text-center mb-6 text-academic-text dark:text-white leading-tight relative z-10">{simState.currentEvent?.title || "Quiet Year"}</h2>
                       <div className="w-16 h-1 bg-academic-gold mx-auto mb-6 rounded-full"></div>
-                      <p className="text-lg font-serif text-center leading-loose text-stone-600 dark:text-stone-300 relative z-10">
+                      <p className="text-lg font-serif text-center leading-loose text-justify text-stone-600 dark:text-stone-300 relative z-10">
                           {simState.currentEvent?.description || "No major events occurred. The nation continues to develop."}
                       </p>
                   </div>

@@ -64,7 +64,7 @@ const ComparativeTab: React.FC<ComparativeTabProps> = ({ onNavigate, onAddToComp
         <div className="p-10 bg-gradient-to-b from-white to-academic-bg dark:from-stone-900 dark:to-stone-950 border-b border-academic-line dark:border-stone-800 transition-colors">
             <div className="max-w-5xl mx-auto">
                 <h2 className="text-5xl md:text-6xl font-serif font-bold text-academic-text dark:text-stone-100 mb-6 tracking-tight">Comparative Analysis</h2>
-                <p className="text-xl font-serif text-stone-500 dark:text-stone-400 max-w-2xl leading-relaxed">
+                <p className="text-xl font-serif text-stone-500 dark:text-stone-400 max-w-2xl leading-relaxed text-justify">
                     Evaluate political entities side-by-side to uncover structural differences, historical parallels, and ideological divergences.
                 </p>
             </div>

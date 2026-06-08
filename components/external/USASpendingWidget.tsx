@@ -30,7 +30,7 @@ export const USASpendingWidget: React.FC = () => {
     return (
         <div className="bg-stone-900 border border-stone-800 rounded-2xl p-6 shadow-xl mb-6 animate-in fade-in">
             <h3 className="text-sm font-bold uppercase tracking-widest text-emerald-500 mb-4 flex items-center gap-2">
-                <DollarSign className="w-4 h-4" /> US Federal Budgets (USAspending API)
+                <DollarSign className="w-4 h-4" /> US Federal Budgets
             </h3>
             <div className="space-y-3">
                 {stats.map((agency: any, idx: number) => (
@@ -45,7 +45,7 @@ export const USASpendingWidget: React.FC = () => {
                     </div>
                 ))}
             </div>
-            <p className="text-[9px] uppercase text-stone-500 mt-4 tracking-widest">* Based on available agency profiles API</p>
+            <p className="text-[9px] uppercase text-stone-500 mt-4 tracking-widest">* Based on available agency profiles</p>
         </div>
     );
 };

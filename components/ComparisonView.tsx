@@ -112,7 +112,7 @@ const ComparisonView: React.FC<ComparisonViewProps> = ({ item1, item2, onClose, 
               <h3 className="text-xs font-bold uppercase tracking-[0.2em] text-academic-gold mb-6 flex items-center gap-2 relative z-10">
                   <Brain className="w-4 h-4" /> Executive Synthesis
               </h3>
-              <div className="font-serif text-lg md:text-xl leading-loose text-stone-800 dark:text-stone-200 relative z-10">
+              <div className="font-serif text-lg md:text-xl leading-loose text-justify text-stone-800 dark:text-stone-200 relative z-10">
                   {(data?.synthesis || "Synthesis unavailable.").split('\n\n').map((para, i) => (
                       <p key={i} className="mb-4 break-inside-avoid-column">{para}</p>
                   ))}
@@ -130,7 +130,7 @@ const ComparisonView: React.FC<ComparisonViewProps> = ({ item1, item2, onClose, 
                     {(data?.sharedTraits || []).map((sim, i) => (
                         <div key={i} className="group">
                             <strong className="block text-sm font-bold text-stone-800 dark:text-stone-200 mb-1 group-hover:text-emerald-600 transition-colors">{sim.title}</strong>
-                            <p className="text-xs font-serif text-stone-600 dark:text-stone-400 leading-relaxed">{sim.description}</p>
+                            <p className="text-xs font-serif text-stone-600 dark:text-stone-400 leading-relaxed text-justify">{sim.description}</p>
                         </div>
                     ))}
                   </div>
@@ -146,7 +146,7 @@ const ComparisonView: React.FC<ComparisonViewProps> = ({ item1, item2, onClose, 
                     {(data?.divergences || []).map((diff, i) => (
                         <div key={i} className="group">
                             <strong className="block text-sm font-bold text-stone-800 dark:text-stone-200 mb-1 group-hover:text-rose-600 transition-colors">{diff.title}</strong>
-                            <p className="text-xs font-serif text-stone-600 dark:text-stone-400 leading-relaxed">{diff.description}</p>
+                            <p className="text-xs font-serif text-stone-600 dark:text-stone-400 leading-relaxed text-justify">{diff.description}</p>
                         </div>
                     ))}
                   </div>
@@ -208,7 +208,7 @@ const ComparisonView: React.FC<ComparisonViewProps> = ({ item1, item2, onClose, 
                                       
                                       {isExpanded && (
                                           <div className="px-4 pb-4 pt-0">
-                                              <div className="md:ml-[25%] p-4 bg-stone-50 dark:bg-stone-950 rounded-lg border-l-4 border-academic-accent dark:border-indigo-500 text-sm font-serif text-stone-600 dark:text-stone-300 leading-relaxed">
+                                              <div className="md:ml-[25%] p-4 bg-stone-50 dark:bg-stone-950 rounded-lg border-l-4 border-academic-accent dark:border-indigo-500 text-sm font-serif text-stone-600 dark:text-stone-300 leading-relaxed text-justify">
                                                   <div className="flex justify-between items-center mb-2">
                                                       <span className="text-[10px] font-bold uppercase text-stone-400">Analysis</span>
                                                       <span className={`text-[9px] font-bold uppercase px-2 py-1 rounded ${getAdvantageColor(point.advantage || 'Distinct')}`}>
@@ -236,7 +236,7 @@ const ComparisonView: React.FC<ComparisonViewProps> = ({ item1, item2, onClose, 
               <h3 className="text-xs font-bold uppercase tracking-widest text-emerald-400 mb-6 flex items-center gap-2 relative z-10">
                   <TrendingUp className="w-4 h-4" /> Future Trajectory Analysis
               </h3>
-              <div className="font-serif text-lg leading-loose relative z-10 text-stone-300">
+              <div className="font-serif text-lg leading-loose text-justify relative z-10 text-stone-300">
                   {data?.futureOutlook || "Projection data unavailable."}
               </div>
           </div>
@@ -268,7 +268,7 @@ const ComparisonView: React.FC<ComparisonViewProps> = ({ item1, item2, onClose, 
                                   {scenario.likelihood} Probability
                               </span>
                           </div>
-                          <p className="text-sm font-serif text-stone-600 dark:text-stone-300 leading-loose pl-16">
+                          <p className="text-sm font-serif text-stone-600 dark:text-stone-300 leading-loose text-justify pl-16">
                               {scenario.outcome}
                           </p>
                       </div>
@@ -362,11 +362,11 @@ const ComparisonView: React.FC<ComparisonViewProps> = ({ item1, item2, onClose, 
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                                         <div className="p-8 bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-2xl shadow-sm relative hover:border-academic-accent/30 transition-colors">
                                             <div className="text-[10px] font-bold uppercase text-stone-400 mb-2 absolute top-6 right-6 tracking-widest">{item1.name}</div>
-                                            <p className="text-sm font-serif text-stone-700 dark:text-stone-300 leading-loose mt-4">{era.item1Context}</p>
+                                            <p className="text-sm font-serif text-stone-700 dark:text-stone-300 leading-loose text-justify mt-4">{era.item1Context}</p>
                                         </div>
                                         <div className="p-8 bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-2xl shadow-sm relative hover:border-academic-gold/30 transition-colors">
                                             <div className="text-[10px] font-bold uppercase text-stone-400 mb-2 absolute top-6 right-6 tracking-widest">{item2.name}</div>
-                                            <p className="text-sm font-serif text-stone-700 dark:text-stone-300 leading-loose mt-4">{era.item2Context}</p>
+                                            <p className="text-sm font-serif text-stone-700 dark:text-stone-300 leading-loose text-justify mt-4">{era.item2Context}</p>
                                         </div>
                                     </div>
                                 </div>

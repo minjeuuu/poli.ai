@@ -19,7 +19,7 @@ export const TechProfile: React.FC<{ data: any }> = ({ data }) => {
                      <Rocket className="w-5 h-5 text-academic-gold" />
                      <h5 className="font-bold uppercase tracking-wide text-sm">Space & Innovation</h5>
                  </div>
-                 <p className="text-sm font-serif leading-relaxed opacity-80 mb-6">{data.spaceProgram}</p>
+                 <p className="text-sm font-serif leading-relaxed text-justify opacity-80 mb-6">{data.spaceProgram}</p>
                  
                  <div>
                      <h6 className="text-[10px] font-bold uppercase tracking-widest text-stone-500 mb-2">Major Tech Sectors</h6>

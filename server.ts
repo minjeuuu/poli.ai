@@ -18,10 +18,10 @@ const io = new Server(httpServer, {
 
 const PORT = 3000;
 
-const isVercel = process.env.VERCEL === '1';
-const uploadDir = isVercel ? '/tmp/uploads' : path.join(process.cwd(), 'uploads');
+// Ensure uploads directory exists
+const uploadDir = path.join(process.cwd(), 'uploads');
 if (!fs.existsSync(uploadDir)) {
-    fs.mkdirSync(uploadDir, { recursive: true });
+    fs.mkdirSync(uploadDir);
 }
 
 // Configure Multer for file uploads
@@ -271,22 +271,14 @@ async function startServer() {
     } else {
         const distPath = path.join(process.cwd(), 'dist');
         app.use(express.static(distPath));
-        if (!process.env.VERCEL) {
-            app.get('*all', (req, res) => {
-                res.sendFile(path.join(distPath, 'index.html'));
-            });
-        }
-    }
-
-    if (!process.env.VERCEL) {
-        httpServer.listen(PORT, "0.0.0.0", () => {
-            console.log(`Server running on http://localhost:${PORT}`);
+        app.get('*all', (req, res) => {
+            res.sendFile(path.join(distPath, 'index.html'));
         });
     }
+
+    httpServer.listen(PORT, "0.0.0.0", () => {
+        console.log(`Server running on http://localhost:${PORT}`);
+    });
 }
 
-if (!process.env.VERCEL) {
-    startServer();
-}
-
-export default app;
+startServer();

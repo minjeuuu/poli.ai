@@ -7,7 +7,7 @@ export const StrategicAnalysis: React.FC<{ text: string }> = ({ text }) => (
         <h3 className="text-xs font-bold uppercase tracking-widest text-academic-gold mb-6 flex items-center gap-2">
             <Brain className="w-4 h-4" /> Strategic Synthesis
         </h3>
-        <div className="prose prose-stone dark:prose-invert font-serif leading-loose text-base md:text-lg max-w-none">
+        <div className="prose prose-stone dark:prose-invert font-serif leading-loose text-justify text-base md:text-lg max-w-none">
             <p>{text}</p>
         </div>
     </div>

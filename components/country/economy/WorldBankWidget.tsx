@@ -53,9 +53,9 @@ export const WorldBankWidget: React.FC<WorldBankWidgetProps> = ({ countryName })
                     <p className="text-[10px] uppercase text-stone-400 mt-1">Year: {data.date}</p>
                 </div>
                 <div className="flex-1">
-                    <div className="p-3 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 rounded text-xs font-serif leading-relaxed flex items-start gap-2">
+                    <div className="p-3 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 rounded text-xs font-serif leading-relaxed text-justify flex items-start gap-2">
                         <Activity className="w-4 h-4 mt-0.5 shrink-0" />
-                        Live data sourced directly from the World Bank API representing the latest official estimate of the size of the national economy.
+                        Live data sourced directly from the World Bank representing the latest official estimate of the size of the national economy.
                     </div>
                 </div>
             </div>

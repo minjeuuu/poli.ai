@@ -17,7 +17,7 @@ export const TriviaWidget: React.FC<TriviaWidgetProps> = ({ fact, trivia, onNavi
                         <span className="text-[9px] font-bold text-stone-400 uppercase tracking-widest block">Did You Know?</span>
                         <Lightbulb className="w-4 h-4 text-academic-gold group-hover:animate-pulse" />
                     </div>
-                    <p className="font-serif text-sm text-stone-700 dark:text-stone-300 leading-relaxed">{fact.content}</p>
+                    <p className="font-serif text-sm text-stone-700 dark:text-stone-300 leading-relaxed text-justify">{fact.content}</p>
                     <div className="mt-4 pt-3 border-t border-stone-200 dark:border-stone-600 flex justify-end">
                         <span className="text-[9px] text-stone-400 font-mono uppercase">{fact.source}</span>
                     </div>
@@ -29,7 +29,7 @@ export const TriviaWidget: React.FC<TriviaWidgetProps> = ({ fact, trivia, onNavi
                         <span className="text-[9px] font-bold text-stone-500 uppercase tracking-widest block">Political Trivia</span>
                         <HelpCircle className="w-4 h-4 text-stone-600 group-hover:text-white transition-colors" />
                     </div>
-                    <p className="font-serif text-sm leading-relaxed">{trivia.content}</p>
+                    <p className="font-serif text-sm leading-relaxed text-justify">{trivia.content}</p>
                     <div className="mt-4 pt-3 border-t border-stone-800 flex justify-end">
                         <span className="text-[9px] text-stone-600 font-mono uppercase">{trivia.source}</span>
                     </div>

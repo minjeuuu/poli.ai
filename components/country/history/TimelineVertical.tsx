@@ -15,7 +15,7 @@ export const TimelineVertical: React.FC<{ events: DetailedTimelineEvent[], onNav
                     </div>
                     <h4 className="text-xl font-serif font-bold text-academic-text dark:text-stone-100 group-hover:text-academic-accent dark:group-hover:text-indigo-400 transition-colors">{event.title}</h4>
                     <span className="inline-block px-2 py-0.5 rounded text-[9px] font-bold uppercase tracking-wider bg-stone-100 dark:bg-stone-800 text-stone-500 mb-3 mt-1">{event.type}</span>
-                    <p className="text-sm text-stone-600 dark:text-stone-400 font-serif leading-relaxed">{event.description}</p>
+                    <p className="text-sm text-stone-600 dark:text-stone-400 font-serif leading-relaxed text-justify">{event.description}</p>
                 </div>
             ))}
         </div>

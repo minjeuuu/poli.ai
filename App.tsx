@@ -135,6 +135,7 @@ export default function App() {
     const loadDaily = async () => {
       setIsDailyLoading(true);
       try {
+        const { fetchDailyContext } = await import('./services/homeService');
         const data = await fetchDailyContext(currentDate, myCountry);
         setDailyData(data);
       } catch (e) {

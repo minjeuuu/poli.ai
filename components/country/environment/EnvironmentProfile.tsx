@@ -32,7 +32,7 @@ export const EnvironmentProfile: React.FC<{ data: any }> = ({ data }) => {
             
             <div className="p-6 bg-emerald-50 dark:bg-emerald-900/10 rounded-xl border border-emerald-100 dark:border-emerald-900/30">
                 <h5 className="font-bold text-emerald-700 dark:text-emerald-400 mb-2 text-sm uppercase tracking-wide">Climate Policy</h5>
-                <p className="text-sm font-serif text-stone-700 dark:text-stone-300 leading-relaxed">{data.policy}</p>
+                <p className="text-sm font-serif text-stone-700 dark:text-stone-300 leading-relaxed text-justify">{data.policy}</p>
             </div>
         </div>
     );

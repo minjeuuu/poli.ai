@@ -21,7 +21,7 @@ export const FallbackAI: React.FC<FallbackAIProps> = ({ prompt = "Analyze this p
           <AlertTriangle className="w-6 h-6 text-red-500 dark:text-red-400" />
       </div>
       <h3 className="text-stone-800 dark:text-stone-200 font-serif font-bold text-lg mb-2">Connection Interrupted</h3>
-      <p className="text-stone-500 dark:text-stone-400 text-sm mb-6 leading-relaxed font-serif">
+      <p className="text-stone-500 dark:text-stone-400 text-sm mb-6 leading-relaxed text-justify font-serif">
         The internal research engine is currently at capacity or unreachable. You can continue your research by consulting external archives.
       </p>
       <div className="flex flex-col sm:flex-row justify-center gap-3">

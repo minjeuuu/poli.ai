@@ -283,7 +283,7 @@ const MessageTab: React.FC<MessageTabProps> = ({ onNavigate, user }) => {
                                                 )}
                                             </div>
                                         ))}
-                                        <p className="text-sm leading-relaxed whitespace-pre-wrap">{msg.text}</p>
+                                        <p className="text-sm leading-relaxed text-justify whitespace-pre-wrap">{msg.text}</p>
                                     </div>
                                     <div className={`flex items-center gap-1 mt-1 text-[10px] text-stone-400 ${msg.isMe ? 'justify-end' : 'justify-start'}`}>
                                         <span>{msg.timestamp}</span>

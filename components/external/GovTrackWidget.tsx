@@ -33,7 +33,7 @@ export const GovTrackWidget: React.FC<GovTrackWidgetProps> = ({ roleType = 'sena
     return (
         <div className="bg-blue-50 dark:bg-blue-950/20 border border-blue-100 dark:border-blue-900/30 rounded-2xl p-6 shadow-sm mb-6 animate-in fade-in">
             <h3 className="text-sm font-bold uppercase tracking-widest text-[#005187] dark:text-[#4da8e8] mb-4 flex items-center gap-2">
-                <Landmark className="w-4 h-4" /> US Congress Data (GovTrack API)
+                <Landmark className="w-4 h-4" /> US Congress Data
             </h3>
             <div className="space-y-3">
                 {roles.map((role, idx) => (

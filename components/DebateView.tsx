@@ -115,7 +115,7 @@ const DebateView: React.FC<DebateViewProps> = ({ topic, onClose, onComplete }) =
                             {turn.speaker === 'User' ? <User className="w-5 h-5" /> : <Bot className="w-5 h-5" />}
                         </div>
                         <div className={`max-w-[80%] p-4 rounded-2xl shadow-sm ${turn.speaker === 'User' ? 'bg-academic-accent text-white rounded-tr-none' : 'bg-white dark:bg-stone-800 text-stone-800 dark:text-stone-200 rounded-tl-none border border-stone-100 dark:border-stone-700'}`}>
-                            <p className="font-serif leading-relaxed text-sm md:text-base">{turn.text}</p>
+                            <p className="font-serif leading-relaxed text-justify text-sm md:text-base">{turn.text}</p>
                         </div>
                     </div>
                 ))}

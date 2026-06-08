@@ -39,7 +39,7 @@ export const APIAggregatorWidget: React.FC<{ query?: string }> = ({ query = "gen
                     <div>
                         <h2 className="font-serif text-2xl font-bold">Full-Stack Data Aggregator</h2>
                         <p className="text-xs font-mono text-emerald-400 uppercase tracking-widest flex items-center gap-2">
-                            <Activity className="w-3 h-3" /> Backend Proxy • 1000+ Global APIs Accessible
+                            <Activity className="w-3 h-3" /> Backend Proxy • 1000+ Global Data Sources Accessible
                         </p>
                     </div>
                 </div>
@@ -207,7 +207,7 @@ export const APIAggregatorWidget: React.FC<{ query?: string }> = ({ query = "gen
                     <div className="bg-stone-800/50 border border-stone-700/50 rounded-xl p-4 backdrop-blur-md flex flex-col justify-center items-center text-center">
                          <Globe className="w-8 h-8 text-indigo-400 mb-2" />
                          <span className="text-lg font-bold text-white">Express Backend</span>
-                         <span className="text-[10px] text-stone-400">Successfully proxied multiple external APIs</span>
+                         <span className="text-[10px] text-stone-400">Successfully proxied multiple external data sources</span>
                     </div>
 
                 </div>
@@ -219,7 +219,7 @@ export const APIAggregatorWidget: React.FC<{ query?: string }> = ({ query = "gen
                  </p>
                  <div className="flex -space-x-2">
                       <div className="w-6 h-6 rounded-full bg-emerald-500 flex items-center justify-center text-[10px] font-bold text-white">DB</div>
-                      <div className="w-6 h-6 rounded-full bg-blue-500 flex items-center justify-center text-[10px] font-bold text-white">API</div>
+                      <div className="w-6 h-6 rounded-full bg-blue-500 flex items-center justify-center text-[10px] font-bold text-white">DS</div>
                       <div className="w-6 h-6 rounded-full bg-red-500 flex items-center justify-center text-[10px] font-bold text-white">BE</div>
                  </div>
             </div>

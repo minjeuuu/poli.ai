@@ -37,7 +37,7 @@ export const GDELTWidget: React.FC<GDELTWidgetProps> = ({ queryText }) => {
     return (
         <div className="bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-2xl p-6 shadow-sm mb-8">
             <h3 className="text-sm font-bold uppercase tracking-widest text-stone-500 mb-4 flex items-center gap-2">
-                <Newspaper className="w-4 h-4 text-academic-accent" /> Media Monitor (GDELT API)
+                <Newspaper className="w-4 h-4 text-academic-accent" /> Media Monitor
             </h3>
             
             <div className="space-y-4">

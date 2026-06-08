@@ -39,7 +39,7 @@ export const NewsWidget: React.FC<NewsWidgetProps> = ({ news, onNavigate }) => {
                             <div>
                                 <div className="flex items-center gap-2 mb-3">
                                     <span className="text-[9px] font-bold uppercase tracking-widest text-white bg-academic-accent dark:bg-indigo-600 px-2 py-1 rounded-sm">
-                                        {item.source || 'Wire'}
+                                        {item.source ? item.source.split(/[:>|\-]/)[0].replace(/\b(News|Today|Latest|Headlines|International|Global|Daily|Weekly|Update|Feed|Online)\b/gi, '').trim().replace(/^,+|,+$/g, '') || item.source.split(/[:>|\-]/)[0].trim() : 'Wire'}
                                     </span>
                                     <span className="text-[9px] font-mono text-stone-400 flex items-center gap-1">
                                         <Clock className="w-3 h-3" /> {item.date || 'Today'}
@@ -50,7 +50,7 @@ export const NewsWidget: React.FC<NewsWidgetProps> = ({ news, onNavigate }) => {
                                     {item.headline}
                                 </h3>
                                 
-                                <p className="font-serif text-sm text-stone-600 dark:text-stone-400 leading-relaxed mb-4 line-clamp-3">
+                                <p className="font-serif text-sm text-stone-600 dark:text-stone-400 leading-relaxed text-justify mb-4 line-clamp-3">
                                     {item.summary}
                                 </p>
                             </div>

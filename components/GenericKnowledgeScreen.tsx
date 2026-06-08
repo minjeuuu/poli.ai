@@ -1,6 +1,6 @@
 
 import React, { useEffect, useState } from 'react';
-import { ArrowLeft, BookOpen, Share2, Bookmark, Activity, Globe, Brain, History, Loader2, AlertTriangle, Layers, Zap, TrendingUp, Users, Quote, MessageSquare } from 'lucide-react';
+import { ArrowLeft, BookOpen, Share2, Bookmark, Download, Activity, Globe, Brain, History, Loader2, AlertTriangle, Layers, Zap, TrendingUp, Users, Quote, MessageSquare } from 'lucide-react';
 import { fetchGenericTopic } from '../services/searchService';
 import LoadingScreen from './LoadingScreen';
 import { IconRenderer } from './IconMap';
@@ -16,6 +16,8 @@ import { UNSDGWidget } from './external/UNSDGWidget';
 import { UKPoliceDataWidget } from './external/UKPoliceDataWidget';
 import { ChicagoCrimesWidget } from './external/ChicagoCrimesWidget';
 import { APIAggregatorWidget } from './external/APIAggregatorWidget';
+import { generateAestheticPDF } from '../utils/pdfGenerator';
+import { playSFX } from '../services/soundService';
 
 interface GenericKnowledgeScreenProps {
   query: string;
@@ -56,6 +58,30 @@ const GenericKnowledgeScreen: React.FC<GenericKnowledgeScreenProps> = ({ query, 
       </div>
   );
 
+  const handleDownload = () => {
+      playSFX('click');
+      if (!data) return;
+      try {
+          const sections = [];
+          if (data.summary) sections.push({ title: "Summary", content: data.summary });
+          if (data.analysis) sections.push({ title: "Analysis", content: data.analysis });
+          if (data.timeline && data.timeline.length > 0) {
+              const events = data.timeline.map((e: any) => `${e.date || ''}: ${e.event || ''}`);
+              sections.push({ title: "Timeline", content: events });
+          }
+
+          generateAestheticPDF(
+              data.title || query,
+              "Omnopedic Dossier",
+              data.summary || "No description provided.",
+              sections,
+              `${(data.title || query).replace(/\s+/g, '_')}_Dossier.pdf`
+          );
+      } catch (err) {
+          console.error("PDF generation failed:", err);
+      }
+  };
+
   const handleLinkClick = (term: string) => {
       onNavigate('Search', term);
   };
@@ -74,16 +100,25 @@ const GenericKnowledgeScreen: React.FC<GenericKnowledgeScreenProps> = ({ query, 
                 <span className="text-[10px] font-mono text-academic-gold uppercase tracking-widest">Omnopedic Dossier</span>
             </div>
           </div>
-          <button 
-            onClick={() => setIsSaved(!isSaved)} 
-            className={`p-2 rounded-full transition-colors ${isSaved ? 'text-academic-gold bg-stone-100 dark:bg-stone-800' : 'text-stone-400 hover:bg-stone-100 dark:hover:bg-stone-800'}`}
-          >
-              <Bookmark className={`w-5 h-5 ${isSaved ? 'fill-current' : ''}`} />
-          </button>
+          <div className="flex items-center gap-2">
+              <button 
+                onClick={handleDownload} 
+                className="p-2 rounded-full text-stone-400 hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors"
+                title="Download Report"
+              >
+                  <Download className="w-5 h-5" />
+              </button>
+              <button 
+                onClick={() => setIsSaved(!isSaved)} 
+                className={`p-2 rounded-full transition-colors ${isSaved ? 'text-academic-gold bg-stone-100 dark:bg-stone-800' : 'text-stone-400 hover:bg-stone-100 dark:hover:bg-stone-800'}`}
+              >
+                  <Bookmark className={`w-5 h-5 ${isSaved ? 'fill-current' : ''}`} />
+              </button>
+          </div>
       </div>
 
       {/* CONTENT */}
-      <div className="flex-1 overflow-y-auto p-6 md:p-12 pb-32 scroll-smooth">
+      <div className="flex-1 overflow-y-auto p-4 sm:p-6 md:p-12 pb-32 scroll-smooth">
           <div className="max-w-4xl mx-auto space-y-12">
               
               {/* HERO */}
@@ -97,26 +132,30 @@ const GenericKnowledgeScreen: React.FC<GenericKnowledgeScreenProps> = ({ query, 
                            <span key={i} className="px-3 py-1 bg-stone-100 dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-full text-[10px] font-bold uppercase tracking-wider text-stone-500">{tag}</span>
                        ))}
                    </div>
-                   <p className="font-serif text-lg md:text-xl text-stone-600 dark:text-stone-300 leading-relaxed max-w-2xl mx-auto italic">
+                   <p className="font-serif text-lg md:text-xl text-stone-600 dark:text-stone-300 leading-relaxed text-justify max-w-2xl mx-auto italic">
                        {data.overview}
                    </p>
               </section>
 
-              <WikipediaWidget title={data.title} />
-              <DictionaryWidget queryText={data.title} />
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <NasaImageWidget queryText={data.title} />
-                  <SpaceXWidget limit={3} />
+              {/* EXTERNAL DATA INTEGRATIONS */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 my-10">
+                  <div className="space-y-6 flex flex-col">
+                      <WikipediaWidget title={data.title} />
+                      <DictionaryWidget queryText={data.title} />
+                      <HackerNewsWidget />
+                      <CoinGeckoWidget />
+                  </div>
+                  <div className="space-y-6 flex flex-col">
+                      <NasaImageWidget queryText={data.title} />
+                      <SpaceXWidget limit={3} />
+                      <ChicagoCrimesWidget />
+                      <UKPoliceDataWidget />
+                      <UNSDGWidget />
+                  </div>
               </div>
-              <APIAggregatorWidget query={data.title} />
-              <HackerNewsWidget />
-              <UNSDGWidget />
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <ChicagoCrimesWidget />
-                  <UKPoliceDataWidget />
+              <div className="my-6">
+                  <APIAggregatorWidget query={data.title} />
               </div>
-              <CoinGeckoWidget />
 
               {/* DATA STRIP */}
               {data.statistics && data.statistics.length > 0 && (
@@ -137,7 +176,7 @@ const GenericKnowledgeScreen: React.FC<GenericKnowledgeScreenProps> = ({ query, 
                       <h3 className="text-xs font-bold uppercase tracking-widest text-academic-gold mb-6 flex items-center gap-2 relative z-10">
                           <Brain className="w-4 h-4" /> Comprehensive Analysis
                       </h3>
-                      <div className="font-serif text-lg text-stone-800 dark:text-stone-200 leading-loose relative z-10 whitespace-pre-line">
+                      <div className="font-serif text-lg text-stone-800 dark:text-stone-200 leading-loose text-justify relative z-10 whitespace-pre-line">
                           {data.politicalAnalysis}
                       </div>
                   </section>
@@ -153,7 +192,7 @@ const GenericKnowledgeScreen: React.FC<GenericKnowledgeScreenProps> = ({ query, 
                           {data.keyPoints.map((point: any, i: number) => (
                               <div key={i} className="p-6 bg-stone-50 dark:bg-stone-900 rounded-xl border border-stone-200 dark:border-stone-800 hover:border-academic-accent dark:hover:border-indigo-500 transition-colors">
                                   <h4 className="font-bold text-sm text-academic-text dark:text-white mb-2">{point.title}</h4>
-                                  <p className="text-sm text-stone-600 dark:text-stone-400 leading-relaxed font-serif">{point.description}</p>
+                                  <p className="text-sm text-stone-600 dark:text-stone-400 leading-relaxed text-justify font-serif">{point.description}</p>
                               </div>
                           ))}
                       </div>
@@ -167,7 +206,7 @@ const GenericKnowledgeScreen: React.FC<GenericKnowledgeScreenProps> = ({ query, 
                           <h3 className="text-xs font-bold uppercase tracking-widest text-academic-gold mb-4 flex items-center gap-2">
                               <History className="w-4 h-4" /> Historical Context
                           </h3>
-                          <p className="font-serif text-sm text-stone-700 dark:text-stone-300 leading-loose">
+                          <p className="font-serif text-sm text-stone-700 dark:text-stone-300 leading-loose text-justify">
                               {data.historicalContext}
                           </p>
                       </section>
@@ -193,7 +232,7 @@ const GenericKnowledgeScreen: React.FC<GenericKnowledgeScreenProps> = ({ query, 
                        <h3 className="text-xs font-bold uppercase tracking-widest text-red-600 dark:text-red-400 mb-4 flex items-center gap-2">
                           <MessageSquare className="w-4 h-4" /> Critical Perspectives & Debate
                        </h3>
-                       <p className="font-serif text-stone-700 dark:text-stone-300 leading-loose">
+                       <p className="font-serif text-stone-700 dark:text-stone-300 leading-loose text-justify">
                            {data.opposingViewpoints}
                        </p>
                    </section>

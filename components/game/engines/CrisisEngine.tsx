@@ -72,7 +72,7 @@ export const CrisisEngine: React.FC<CrisisEngineProps> = ({ game, onExit }) => {
             <div className="flex-1 flex flex-col justify-center">
                 <div className="bg-white dark:bg-stone-900 border-2 border-stone-200 dark:border-stone-800 p-8 rounded-3xl shadow-xl mb-8">
                     <h3 className="text-2xl font-serif font-bold text-stone-800 dark:text-stone-100 mb-4">{currentEvent.title}</h3>
-                    <p className="text-lg text-stone-600 dark:text-stone-400 leading-relaxed">
+                    <p className="text-lg text-stone-600 dark:text-stone-400 leading-relaxed text-justify">
                         {currentEvent.desc}
                     </p>
                 </div>

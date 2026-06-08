@@ -26,7 +26,7 @@ export const SimEventModal: React.FC<SimEventModalProps> = ({ event, onChoice })
                     </div>
                     
                     <h2 className="text-3xl md:text-4xl font-serif font-bold text-white mb-6 relative z-10 text-shadow-lg">{event.title}</h2>
-                    <p className="text-lg text-stone-300 font-serif leading-relaxed mb-10 relative z-10 max-w-xl mx-auto">
+                    <p className="text-lg text-stone-300 font-serif leading-relaxed text-justify mb-10 relative z-10 max-w-xl mx-auto">
                         {event.description}
                     </p>
                     

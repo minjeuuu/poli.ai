@@ -32,8 +32,8 @@ export const QuoteWidget: React.FC<QuoteWidgetProps> = ({ quote, onNavigate }) =
             </div>
             <div className="mb-8 pointer-events-none">
                 <BookOpen className="w-6 h-6 text-academic-gold opacity-80 mb-6" />
-                <blockquote className="font-serif text-2xl md:text-3xl text-academic-text dark:text-stone-100 leading-relaxed">
-                    "{quote?.text || "The study of politics is the study of influence and the influential."}"
+                <blockquote className="font-serif text-2xl md:text-3xl text-academic-text dark:text-stone-100 leading-relaxed text-justify">
+                    “{(quote?.text || "The study of politics is the study of influence and the influential.").replace(/"([^"]*)"/g, '“$1”').replace(/'/g, '’')}”
                 </blockquote>
             </div>
             <div className="flex items-end justify-between border-t border-stone-100 dark:border-stone-800 pt-6 pointer-events-none">

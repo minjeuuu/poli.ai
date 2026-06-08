@@ -1,9 +1,9 @@
 import { ImageWithFallback } from '../../atoms/ImageWithFallback';
-import { CountryFlag } from '../CountryFlag';
 
 import React from 'react';
 import { ArrowLeft, Flag } from 'lucide-react';
 import { CountryDeepDive } from '../../../types';
+import { CountryFlag } from '../CountryFlag';
 
 interface CountryHeroProps {
     data: CountryDeepDive;

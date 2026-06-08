@@ -1,27 +1,24 @@
 import { ImageWithFallback } from './atoms/ImageWithFallback';
 
 import React, { useEffect, useState, useRef } from 'react';
-import { ArrowLeft, User, Book, Flag, ExternalLink, Calendar, Lightbulb, Quote, Bookmark, Download, Search, BookOpen, Bell, ArrowRightLeft, Clock, Users, GraduationCap, MapPin, Target, Zap, Share2, Swords, Heart, AlertCircle, Award, Brain } from 'lucide-react';
+import { ArrowLeft, User, Book, Flag, ExternalLink, Calendar, Lightbulb, Quote, Bookmark, Download, Search, BookOpen, Bell, ArrowRightLeft, Clock, Users, GraduationCap, MapPin, Target, Zap, Share2, Swords, Heart, AlertCircle, Award, Brain, Globe } from 'lucide-react';
 import { PersonDetail } from '../types';
 import { fetchPersonDetail } from '../services/personService';
-import { WikidataWidget } from './external/WikidataWidget';
 import { OpenLibraryWidget } from './external/OpenLibraryWidget';
 import { RedditWidget } from './external/RedditWidget';
 import LoadingScreen from './LoadingScreen';
 import ReaderView from './ReaderView';
-import { TVMazeWidget } from './external/TVMazeWidget';
-import { FederalRegisterWidget } from './external/FederalRegisterWidget';
-import { SpaceflightNewsWidget } from './external/SpaceflightNewsWidget';
 import { WikipediaWidget } from './external/WikipediaWidget';
-import { NobelPrizeWidget } from './external/NobelPrizeWidget';
 import { WikiquoteWidget } from './external/WikiquoteWidget';
 import { OpenAlexWidget } from './external/OpenAlexWidget';
 import { InternetArchiveWidget } from './external/InternetArchiveWidget';
 import { GutendexWidget } from './external/GutendexWidget';
 import { CrossrefWidget } from './external/CrossrefWidget';
-import { OpenFECWidget } from './external/OpenFECWidget';
-import { UKParliamentWidget } from './external/UKParliamentWidget';
-import { FBIWantedWidget } from './external/FBIWantedWidget';
+import { GDELTWidget } from './external/GDELTWidget';
+import { DOAJWidget } from './external/DOAJWidget';
+import { SemanticScholarWidget } from './external/SemanticScholarWidget';
+import { LibraryOfCongressWidget } from './external/LibraryOfCongressWidget';
+import { generateAestheticPDF } from '../utils/pdfGenerator';
 import { playSFX } from '../services/soundService';
 import { IconRenderer } from './IconMap';
 
@@ -37,7 +34,6 @@ const TABS = [
     { id: 'biography', label: 'Biography', icon: BookOpen },
     { id: 'earlyLife', label: 'Early Life', icon: GraduationCap },
     { id: 'career', label: 'Career Arc', icon: Flag },
-    { id: 'ideology', label: 'Philosophy', icon: Lightbulb },
     { id: 'personal', label: 'Personal', icon: Heart },
     { id: 'network', label: 'Network', icon: Users },
     { id: 'psychology', label: 'Psychology', icon: Brain },
@@ -71,6 +67,28 @@ const PersonDetailScreen: React.FC<PersonDetailScreenProps> = ({ personName, onC
 
   const handleNavigateSafe = (type: string, payload: any) => {
       if (onNavigate) onNavigate(type, payload);
+  };
+
+  const handleDownload = () => {
+      playSFX('click');
+      if (!data) return;
+      try {
+          const sections = [];
+          if (data.biography) sections.push({ title: "Biography", content: data.biography });
+          if (data.careerArc) sections.push({ title: "Career Arc", content: data.careerArc });
+          if (data.psychologicalProfile?.publicPerception) sections.push({ title: "Public Perception", content: data.psychologicalProfile.publicPerception });
+          if (data.legacy) sections.push({ title: "Legacy", content: data.legacy });
+
+          generateAestheticPDF(
+              data.name || personName,
+              data.role || "Political Figure Dossier",
+              data.shortBio || "No description provided.",
+              sections,
+              `${(data.name || personName).replace(/\s+/g, '_')}_Dossier.pdf`
+          );
+      } catch (err) {
+          console.error("PDF generation failed:", err);
+      }
   };
 
   const scrollToSection = (id: string) => {
@@ -112,6 +130,7 @@ const PersonDetailScreen: React.FC<PersonDetailScreenProps> = ({ personName, onC
                 </div>
             </div>
             <div className="flex items-center gap-2">
+                 <button onClick={handleDownload} className="p-2 rounded-full hover:bg-stone-100 dark:hover:bg-stone-800 text-stone-400 transition-colors" title="Download Record"><Download className="w-5 h-5" /></button>
                  <button onClick={handleWebSearch} className="p-2 rounded-full hover:bg-stone-100 dark:hover:bg-stone-800 text-stone-400 transition-colors" title="Search Images"><Search className="w-5 h-5" /></button>
                  <button onClick={onToggleSave} className={`p-2 rounded-full transition-colors ${isSaved ? 'text-academic-gold' : 'text-stone-400 hover:text-academic-accent dark:hover:text-indigo-400'}`}>
                     <Bookmark className={`w-5 h-5 ${isSaved ? 'fill-current' : ''}`} />
@@ -128,11 +147,8 @@ const PersonDetailScreen: React.FC<PersonDetailScreenProps> = ({ personName, onC
       </div>
 
       <div className="flex-1 overflow-y-auto scroll-smooth pb-32 bg-stone-50/30 dark:bg-black/20">
-          <div className="max-w-5xl mx-auto p-6 md:p-10 space-y-12">
+          <div className="max-w-5xl mx-auto p-4 sm:p-6 md:p-10 space-y-12">
               
-              <WikidataWidget queryText={data.name} />
-              <WikipediaWidget title={data.name} />
-
               {/* HERO SECTION */}
               <div id="biography" ref={el => { sectionRefs.current['biography'] = el; }} className="grid grid-cols-1 md:grid-cols-3 gap-8">
                   <div className="md:col-span-1">
@@ -170,7 +186,7 @@ const PersonDetailScreen: React.FC<PersonDetailScreenProps> = ({ personName, onC
 
                   <div className="md:col-span-2">
                       <h1 className="text-5xl font-serif font-bold text-academic-text dark:text-stone-100 mb-6 tracking-tight">{data.name}</h1>
-                      <div className="prose prose-stone dark:prose-invert font-serif text-lg leading-relaxed max-w-none">
+                      <div className="prose prose-stone dark:prose-invert font-serif text-lg leading-relaxed text-justify max-w-none">
                            {data.bio.split('\n\n').map((para, i) => (
                                <p key={i} className="mb-4">{para}</p>
                            ))}
@@ -182,7 +198,7 @@ const PersonDetailScreen: React.FC<PersonDetailScreenProps> = ({ personName, onC
                                <h3 className="text-2xl font-serif font-bold text-stone-800 dark:text-stone-100 mb-6 flex items-center gap-3">
                                    <GraduationCap className="w-6 h-6 text-academic-gold" /> Early Life & Education
                                </h3>
-                               <div className="prose prose-stone dark:prose-invert font-serif text-lg leading-relaxed max-w-none">
+                               <div className="prose prose-stone dark:prose-invert font-serif text-lg leading-relaxed text-justify max-w-none">
                                    <p>{data.earlyLife}</p>
                                </div>
                           </div>
@@ -231,7 +247,7 @@ const PersonDetailScreen: React.FC<PersonDetailScreenProps> = ({ personName, onC
                           <div className="p-2 bg-rose-50 dark:bg-rose-900/20 rounded-lg text-rose-500"><Heart className="w-5 h-5" /></div>
                           <h3 className="text-xl font-bold font-serif">Personal Life</h3>
                       </div>
-                      <p className="font-serif text-lg leading-relaxed text-stone-700 dark:text-stone-300">{data.personalLife}</p>
+                      <p className="font-serif text-lg leading-relaxed text-justify text-stone-700 dark:text-stone-300">{data.personalLife}</p>
                   </div>
               )}
 
@@ -273,11 +289,11 @@ const PersonDetailScreen: React.FC<PersonDetailScreenProps> = ({ personName, onC
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                           <div>
                               <h4 className="text-xs font-bold uppercase tracking-widest text-stone-400 mb-4">Leadership Style</h4>
-                              <p className="font-serif text-stone-700 dark:text-stone-300 leading-relaxed">{data.psychologicalProfile.leadershipStyle}</p>
+                              <p className="font-serif text-stone-700 dark:text-stone-300 leading-relaxed text-justify">{data.psychologicalProfile.leadershipStyle}</p>
                           </div>
                           <div>
                               <h4 className="text-xs font-bold uppercase tracking-widest text-stone-400 mb-4">Public Perception</h4>
-                              <p className="font-serif text-stone-700 dark:text-stone-300 leading-relaxed">{data.psychologicalProfile.publicPerception}</p>
+                              <p className="font-serif text-stone-700 dark:text-stone-300 leading-relaxed text-justify">{data.psychologicalProfile.publicPerception}</p>
                           </div>
                           <div className="md:col-span-2">
                               <h4 className="text-xs font-bold uppercase tracking-widest text-stone-400 mb-4">Personality Traits</h4>
@@ -391,7 +407,7 @@ const PersonDetailScreen: React.FC<PersonDetailScreenProps> = ({ personName, onC
                        <h4 className="text-xs font-bold uppercase tracking-widest mb-6 opacity-70">Notable Quotes</h4>
                        <div className="space-y-6 relative z-10">
                            {((data as any).quotes || []).map((quote: string, i: number) => (
-                               <blockquote key={i} className="font-serif text-lg leading-relaxed italic">
+                               <blockquote key={i} className="font-serif text-lg leading-relaxed text-justify italic">
                                    "{quote}"
                                </blockquote>
                            ))}
@@ -411,21 +427,30 @@ const PersonDetailScreen: React.FC<PersonDetailScreenProps> = ({ personName, onC
                   </div>
               </div>
               
-              <div className="mt-12 space-y-8">
-                  <OpenFECWidget queryText={data.name} />
-                  <UKParliamentWidget queryText={data.name} />
-                  <FBIWantedWidget queryText={data.name} />
-                  <NobelPrizeWidget countryName={data.country} />
-                  <WikiquoteWidget queryText={data.name} />
-                  <OpenAlexWidget queryText={data.name} />
-                  <InternetArchiveWidget queryText={data.name} />
-                  <CrossrefWidget queryText={data.name} />
-                  <GutendexWidget queryText={data.name} />
-                  <RedditWidget queryText={data.name} />
-                  <FederalRegisterWidget queryText={data.name} />
-                  <SpaceflightNewsWidget queryText={data.name} />
-                  <OpenLibraryWidget queryText={`author:"${data.name}"`} />
-                  <TVMazeWidget queryText={data.name} />
+              <div className="mt-16 pt-8 border-t border-stone-200 dark:border-stone-800">
+                  <h3 className="font-serif text-2xl font-bold mb-6 flex items-center gap-2">
+                      <Globe className="w-5 h-5 text-academic-gold" /> External Repositories & Data
+                  </h3>
+                  <div className="grid grid-cols-1 lg:grid-cols-3 md:grid-cols-2 gap-6">
+                      <div className="space-y-6">
+                          <WikipediaWidget title={data.name} description={data.ideology || data.country || "politics"} />
+                          <WikiquoteWidget queryText={data.name} />
+                          <LibraryOfCongressWidget queryText={data.name} />
+                      </div>
+                      <div className="space-y-6">
+                          <OpenAlexWidget queryText={data.name} />
+                          <InternetArchiveWidget queryText={data.name} />
+                          <CrossrefWidget queryText={data.name} />
+                          <SemanticScholarWidget queryText={data.name} />
+                      </div>
+                      <div className="space-y-6">
+                          <GutendexWidget queryText={data.name} />
+                          <RedditWidget queryText={data.name} />
+                          <OpenLibraryWidget queryText={`author:"${data.name}"`} />
+                          <GDELTWidget queryText={data.name} />
+                          <DOAJWidget queryText={data.name} />
+                      </div>
+                  </div>
               </div>
 
           </div>

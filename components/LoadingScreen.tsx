@@ -42,7 +42,7 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({ message = "Consulting str
        </div>
        
        <div className={`transition-opacity duration-500 ease-in-out max-w-xl min-h-[120px] flex flex-col justify-center ${fade ? 'opacity-100' : 'opacity-0'}`}>
-         <h3 className="text-xl md:text-2xl font-serif text-academic-text dark:text-stone-200 leading-relaxed mb-4">
+         <h3 className="text-xl md:text-2xl font-serif text-academic-text dark:text-stone-200 leading-relaxed mb-4 text-center">
            “{currentQuote?.text}”
          </h3>
          <div className="flex flex-col items-center gap-1 font-sans text-xs uppercase tracking-widest text-academic-muted dark:text-stone-500">
