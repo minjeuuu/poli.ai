@@ -56,7 +56,7 @@ const ProfileTab: React.FC<ProfileTabProps> = ({
         level: 1,
         xp: 0,
         coins: 0,
-        stats: { ...DEFAULT_STATS, totalXp: 0, currentLevel: 1, streakDays: 0, longestStreak: 0, articlesRead: 0, booksArchived: 0, simulationsRun: 0, debatesWon: 0, pollsVoted: 0, quizzesTaken: 0, quizzesPerfect: 0, flashcardsReviewed: 0, accuracyRate: 0, postsCreated: 0, commentsWritten: 0, likesReceived: 0, citationsReceived: 0 },
+        stats: { ...DEFAULT_STATS, totalXp: 0, currentLevel: 1, streakDays: 0, longestStreak: 0, articlesRead: 0, booksArchived: 0, simulationsRun: 0, debatesWon: 0, pollsVoted: 0, quizzesTaken: 0, quizzesPerfect: 0, flashcardsReviewed: 0, accuracyRate: 0 },
         preferences: { ...DEFAULT_PREFS, themeMode: currentTheme },
         achievements: [],
         savedItems: savedItems,

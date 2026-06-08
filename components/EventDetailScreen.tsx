@@ -1,7 +1,7 @@
 import { ImageWithFallback } from './atoms/ImageWithFallback';
 
 import React, { useEffect, useState, useRef } from 'react';
-import { ArrowLeft, Calendar, MapPin, Users, FileText, CheckCircle, Activity, Globe, Scale, Bookmark, Download, Swords, Cloud, UserMinus, History, Clock, Image as ImageIcon, Search } from 'lucide-react';
+import { ArrowLeft, Calendar, MapPin, Users, FileText, CheckCircle, Activity, Globe, Scale, Bookmark, Download, Swords, Cloud, UserMinus, History, Clock, Image as ImageIcon, Search, Printer } from 'lucide-react';
 import { EventDetail } from '../types';
 import { fetchEventDetail } from '../services/eventService';
 import LoadingScreen from './LoadingScreen';
@@ -126,6 +126,7 @@ const EventDetailScreen: React.FC<EventDetailScreenProps> = ({ eventName, onClos
                 </div>
             </div>
             <div className="flex items-center gap-2">
+                <button onClick={() => window.print()} className="p-2 rounded-full hover:bg-stone-100 dark:hover:bg-stone-800 text-stone-400 transition-colors" title="Print Event"><Printer className="w-5 h-5" /></button>
                 <button onClick={handleDownload} className="p-2 rounded-full hover:bg-stone-100 dark:hover:bg-stone-800 text-stone-400 transition-colors" title="Download Report"><Download className="w-5 h-5" /></button>
                 <button onClick={handleWebSearch} className="p-2 rounded-full hover:bg-stone-100 dark:hover:bg-stone-800 text-stone-400 transition-colors" title="Visual Evidence"><ImageIcon className="w-5 h-5" /></button>
                 <button onClick={onToggleSave} className={`p-2 rounded-full hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors ${isSaved ? 'text-academic-gold' : 'text-stone-400 dark:text-stone-500'}`}><Bookmark className={`w-5 h-5 ${isSaved ? 'fill-current' : ''}`} /></button>

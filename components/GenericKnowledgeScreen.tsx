@@ -1,6 +1,6 @@
 
 import React, { useEffect, useState } from 'react';
-import { ArrowLeft, BookOpen, Share2, Bookmark, Download, Activity, Globe, Brain, History, Loader2, AlertTriangle, Layers, Zap, TrendingUp, Users, Quote, MessageSquare } from 'lucide-react';
+import { ArrowLeft, BookOpen, Share2, Bookmark, Download, Activity, Globe, Brain, History, Loader2, AlertTriangle, Layers, Zap, TrendingUp, Users, Quote, MessageSquare, Printer } from 'lucide-react';
 import { fetchGenericTopic } from '../services/searchService';
 import LoadingScreen from './LoadingScreen';
 import { IconRenderer } from './IconMap';
@@ -101,6 +101,13 @@ const GenericKnowledgeScreen: React.FC<GenericKnowledgeScreenProps> = ({ query, 
             </div>
           </div>
           <div className="flex items-center gap-2">
+              <button 
+                onClick={() => window.print()} 
+                className="p-2 rounded-full text-stone-400 hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors"
+                title="Print Report"
+              >
+                  <Printer className="w-5 h-5" />
+              </button>
               <button 
                 onClick={handleDownload} 
                 className="p-2 rounded-full text-stone-400 hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors"

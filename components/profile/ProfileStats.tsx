@@ -38,10 +38,10 @@ export const ProfileStats: React.FC<ProfileStatsProps> = ({ stats }) => {
                 <h3 className="text-xs font-bold uppercase tracking-widest text-stone-500 mb-4 flex items-center gap-2">
                     <Brain className="w-4 h-4" /> Intellectual Capital
                 </h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                    <StatCard label="Quizzes Aced" value={stats.quizzesPerfect} icon={Award} color="bg-purple-500" />
-                    <StatCard label="Books Archived" value={stats.booksArchived} icon={BookOpen} color="bg-pink-500" />
-                    <StatCard label="Debates Won" value={stats.debatesWon} icon={Award} color="bg-amber-500" />
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                    <StatCard label="Quizzes" value={stats.quizzesPerfect} icon={Award} color="bg-purple-500" />
+                    <StatCard label="Books" value={stats.booksArchived} icon={BookOpen} color="bg-pink-500" />
+                    <StatCard label="Debates" value={stats.debatesWon} icon={Award} color="bg-amber-500" />
                     <StatCard label="Flashcards" value={stats.flashcardsReviewed} icon={Brain} color="bg-cyan-500" />
                 </div>
             </div>

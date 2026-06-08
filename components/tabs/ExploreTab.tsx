@@ -2,7 +2,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { EXPLORE_HIERARCHY } from '../../data/exploreData';
 import { COUNTRIES_DATA } from '../../data/countriesData';
-import { ArrowUpRight, Building2, ChevronRight, Scale, Globe, Shield, BookOpen, Vote, Map, Users, Database, GraduationCap, Gamepad2, FileText, Landmark, Clock, Search, ChevronLeft, Lightbulb, Coins, Microscope, Tv, Lock, Home, BarChart2, MoreHorizontal, Bookmark, ArrowRightLeft } from 'lucide-react';
+import { ArrowUpRight, Building2, ChevronRight, Scale, Globe, Shield, BookOpen, Vote, Map, Users, Database, GraduationCap, Gamepad2, FileText, Landmark, Clock, Search, ChevronLeft, Lightbulb, Coins, Microscope, Tv, Lock, Home, BarChart2, MoreHorizontal, Bookmark, ArrowRightLeft, ShieldAlert, TriangleAlert } from 'lucide-react';
 import { IconRenderer } from '../IconMap';
 import DisciplineDetailScreen from '../DisciplineDetailScreen';
 import OrgDetailScreen from '../OrgDetailScreen';
@@ -10,6 +10,15 @@ import ReaderView from '../ReaderView';
 import IdeologyDetailScreen from '../IdeologyDetailScreen';
 import EventDetailScreen from '../EventDetailScreen';
 import ConceptDetailModal from '../ConceptDetailModal';
+import ReligionDetailScreen from '../ReligionDetailScreen';
+import TreatyDetailScreen from '../TreatyDetailScreen';
+import MovementDetailScreen from '../MovementDetailScreen';
+import AgencyDetailScreen from '../AgencyDetailScreen';
+import ElectionDetailScreen from '../ElectionDetailScreen';
+import LegalCaseDetailScreen from '../LegalCaseDetailScreen';
+import ScandalDetailScreen from '../ScandalDetailScreen';
+import ThinkTankDetailScreen from '../ThinkTankDetailScreen';
+import UniversityDetailScreen from '../UniversityDetailScreen';
 
 // Root Categories Config - Ordered for visual balance
 const EXPLORE_CATS = [
@@ -31,9 +40,18 @@ const EXPLORE_CATS = [
     { id: 'Constitutions', label: 'Constitutions', icon: FileText, desc: 'Legal Frameworks' },
     { id: 'Laws & Systems', label: 'Law', icon: Scale, desc: 'Legal Systems' },
     { id: 'Ideologies', label: 'Ideologies', icon: Lightbulb, desc: 'Belief Systems' },
+    { id: 'Religions', label: 'Religions', icon: Globe, desc: 'Faiths & Cults' },
     { id: 'Political Systems', label: 'Systems', icon: Building2, desc: 'Regime Types' },
     { id: 'Political Economy', label: 'Economy', icon: Coins, desc: 'Wealth & Power' },
     { id: 'Security & Conflict', label: 'Security', icon: Shield, desc: 'War & Peace' },
+    { id: 'Treaties & Pacts', label: 'Treaties', icon: FileText, desc: 'Global Agreements' },
+    { id: 'Social Movements', label: 'Movements', icon: Users, desc: 'Protests & Revolts' },
+    { id: 'Intelligence', label: 'Espionage', icon: ShieldAlert, desc: 'Agencies & Ops' },
+    { id: 'Historical Campaigns', label: 'Precedents', icon: Vote, desc: 'Historical Campaigns' },
+    { id: 'Legal Cases', label: 'Court Cases', icon: Scale, desc: 'Supreme Court & Law' },
+    { id: 'Scandals & Crises', label: 'Scandals', icon: TriangleAlert, desc: 'Political Crises' },
+    { id: 'Think Tanks', label: 'Think Tanks', icon: Lightbulb, desc: 'Policy Institutes' },
+    { id: 'Universities', label: 'Universities', icon: GraduationCap, desc: 'Academic Institutions' },
     { id: 'Books & Lit', label: 'Library', icon: BookOpen, desc: 'Core Texts' },
     { id: 'Journals', label: 'Journals', icon: FileText, desc: 'Academic Papers' },
     { id: 'Archives', label: 'Archives', icon: FileText, desc: 'Primary Sources' },
@@ -43,7 +61,7 @@ const EXPLORE_CATS = [
 interface NavItem {
     name: string;
     data: any;
-    type: 'List' | 'Discipline' | 'Org' | 'Ideology' | 'Reader' | 'Concept' | 'Event' | 'System';
+    type: 'List' | 'Discipline' | 'Org' | 'Ideology' | 'Religion' | 'Treaty' | 'Movement' | 'Intelligence' | 'Election' | 'LegalCase' | 'Scandal' | 'Reader' | 'Concept' | 'Event' | 'System' | 'ThinkTank' | 'University';
 }
 
 interface ExploreTabProps {
@@ -167,6 +185,24 @@ const ExploreTab: React.FC<ExploreTabProps> = ({ onNavigate, onAddToCompare, onT
           setNavStack([...navStack, { name: item.name, data: null, type: 'Org' }]);
       } else if (item.type === 'Ideology') {
           setNavStack([...navStack, { name: item.name, data: null, type: 'Ideology' }]);
+      } else if (item.type === 'Religion') {
+          setNavStack([...navStack, { name: item.name, data: null, type: 'Religion' }]);
+      } else if (item.type === 'Treaty') {
+          setNavStack([...navStack, { name: item.name, data: null, type: 'Treaty' }]);
+      } else if (item.type === 'Movement') {
+          setNavStack([...navStack, { name: item.name, data: null, type: 'Movement' }]);
+      } else if (item.type === 'Intelligence') {
+          setNavStack([...navStack, { name: item.name, data: null, type: 'Intelligence' }]);
+      } else if (item.type === 'Election') {
+          setNavStack([...navStack, { name: item.name, data: null, type: 'Election' }]);
+      } else if (item.type === 'LegalCase') {
+          setNavStack([...navStack, { name: item.name, data: null, type: 'LegalCase' }]);
+      } else if (item.type === 'Scandal') {
+          setNavStack([...navStack, { name: item.name, data: null, type: 'Scandal' }]);
+      } else if (item.type === 'ThinkTank') {
+          setNavStack([...navStack, { name: item.name, data: null, type: 'ThinkTank' }]);
+      } else if (item.type === 'University') {
+          setNavStack([...navStack, { name: item.name, data: null, type: 'University' }]);
       } else if (item.type === 'Event' || item.type === 'Era') { // Handle History events
           setNavStack([...navStack, { name: item.name, data: null, type: 'Event' }]);
       } else if (item.type === 'Document' || item.type === 'Book' || item.type === 'Journal') {
@@ -312,6 +348,15 @@ const ExploreTab: React.FC<ExploreTabProps> = ({ onNavigate, onAddToCompare, onT
         />
       );
       if (current.type === 'Ideology') return <IdeologyDetailScreen ideologyName={current.name} onClose={goBack} />;
+      if (current.type === 'Religion') return <ReligionDetailScreen religionName={current.name} onClose={goBack} />;
+      if (current.type === 'Treaty') return <TreatyDetailScreen treatyName={current.name} onClose={goBack} />;
+      if (current.type === 'Movement') return <MovementDetailScreen movementName={current.name} onClose={goBack} />;
+      if (current.type === 'Intelligence') return <AgencyDetailScreen agencyName={current.name} onClose={goBack} />;
+      if (current.type === 'Election') return <ElectionDetailScreen electionName={current.name} onClose={goBack} />;
+      if (current.type === 'LegalCase') return <LegalCaseDetailScreen caseName={current.name} onClose={goBack} />;
+      if (current.type === 'Scandal') return <ScandalDetailScreen scandalName={current.name} onClose={goBack} />;
+      if (current.type === 'ThinkTank') return <ThinkTankDetailScreen entityName={current.name} onClose={goBack} />;
+      if (current.type === 'University') return <UniversityDetailScreen entityName={current.name} onClose={goBack} />;
       if (current.type === 'Event') return <EventDetailScreen eventName={current.name} onClose={goBack} />;
       if (current.type === 'Reader') return <ReaderView title={current.name} author="Archive" onClose={goBack} onNavigate={onNavigate} />;
       if (current.type === 'Concept') return <ConceptDetailModal term={current.name} context={activeRootTab} onClose={goBack} />;

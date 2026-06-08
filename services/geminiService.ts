@@ -496,6 +496,332 @@ export const fetchIdeologyDetail = async (name: string): Promise<IdeologyDetail>
     });
 };
 
+export const fetchTreatyDetail = async (name: string): Promise<any> => {
+    return withCache(`treaty_v2_${name}`, async () => {
+        try {
+            const response = await generateWithRetry({
+                model: 'gemini-3-flash-preview',
+                contents: `Analyze the geopolitical treaty or agreement: "${name}". 
+                RETURN STRICT VALID JSON. DO NOT use markdown.
+                {
+                    "name": "Full name",
+                    "type": "Treaty, Pact, Accord, etc.",
+                    "dateSigned": "Date",
+                    "location": "Location signed",
+                    "signatories": ["Country 1", "Country 2"],
+                    "keyTerms": ["Term 1", "Term 2"],
+                    "objective": "Primary objective",
+                    "historicalImpact": "Detailed analysis of its impact",
+                    "aftermath": "Long-term legacy",
+                    "context": "Why was it created?",
+                    "violations": ["Violation 1", "Violation 2"]
+                } ${getLanguageInstruction()}`,
+                config: { responseMimeType: "application/json" }
+            });
+            return safeParse(response.text || '{}', {});
+        } catch (e) { return null; }
+    });
+};
+
+export const fetchMovementDetail = async (name: string): Promise<any> => {
+    return withCache(`movement_v2_${name}`, async () => {
+        try {
+            const response = await generateWithRetry({
+                model: 'gemini-3-flash-preview',
+                contents: `Analyze the social or political movement: "${name}". 
+                RETURN STRICT VALID JSON. DO NOT use markdown.
+                {
+                    "name": "Full name",
+                    "type": "Protest, Revolution, Movement, etc.",
+                    "activeYears": "Time period",
+                    "location": "Location or scope",
+                    "leaders": ["Figure 1", "Figure 2"],
+                    "keyTexts": ["Text 1", "Slogan 1"],
+                    "coreGoals": "Primary objectives",
+                    "historicalImpact": "Detailed analysis of outcomes",
+                    "politicalInfluence": "How did it change laws or politics?",
+                    "majorEvents": ["Event 1", "Event 2"],
+                    "tactics": ["Tactic 1", "Tactic 2"],
+                    "opposition": "Who opposed it and how?"
+                } ${getLanguageInstruction()}`,
+                config: { responseMimeType: "application/json" }
+            });
+            return safeParse(response.text || '{}', {});
+        } catch (e) { return null; }
+    });
+};
+
+export const fetchAgencyDetail = async (name: string): Promise<any> => {
+    return withCache(`agency_v2_${name}`, async () => {
+        try {
+            let wikipediaImage = "";
+            try {
+                 const searchRes = await fetch(`https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(name)}&utf8=&format=json&origin=*`);
+                 const searchData = await searchRes.json();
+                 if (searchData.query?.search?.length > 0) {
+                     const pageTitle = searchData.query.search[0].title;
+                     const detailRes = await fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(pageTitle)}`);
+                     const detailData = await detailRes.json();
+                     if (detailData.thumbnail?.source) {
+                         wikipediaImage = detailData.thumbnail.source;
+                     }
+                 }
+            } catch (err) { console.warn('wiki image fetch failed'); }
+
+            const response = await generateWithRetry({
+                model: 'gemini-3-flash-preview',
+                contents: `Analyze the intelligence agency or specific operational group: "${name}". 
+                RETURN STRICT VALID JSON. DO NOT use markdown.
+                {
+                    "name": "Full name",
+                    "type": "Domestic Intelligence, Foreign Intelligence, etc.",
+                    "foundedYear": "Year",
+                    "country": "Country of origin",
+                    "keyFigures": ["Director 1", "Figure 2"],
+                    "coreFocus": ["Focus 1", "Focus 2"],
+                    "jurisdiction": "Scope of operations",
+                    "historicalImpact": "Broad role in geopolitics",
+                    "politicalInfluence": "Relationship with state leaders",
+                    "majorOperations": ["Operation 1", "Operation 2"],
+                    "controversies": ["Scandal 1", "Scandal 2"],
+                    "capabilities": ["HUMINT", "SIGINT"]
+                } ${getLanguageInstruction()}`,
+                config: { responseMimeType: "application/json" }
+            });
+            const parsed: any = safeParse(response.text || '{}', {});
+            parsed.imageUrl = wikipediaImage;
+            return parsed;
+        } catch (e) { return null; }
+    });
+};
+
+export const fetchElectionDetail = async (name: string): Promise<any> => {
+    return withCache(`election_v1_${name}`, async () => {
+        try {
+            let wikipediaImage = "";
+            try {
+                 const searchRes = await fetch(`https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(name)}&utf8=&format=json&origin=*`);
+                 const searchData = await searchRes.json();
+                 if (searchData.query?.search?.length > 0) {
+                     const pageTitle = searchData.query.search[0].title;
+                     const detailRes = await fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(pageTitle)}`);
+                     const detailData = await detailRes.json();
+                     if (detailData.thumbnail?.source) {
+                         wikipediaImage = detailData.thumbnail.source;
+                     }
+                 }
+            } catch (err) { console.warn('wiki image fetch failed'); }
+
+            const response = await generateWithRetry({
+                model: 'gemini-3-flash-preview',
+                contents: `Analyze the political election or campaign: "${name}". 
+                RETURN STRICT VALID JSON. DO NOT use markdown.
+                {
+                    "name": "Full name",
+                    "type": "General Election, Referendum, Presidential Campaign, etc.",
+                    "year": "Year",
+                    "country": "Country",
+                    "candidates": [{"name": "Candidate A", "party": "Party A", "votes": "Vote count/percentage", "winner": true}],
+                    "keyIssues": ["Issue 1", "Issue 2"],
+                    "historicalImpact": "Broad role in geopolitics",
+                    "context": "Political climate leading up to the vote",
+                    "aftermath": "What happened after the election?",
+                    "controversies": ["Scandal 1", "Scandal 2"]
+                } ${getLanguageInstruction()}`,
+                config: { responseMimeType: "application/json" }
+            });
+            const parsed: any = safeParse(response.text || '{}', {});
+            parsed.imageUrl = wikipediaImage;
+            return parsed;
+        } catch (e) { return null; }
+    });
+};
+
+export const fetchLegalCaseDetail = async (name: string): Promise<any> => {
+    return withCache(`legal_case_v1_${name}`, async () => {
+        try {
+            const response = await generateWithRetry({
+                model: 'gemini-3-flash-preview',
+                contents: `Analyze the legal case or Supreme Court ruling: "${name}". 
+                RETURN STRICT VALID JSON. DO NOT use markdown.
+                {
+                    "name": "Full name of case",
+                    "type": "Supreme Court Ruling, Landmark Case, etc.",
+                    "year": "Year decided",
+                    "court": "Name of the court",
+                    "voteCount": "e.g., 5-4, 9-0",
+                    "decisionSummary": "Short summary of the final decision",
+                    "questions": ["Question of law 1", "Question 2"],
+                    "majoritySummary": "Summary of the majority opinion",
+                    "majorityAuthor": "Author of majority opinion",
+                    "dissentSummary": "Summary of dissent",
+                    "dissentAuthor": "Author of dissent",
+                    "historicalImpact": "Legal precedent set",
+                    "societalImpact": "Impact on society"
+                } ${getLanguageInstruction()}`,
+                config: { responseMimeType: "application/json" }
+            });
+            return safeParse(response.text || '{}', {});
+        } catch (e) { return null; }
+    });
+};
+
+export const fetchScandalDetail = async (name: string): Promise<any> => {
+    return withCache(`scandal_v1_${name}`, async () => {
+        try {
+            const response = await generateWithRetry({
+                model: 'gemini-3-flash-preview',
+                contents: `Analyze the political scandal or crisis: "${name}". 
+                RETURN STRICT VALID JSON. DO NOT use markdown.
+                {
+                    "name": "Full name",
+                    "type": "Corruption, Wiretapping, Constitutional Crisis, etc.",
+                    "year": "Year",
+                    "country": "Country",
+                    "coreIssue": "Summary of what the scandal actually was",
+                    "keyFigures": ["Person 1", "Person 2"],
+                    "exposure": "How did the public find out?",
+                    "historicalImpact": "Broad role in geopolitics/history",
+                    "fallout": "Resignations, arrests, political shifts",
+                    "reforms": ["Reform 1", "Reform 2"]
+                } ${getLanguageInstruction()}`,
+                config: { responseMimeType: "application/json" }
+            });
+            return safeParse(response.text || '{}', {});
+        } catch (e) { return null; }
+    });
+};
+
+export const fetchUniversityDetail = async (name: string): Promise<any> => {
+    return withCache(`university_v1_${name}`, async () => {
+        try {
+            let wikipediaImage = "";
+            try {
+                 const searchRes = await fetch(`https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(name)}&utf8=&format=json&origin=*`);
+                 const searchData = await searchRes.json();
+                 if (searchData.query?.search?.length > 0) {
+                     const pageTitle = searchData.query.search[0].title;
+                     const detailRes = await fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(pageTitle)}`);
+                     const detailData = await detailRes.json();
+                     if (detailData.thumbnail?.source) {
+                         wikipediaImage = detailData.thumbnail.source;
+                     }
+                 }
+            } catch (err) { console.warn('wiki image fetch failed'); }
+
+            const response = await generateWithRetry({
+                model: 'gemini-3-flash-preview',
+                contents: `Analyze the University: "${name}". 
+                RETURN STRICT VALID JSON. DO NOT use markdown.
+                {
+                    "name": "Full name",
+                    "type": "Public Research University, Private University, etc.",
+                    "year": "Founding year",
+                    "location": "City, Country",
+                    "notableAlumni": ["Alumni 1", "Alumni 2 - Role"],
+                    "historicalImpact": "Broad role in geopolitics, research, and history",
+                    "focusAreas": ["Political Science", "Law", "International Relations"],
+                    "motto": "University motto",
+                    "overview": "Overview of the university and its political science prestige"
+                } ${getLanguageInstruction()}`,
+                config: { responseMimeType: "application/json" }
+            });
+            const parsed: any = safeParse(response.text || '{}', {});
+            parsed.imageUrl = wikipediaImage;
+            return parsed;
+        } catch (e) { return null; }
+    });
+};
+
+export const fetchThinkTankDetail = async (name: string): Promise<any> => {
+    return withCache(`thinktank_v1_${name}`, async () => {
+        try {
+            let wikipediaImage = "";
+            try {
+                 const searchRes = await fetch(`https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(name)}&utf8=&format=json&origin=*`);
+                 const searchData = await searchRes.json();
+                 if (searchData.query?.search?.length > 0) {
+                     const pageTitle = searchData.query.search[0].title;
+                     const detailRes = await fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(pageTitle)}`);
+                     const detailData = await detailRes.json();
+                     if (detailData.thumbnail?.source) {
+                         wikipediaImage = detailData.thumbnail.source;
+                     }
+                 }
+            } catch (err) { console.warn('wiki image fetch failed'); }
+
+            const response = await generateWithRetry({
+                model: 'gemini-3-flash-preview',
+                contents: `Analyze the Think Tank or Policy Institute: "${name}". 
+                RETURN STRICT VALID JSON. DO NOT use markdown.
+                {
+                    "name": "Full name",
+                    "type": "Policy Institute, Advocacy Group, NGO, etc.",
+                    "year": "Founding year",
+                    "headquarters": "City, Country",
+                    "overview": "Overview of what they do",
+                    "keyFocusAreas": ["Policy Area 1", "Policy Area 2"],
+                    "politicalAlignment": "Non-partisan, Conservative, Liberal, etc.",
+                    "influence": "How they influence policy or global relations",
+                    "notableProjects": ["Project 1", "Project 2"],
+                    "keyPeople": ["Person 1 - Role", "Person 2 - Role"]
+                } ${getLanguageInstruction()}`,
+                config: { responseMimeType: "application/json" }
+            });
+            const parsed: any = safeParse(response.text || '{}', {});
+            parsed.imageUrl = wikipediaImage;
+            return parsed;
+        } catch (e) { return null; }
+    });
+};
+
+export const fetchReligionDetail = async (name: string): Promise<any> => {
+    return withCache(`religion_v2_${name}`, async () => {
+        try {
+            let wikipediaImage = "";
+            try {
+                 const searchRes = await fetch(`https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(name + ' religion')}&utf8=&format=json&origin=*`);
+                 const searchData = await searchRes.json();
+                 if (searchData.query?.search?.length > 0) {
+                     const pageTitle = searchData.query.search[0].title;
+                     const detailRes = await fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(pageTitle)}`);
+                     const detailData = await detailRes.json();
+                     if (detailData.thumbnail?.source) {
+                         wikipediaImage = detailData.thumbnail.source;
+                     }
+                 }
+            } catch (err) { console.warn('wiki image fetch failed'); }
+
+            const response = await generateWithRetry({
+                model: 'gemini-3-flash-preview',
+                contents: `Provide an incredibly comprehensive, highly detailed anthropological and historical analysis of the religion, belief system, or cult known as "${name}". 
+                Act as a master theologian and historian. RETURN STRICT VALID JSON. DO NOT use markdown.
+                {
+                    "name": "Full name",
+                    "type": "e.g., Major Religion, Cult, Ancient Mythology",
+                    "origin": "Time and place of origin",
+                    "founders": ["Founder 1", "Founder 2"],
+                    "deities": ["Deity 1", "Deity 2"],
+                    "adherents": "Estimated number of current adherents",
+                    "coreTenets": ["Tenet 1", "Tenet 2", "Tenet 3"],
+                    "sacredTexts": ["Text 1", "Text 2"],
+                    "historicalImpact": "A long paragraph detailing its impact on historical politics, wars, and societies...",
+                    "controversies": ["Controversy or criticism 1", "Controversy 2"],
+                    "politicalInfluence": "How this belief system interacts with government, statecraft, and law...",
+                    "symbolDescription": "Detailed visual description of primary symbol or logo",
+                    "rituals": ["Ritual 1", "Ritual 2", "Ritual 3"],
+                    "sects": ["Major sect 1", "Sect 2"],
+                    "demographics": "Where are adherents located globally?"
+                } ${getLanguageInstruction()}`,
+                config: { responseMimeType: "application/json" }
+            });
+            const parsed: any = safeParse(response.text || '{}', {});
+            parsed.imageUrl = wikipediaImage;
+            return parsed;
+        } catch (e) { return null; }
+    });
+};
+
 export const fetchConceptDetail = async (term: string, context: string): Promise<ConceptDetail> => {
     return withCache(`concept_v3_${term}_${context}`, async () => {
         let wikiExtract = "";

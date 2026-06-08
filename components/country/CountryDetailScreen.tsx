@@ -3,7 +3,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { 
     Globe, MessageCircle, Flag, Map as MapIcon, Users, Crown, Vote, Gavel, Coins, Truck, 
     Shield, History, Brain, Image as ImageIcon, BookOpen, Layers, GraduationCap,
-    Leaf, Cpu, Music, Plane, Palette, Heart, Newspaper, Building2
+    Leaf, Cpu, Music, Plane, Palette, Heart, Newspaper, Building2, Printer
 } from 'lucide-react';
 import { fetchCountryDeepDive } from '../../services/countryService';
 import { CountryDeepDive, CountryMapData, DetailedTimelineEvent } from '../../types';
@@ -182,6 +182,7 @@ const CountryDetailScreen: React.FC<CountryDetailScreenProps> = ({ countryName, 
           </div>
           <div className="p-4 border-t border-stone-200 dark:border-stone-800 bg-stone-50 dark:bg-stone-900/50 flex flex-col gap-2">
               <button onClick={() => { playSFX('click'); onAddToCompare(countryName, 'Country'); }} className="w-full py-2 bg-white dark:bg-stone-800 border border-stone-200 dark:border-stone-700 text-stone-600 dark:text-stone-300 rounded-lg text-xs font-bold uppercase tracking-wider hover:border-academic-accent dark:hover:border-indigo-500 transition-colors">Compare</button>
+              <button onClick={() => window.print()} className="w-full py-2 bg-white dark:bg-stone-800 border border-stone-200 dark:border-stone-700 text-stone-600 dark:text-stone-300 rounded-lg text-xs font-bold uppercase tracking-wider hover:border-academic-accent dark:hover:border-indigo-500 transition-colors">Print</button>
               <button onClick={handleDownload} className="w-full py-2 bg-white dark:bg-stone-800 border border-stone-200 dark:border-stone-700 text-stone-600 dark:text-stone-300 rounded-lg text-xs font-bold uppercase tracking-wider hover:border-academic-accent dark:hover:border-indigo-500 transition-colors">Download</button>
               <button onClick={onToggleSave} className={`w-full py-2 border rounded-lg text-xs font-bold uppercase tracking-wider transition-colors ${isSaved ? 'bg-academic-gold text-white border-academic-gold' : 'bg-transparent border-stone-200 dark:border-stone-700 text-stone-500 hover:border-academic-gold'}`}>{isSaved ? 'Saved' : 'Save Dossier'}</button>
           </div>
@@ -192,6 +193,7 @@ const CountryDetailScreen: React.FC<CountryDetailScreenProps> = ({ countryName, 
           
           {/* MOBILE NAV */}
           <div className="lg:hidden bg-white dark:bg-stone-900 border-b border-stone-200 dark:border-stone-800 overflow-x-auto no-scrollbar flex items-center gap-2 p-2 shadow-sm">
+              <button onClick={() => window.print()} className="flex-none px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider whitespace-nowrap bg-stone-100 dark:bg-stone-800 text-stone-500"><Printer className="w-4 h-4 inline-block mr-1" />Print</button>
               <button onClick={handleDownload} className="flex-none px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider whitespace-nowrap bg-stone-100 dark:bg-stone-800 text-stone-500">Download</button>
               {SECTIONS.map(s => (
                   <button

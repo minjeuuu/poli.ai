@@ -311,11 +311,6 @@ export interface DetailedStats {
     flashcardsReviewed: number;
     accuracyRate: number;
     
-    postsCreated: number;
-    commentsWritten: number;
-    likesReceived: number;
-    citationsReceived: number;
-    
     gamesPlayed?: number; 
     quizzesMastered?: number; 
     flashcardsReview?: number; 
@@ -338,10 +333,6 @@ export const DEFAULT_STATS: DetailedStats = {
     quizzesPerfect: 0,
     flashcardsReviewed: 0,
     accuracyRate: 0,
-    postsCreated: 0,
-    commentsWritten: 0,
-    likesReceived: 0,
-    citationsReceived: 0,
     gamesPlayed: 0,
     quizzesMastered: 0,
     flashcardsReview: 0,

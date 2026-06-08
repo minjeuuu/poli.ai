@@ -2442,3 +2442,603 @@ export const EXPLORE_HIERARCHY: Record<string, { category: string; icon?: string
     }
   ]
 };
+
+EXPLORE_HIERARCHY["Treaties & Pacts"] = [
+    {
+        category: "Global Peace Treaties",
+        icon: "FileText",
+        items: [
+            { name: "Treaty of Versailles (1919)", type: "Treaty" },
+            { name: "Peace of Westphalia (1648)", type: "Treaty" },
+            { name: "Treaty of Tordesillas (1494)", type: "Treaty" },
+            { name: "Congress of Vienna (1815)", type: "Treaty" },
+            { name: "Dayton Agreement (1995)", type: "Treaty" },
+            { name: "Good Friday Agreement (1998)", type: "Treaty" },
+            { name: "Camp David Accords (1978)", type: "Treaty" },
+            { name: "Treaty of Paris (1783)", type: "Treaty" },
+            { name: "Treaty of Portsmouth (1905)", type: "Treaty" },
+            { name: "Oslo Accords (1993)", type: "Treaty" }
+        ]
+    },
+    {
+        category: "Military & Defense Alliances",
+        icon: "ShieldAlert",
+        items: [
+            { name: "North Atlantic Treaty (NATO, 1949)", type: "Treaty" },
+            { name: "Warsaw Pact (1955)", type: "Treaty" },
+            { name: "SEATO (1954)", type: "Treaty" },
+            { name: "CENTO (1955)", type: "Treaty" },
+            { name: "ANZUS Treaty (1951)", type: "Treaty" },
+            { name: "AUKUS (2021)", type: "Treaty" },
+            { name: "Rio Treaty (1947)", type: "Treaty" }
+        ]
+    },
+    {
+        category: "Nuclear & Arms Control",
+        icon: "AlertCircle",
+        items: [
+            { name: "Nuclear Non-Proliferation Treaty (NPT, 1968)", type: "Treaty" },
+            { name: "SALT I (1972)", type: "Treaty" },
+            { name: "SALT II (1979)", type: "Treaty" },
+            { name: "Intermediate-Range Nuclear Forces Treaty (INF, 1987)", type: "Treaty" },
+            { name: "START I (1991)", type: "Treaty" },
+            { name: "New START (2010)", type: "Treaty" },
+            { name: "Comprehensive Nuclear-Test-Ban Treaty (CTBT, 1996)", type: "Treaty" }
+        ]
+    },
+    {
+        category: "Human Rights & Environment",
+        icon: "Globe",
+        items: [
+            { name: "Universal Declaration of Human Rights (1948)", type: "Treaty" },
+            { name: "Geneva Conventions (1949)", type: "Treaty" },
+            { name: "Kyoto Protocol (1997)", type: "Treaty" },
+            { name: "Paris Agreement (2015)", type: "Treaty" },
+            { name: "Montreal Protocol (1987)", type: "Treaty" },
+            { name: "Convention on the Rights of the Child (1989)", type: "Treaty" }
+        ]
+    }
+];
+
+EXPLORE_HIERARCHY["Social Movements"] = [
+    {
+        category: "Civil Rights & Equality",
+        icon: "Users",
+        items: [
+            { name: "American Civil Rights Movement", type: "Movement" },
+            { name: "Anti-Apartheid Movement", type: "Movement" },
+            { name: "Women's Suffrage Movement", type: "Movement" },
+            { name: "Indian Independence Movement", type: "Movement" },
+            { name: "LGBTQ+ Rights Movement", type: "Movement" },
+            { name: "Black Lives Matter", type: "Movement" }
+        ]
+    },
+    {
+        category: "Revolutions & Rebellions",
+        icon: "Flame",
+        items: [
+            { name: "French Revolution", type: "Movement" },
+            { name: "Russian Revolution", type: "Movement" },
+            { name: "American Revolution", type: "Movement" },
+            { name: "Haitian Revolution", type: "Movement" },
+            { name: "Cuban Revolution", type: "Movement" },
+            { name: "Arab Spring", type: "Movement" },
+            { name: "Iranian Revolution", type: "Movement" },
+            { name: "Taiping Rebellion", type: "Movement" }
+        ]
+    },
+    {
+        category: "Labor & Economic",
+        icon: "Building2",
+        items: [
+            { name: "Labor Union Movement", type: "Movement" },
+            { name: "Occupy Wall Street", type: "Movement" },
+            { name: "Luddite Movement", type: "Movement" },
+            { name: "Yellow Vests (Gilets Jaunes)", type: "Movement" }
+        ]
+    }
+];
+
+EXPLORE_HIERARCHY["Intelligence"] = [
+    {
+        category: "North America",
+        icon: "Map",
+        items: [
+            { name: "Central Intelligence Agency (CIA)", type: "Intelligence" },
+            { name: "Federal Bureau of Investigation (FBI)", type: "Intelligence" },
+            { name: "National Security Agency (NSA)", type: "Intelligence" },
+            { name: "Canadian Security Intelligence Service (CSIS)", type: "Intelligence" }
+        ]
+    },
+    {
+        category: "Europe",
+        icon: "Map",
+        items: [
+            { name: "MI6 (Secret Intelligence Service)", type: "Intelligence" },
+            { name: "MI5 (Security Service)", type: "Intelligence" },
+            { name: "DGSE (France)", type: "Intelligence" },
+            { name: "BND (Germany)", type: "Intelligence" },
+            { name: "KGB (Soviet Union)", type: "Intelligence" },
+            { name: "FSB (Russia)", type: "Intelligence" },
+            { name: "GRU (Russia)", type: "Intelligence" },
+            { name: "Stasi (East Germany)", type: "Intelligence" }
+        ]
+    },
+    {
+        category: "Middle East & Asia",
+        icon: "Map",
+        items: [
+            { name: "Mossad (Israel)", type: "Intelligence" },
+            { name: "Shin Bet (Israel)", type: "Intelligence" },
+            { name: "Ministry of State Security (MSS, China)", type: "Intelligence" },
+            { name: "Inter-Services Intelligence (ISI, Pakistan)", type: "Intelligence" },
+            { name: "Research and Analysis Wing (RAW, India)", type: "Intelligence" },
+            { name: "SAVAK (Iran)", type: "Intelligence" },
+            { name: "Cabinet Information and Decision Support Center (Egypt)", type: "Intelligence" }
+        ]
+    }
+];
+EXPLORE_HIERARCHY["Historical Campaigns"] = [
+    {
+        category: "US Presidential Elections",
+        icon: "Vote",
+        items: [
+            { name: "1800 United States presidential election", type: "Election" },
+            { name: "1824 United States presidential election", type: "Election" },
+            { name: "1860 United States presidential election", type: "Election" },
+            { name: "1876 United States presidential election", type: "Election" },
+            { name: "1912 United States presidential election", type: "Election" },
+            { name: "1932 United States presidential election", type: "Election" },
+            { name: "1948 United States presidential election", type: "Election" },
+            { name: "1960 United States presidential election", type: "Election" },
+            { name: "1968 United States presidential election", type: "Election" },
+            { name: "1980 United States presidential election", type: "Election" },
+            { name: "2000 United States presidential election", type: "Election" },
+            { name: "2008 United States presidential election", type: "Election" },
+            { name: "2016 United States presidential election", type: "Election" },
+            { name: "2020 United States presidential election", type: "Election" },
+            { name: "2024 United States presidential election", type: "Election" }
+        ]
+    },
+    {
+        category: "Global Elections & Referendums",
+        icon: "Globe",
+        items: [
+            { name: "1994 South African general election", type: "Election" },
+            { name: "1932 German presidential election", type: "Election" },
+            { name: "1933 German federal election", type: "Election" },
+            { name: "1973 Chilean parliamentary election", type: "Election" },
+            { name: "2016 United Kingdom European Union membership referendum (Brexit)", type: "Election" },
+            { name: "1995 Quebec independence referendum", type: "Election" },
+            { name: "1945 United Kingdom general election", type: "Election" },
+            { name: "1979 United Kingdom general election", type: "Election" },
+            { name: "1989 Polish parliamentary election", type: "Election" },
+            { name: "2009 Iranian presidential election", type: "Election" },
+            { name: "1990 Nicaraguan general election", type: "Election" },
+            { name: "2014 Indian general election", type: "Election" },
+            { name: "1947 Indian general election", type: "Election" },
+            { name: "1999 Venezuelan presidential election", type: "Election" }
+        ]
+    }
+];
+
+EXPLORE_HIERARCHY["Legal Cases"] = [
+    {
+        category: "US Supreme Court: Civil Rights",
+        icon: "Scale",
+        items: [
+            { name: "Dred Scott v. Sandford", type: "LegalCase" },
+            { name: "Plessy v. Ferguson", type: "LegalCase" },
+            { name: "Brown v. Board of Education", type: "LegalCase" },
+            { name: "Loving v. Virginia", type: "LegalCase" },
+            { name: "Heart of Atlanta Motel v. United States", type: "LegalCase" },
+            { name: "Regents of the University of California v. Bakke", type: "LegalCase" },
+            { name: "Obergefell v. Hodges", type: "LegalCase" },
+            { name: "Bostock v. Clayton County", type: "LegalCase" },
+            { name: "Shelby County v. Holder", type: "LegalCase" }
+        ]
+    },
+    {
+        category: "US Supreme Court: Liberty & Privacy",
+        icon: "Scale",
+        items: [
+            { name: "Griswold v. Connecticut", type: "LegalCase" },
+            { name: "Roe v. Wade", type: "LegalCase" },
+            { name: "Planned Parenthood v. Casey", type: "LegalCase" },
+            { name: "Dobbs v. Jackson Women's Health Organization", type: "LegalCase" },
+            { name: "Lawrence v. Texas", type: "LegalCase" },
+            { name: "Cruzan v. Director, Missouri Department of Health", type: "LegalCase" }
+        ]
+    },
+    {
+        category: "US Supreme Court: Power & Procedure",
+        icon: "Scale",
+        items: [
+            { name: "Marbury v. Madison", type: "LegalCase" },
+            { name: "McCulloch v. Maryland", type: "LegalCase" },
+            { name: "Gibbons v. Ogden", type: "LegalCase" },
+            { name: "Korematsu v. United States", type: "LegalCase" },
+            { name: "Nixon v. United States", type: "LegalCase" },
+            { name: "Bush v. Gore", type: "LegalCase" },
+            { name: "Citizens United v. FEC", type: "LegalCase" },
+            { name: "Chevron U.S.A., Inc. v. Natural Resources Defense Council, Inc.", type: "LegalCase" }
+        ]
+    },
+    {
+        category: "Criminal Procedure",
+        icon: "Scale",
+        items: [
+            { name: "Mapp v. Ohio", type: "LegalCase" },
+            { name: "Gideon v. Wainwright", type: "LegalCase" },
+            { name: "Miranda v. Arizona", type: "LegalCase" },
+            { name: "Terry v. Ohio", type: "LegalCase" },
+            { name: "Batson v. Kentucky", type: "LegalCase" }
+        ]
+    },
+    {
+        category: "International Legal Precedents",
+        icon: "Scale",
+        items: [
+            { name: "Nuremberg Trials", type: "LegalCase" },
+            { name: "Tokyo Trials", type: "LegalCase" },
+            { name: "Eichmann Trial", type: "LegalCase" },
+            { name: "Prosecutor v. Tadić (ICTY)", type: "LegalCase" },
+            { name: "Prosecutor v. Akayesu (ICTR)", type: "LegalCase" }
+        ]
+    }
+];
+
+EXPLORE_HIERARCHY["Scandals & Crises"] = [
+    {
+        category: "US Political Scandals",
+        icon: "TriangleAlert",
+        items: [
+            { name: "Watergate Scandal", type: "Scandal" },
+            { name: "Teapot Dome Scandal", type: "Scandal" },
+            { name: "Iran-Contra Affair", type: "Scandal" },
+            { name: "Lewinsky Scandal (Clinton Impeachment)", type: "Scandal" },
+            { name: "Tweed Ring (Tammany Hall)", type: "Scandal" },
+            { name: "Credit Mobilier Scandal", type: "Scandal" },
+            { name: "Pentagon Papers Leak", type: "Scandal" },
+            { name: "Valerie Plame Affair", type: "Scandal" },
+            { name: "Trump-Ukraine Scandal (First Impeachment)", type: "Scandal" }
+        ]
+    },
+    {
+        category: "Global Scandals",
+        icon: "Globe",
+        items: [
+            { name: "Dreyfus Affair", type: "Scandal" },
+            { name: "The Profumo Affair", type: "Scandal" },
+            { name: "Operation Car Wash (Lava Jato)", type: "Scandal" },
+            { name: "Panama Papers Leak", type: "Scandal" },
+            { name: "1MDB Scandal", type: "Scandal" },
+            { name: "Watergate", type: "Scandal" },
+            { name: "South Korean political scandal (2016)", type: "Scandal" },
+            { name: "Bofors Scandal (India)", type: "Scandal" },
+            { name: "Gürtel Case (Spain)", type: "Scandal" },
+            { name: "Mani Pulite (Clean Hands, Italy)", type: "Scandal" },
+            { name: "Lockheed Bribery Scandals", type: "Scandal" }
+        ]
+    }
+];
+
+EXPLORE_HIERARCHY["Think Tanks"] = [
+    {
+        category: "Global Policy Institutes",
+        icon: "Lightbulb",
+        items: [
+            { name: "Brookings Institution", type: "ThinkTank" },
+            { name: "Chatham House", type: "ThinkTank" },
+            { name: "Carnegie Endowment for International Peace", type: "ThinkTank" },
+            { name: "Council on Foreign Relations", type: "ThinkTank" },
+            { name: "RAND Corporation", type: "ThinkTank" },
+            { name: "Center for Strategic and International Studies (CSIS)", type: "ThinkTank" },
+            { name: "Bruegel", type: "ThinkTank" },
+            { name: "French Institute of International Relations (Ifri)", type: "ThinkTank" },
+            { name: "Stockholm International Peace Research Institute (SIPRI)", type: "ThinkTank" },
+            { name: "Heritage Foundation", type: "ThinkTank" },
+            { name: "Amnesty International", type: "ThinkTank" },
+            { name: "Human Rights Watch", type: "ThinkTank" },
+            { name: "Transparency International", type: "ThinkTank" },
+            { name: "Center for American Progress", type: "ThinkTank" },
+            { name: "Woodrow Wilson International Center for Scholars", type: "ThinkTank" },
+            { name: "Peterson Institute for International Economics", type: "ThinkTank" },
+            { name: "Cato Institute", type: "ThinkTank" },
+            { name: "Center for a New American Security", type: "ThinkTank" },
+            { name: "Hoover Institution", type: "ThinkTank" },
+            { name: "Urban Institute", type: "ThinkTank" },
+            { name: "Belfer Center for Science and International Affairs", type: "ThinkTank" },
+            { name: "International Institute for Strategic Studies (IISS)", type: "ThinkTank" },
+            { name: "European Council on Foreign Relations (ECFR)", type: "ThinkTank" },
+            { name: "Centre for European Policy Studies (CEPS)", type: "ThinkTank" },
+            { name: "German Institute for International and Security Affairs (SWP)", type: "ThinkTank" },
+            { name: "Clingendael Institute", type: "ThinkTank" },
+            { name: "Elcano Royal Institute", type: "ThinkTank" },
+            { name: "Italian Institute for International Political Studies (ISPI)", type: "ThinkTank" },
+            { name: "Institute of World Economy and International Relations (IMEMO)", type: "ThinkTank" },
+            { name: "Valdai Discussion Club", type: "ThinkTank" },
+            { name: "China Institutes of Contemporary International Relations (CICIR)", type: "ThinkTank" },
+            { name: "Chinese Academy of Social Sciences (CASS)", type: "ThinkTank" },
+            { name: "Shanghai Institutes for International Studies (SIIS)", type: "ThinkTank" },
+            { name: "Observer Research Foundation (ORF)", type: "ThinkTank" },
+            { name: "Institute for Defence Studies and Analyses (IDSA)", type: "ThinkTank" },
+            { name: "Japan Institute of International Affairs (JIIA)", type: "ThinkTank" },
+            { name: "Korea Institute for International Economic Policy (KIEP)", type: "ThinkTank" },
+            { name: "Asan Institute for Policy Studies", type: "ThinkTank" },
+            { name: "Lowy Institute", type: "ThinkTank" },
+            { name: "Australian Strategic Policy Institute (ASPI)", type: "ThinkTank" },
+            { name: "Rajratna Ambedkar Institute of Public Policy", type: "ThinkTank" },
+            { name: "S. Rajaratnam School of International Studies (RSIS)", type: "ThinkTank" },
+            { name: "Institute of Southeast Asian Studies (ISEAS)", type: "ThinkTank" },
+            { name: "Center for Strategic and International Studies (CSIS Indonesia)", type: "ThinkTank" },
+            { name: "Philippine Institute for Development Studies (PIDS)", type: "ThinkTank" },
+            { name: "Institute for Strategic and Development Studies (ISDS Philippines)", type: "ThinkTank" },
+            { name: "Ateneo School of Government", type: "ThinkTank" },
+            { name: "Stratbase ADR Institute", type: "ThinkTank" },
+            { name: "Philippine Political Science Association", type: "ThinkTank" },
+            { name: "Center for Public Policy Studies (Malaysia)", type: "ThinkTank" },
+            { name: "Thailand Development Research Institute (TDRI)", type: "ThinkTank" },
+            { name: "Institute for Security Studies (ISS Africa)", type: "ThinkTank" },
+            { name: "South African Institute of International Affairs (SAIIA)", type: "ThinkTank" },
+            { name: "Al Ahram Center for Political and Strategic Studies (ACPSS)", type: "ThinkTank" },
+            { name: "King Faisal Center for Research and Islamic Studies", type: "ThinkTank" },
+            { name: "Gulf Research Center", type: "ThinkTank" },
+            { name: "Institute for National Security Studies (INSS Israel)", type: "ThinkTank" },
+            { name: "Fundação Getulio Vargas (FGV)", type: "ThinkTank" },
+            { name: "Centro de Implementación de Políticas Públicas para la Equidad y el Crecimiento (CIPPEC)", type: "ThinkTank" },
+            { name: "Consejo Argentino para las Relaciones Internacionales (CARI)", type: "ThinkTank" },
+            { name: "Mexican Council on Foreign Relations (COMEXI)", type: "ThinkTank" },
+            { name: "ECLAC (Economic Commission for Latin America and the Caribbean)", type: "ThinkTank" }
+        ]
+    }
+];
+
+EXPLORE_HIERARCHY["Universities"] = [
+    {
+        category: "Top Global Universities",
+        icon: "GraduationCap",
+        items: [
+            { name: "Harvard University", type: "University" },
+            { name: "University of Oxford", type: "University" },
+            { name: "Stanford University", type: "University" },
+            { name: "Massachusetts Institute of Technology (MIT)", type: "University" },
+            { name: "University of Cambridge", type: "University" },
+            { name: "Princeton University", type: "University" },
+            { name: "Yale University", type: "University" },
+            { name: "Columbia University", type: "University" },
+            { name: "Sciences Po Paris", type: "University" },
+            { name: "London School of Economics and Political Science (LSE)", type: "University" },
+            { name: "University of Chicago", type: "University" },
+            { name: "University of Pennsylvania", type: "University" },
+            { name: "Johns Hopkins University", type: "University" },
+            { name: "University of California, Berkeley", type: "University" },
+            { name: "University of California, Los Angeles (UCLA)", type: "University" },
+            { name: "Georgetown University", type: "University" },
+            { name: "George Washington University", type: "University" },
+            { name: "American University", type: "University" },
+            { name: "Tufts University (Fletcher School)", type: "University" },
+            { name: "New York University (NYU)", type: "University" },
+            { name: "King's College London", type: "University" },
+            { name: "UCL (University College London)", type: "University" },
+            { name: "University of Edinburgh", type: "University" },
+            { name: "University of Toronto", type: "University" },
+            { name: "McGill University", type: "University" },
+            { name: "University of British Columbia", type: "University" },
+            { name: "National University of Singapore (NUS)", type: "University" },
+            { name: "Nanyang Technological University (NTU)", type: "University" },
+            { name: "Tsinghua University", type: "University" },
+            { name: "Peking University", type: "University" },
+            { name: "Fudan University", type: "University" },
+            { name: "University of Hong Kong (HKU)", type: "University" },
+            { name: "Chinese University of Hong Kong (CUHK)", type: "University" },
+            { name: "National Taiwan University (NTU)", type: "University" },
+            { name: "University of Tokyo", type: "University" },
+            { name: "Kyoto University", type: "University" },
+            { name: "Seoul National University", type: "University" },
+            { name: "Korea University", type: "University" },
+            { name: "Yonsei University", type: "University" },
+            { name: "Australian National University (ANU)", type: "University" },
+            { name: "University of Melbourne", type: "University" },
+            { name: "University of Sydney", type: "University" },
+            { name: "University of Auckland", type: "University" },
+            { name: "University of Delhi", type: "University" },
+            { name: "Jawaharlal Nehru University (JNU)", type: "University" },
+            { name: "University of the Philippines Diliman", type: "University" },
+            { name: "Ateneo de Manila University", type: "University" },
+            { name: "De La Salle University", type: "University" },
+            { name: "University of Santo Tomas", type: "University" },
+            { name: "Chulalongkorn University", type: "University" },
+            { name: "Thammasat University", type: "University" },
+            { name: "Universiti Malaya", type: "University" },
+            { name: "Universitas Indonesia", type: "University" },
+            { name: "University of Cape Town", type: "University" },
+            { name: "University of the Witwatersrand", type: "University" },
+            { name: "American University in Cairo", type: "University" },
+            { name: "Hebrew University of Jerusalem", type: "University" },
+            { name: "Tel Aviv University", type: "University" },
+            { name: "Universidad Nacional Autónoma de México (UNAM)", type: "University" },
+            { name: "Tecnológico de Monterrey", type: "University" },
+            { name: "Universidade de São Paulo (USP)", type: "University" },
+            { name: "Pontificia Universidad Católica de Chile", type: "University" },
+            { name: "Universidad de Buenos Aires (UBA)", type: "University" },
+            { name: "Sorbonne University", type: "University" },
+            { name: "Freie Universität Berlin", type: "University" },
+            { name: "Humboldt-Universität zu Berlin", type: "University" },
+            { name: "Ludwig-Maximilians-Universität München", type: "University" },
+            { name: "Bocconi University", type: "University" },
+            { name: "Sapienza University of Rome", type: "University" },
+            { name: "University of Amsterdam", type: "University" },
+            { name: "Leiden University", type: "University" },
+            { name: "KU Leuven", type: "University" },
+            { name: "ETH Zurich", type: "University" },
+            { name: "Graduate Institute of International and Development Studies (Geneva)", type: "University" },
+            { name: "University of Copenhagen", type: "University" },
+            { name: "Lomonosov Moscow State University", type: "University" },
+            { name: "Moscow State Institute of International Relations (MGIMO)", type: "University" },
+            { name: "Saint Petersburg State University", type: "University" }
+        ]
+    }
+];
+
+EXPLORE_HIERARCHY["Religions"] = [
+    {
+        category: "Major Global Religions",
+        icon: "Globe",
+        items: [
+            { name: "Christianity", type: "Religion" },
+            { name: "Islam", type: "Religion" },
+            { name: "Hinduism", type: "Religion" },
+            { name: "Buddhism", type: "Religion" },
+            { name: "Sikhism", type: "Religion" },
+            { name: "Judaism", type: "Religion" },
+            { name: "Bahá'í Faith", type: "Religion" },
+            { name: "Jainism", type: "Religion" },
+            { name: "Shinto", type: "Religion" },
+            { name: "Taoism", type: "Religion" },
+            { name: "Zoroastrianism", type: "Religion" }
+        ]
+    },
+    {
+        category: "Historical & Ancient Mythologies",
+        icon: "Bank",
+        items: [
+            { name: "Ancient Egyptian Religion", type: "Religion" },
+            { name: "Ancient Greek Religion", type: "Religion" },
+            { name: "Ancient Roman Religion", type: "Religion" },
+            { name: "Norse Religion", type: "Religion" },
+            { name: "Mesopotamian Mythology", type: "Religion" },
+            { name: "Celtic Polytheism", type: "Religion" },
+            { name: "Slavic Native Faith", type: "Religion" },
+            { name: "Aztec Religion", type: "Religion" },
+            { name: "Maya Religion", type: "Religion" },
+            { name: "Inca Religion", type: "Religion" },
+            { name: "Canaanite Religion", type: "Religion" },
+            { name: "Mithraism", type: "Religion" },
+            { name: "Manichaeism", type: "Religion" },
+            { name: "Tengrism", type: "Religion" },
+            { name: "Historical Vedic Religion", type: "Religion" }
+        ]
+    },
+    {
+        category: "Indigenous & Folk Religions",
+        icon: "Users",
+        items: [
+            { name: "Chinese Folk Religion", type: "Religion" },
+            { name: "African Traditional Religions", type: "Religion" },
+            { name: "Native American Religions", type: "Religion" },
+            { name: "Australian Aboriginal Mythology", type: "Religion" },
+            { name: "Vodou (Voodoo)", type: "Religion" },
+            { name: "Santería", type: "Religion" },
+            { name: "Candomblé", type: "Religion" },
+            { name: "Romuva", type: "Religion" },
+            { name: "Ainu Religion", type: "Religion" },
+            { name: "Inuit Religion", type: "Religion" }
+        ]
+    },
+    {
+        category: "New Religious Movements & Cults",
+        icon: "Flame",
+        items: [
+            { name: "Scientology", type: "Religion" },
+            { name: "Mormonism (LDS Church)", type: "Religion" },
+            { name: "Jehovah's Witnesses", type: "Religion" },
+            { name: "Iglesia ni Cristo (INC)", type: "Religion" },
+            { name: "Unification Church (Moonies)", type: "Religion" },
+            { name: "Aum Shinrikyo", type: "Religion" },
+            { name: "Falun Gong", type: "Religion" },
+            { name: "Rastafari", type: "Religion" },
+            { name: "Peoples Temple (Jonestown)", type: "Religion" },
+            { name: "Branch Davidians (Waco)", type: "Religion" },
+            { name: "Heaven's Gate", type: "Religion" },
+            { name: "Satanism (LeVeyan)", type: "Religion" },
+            { name: "Thelema", type: "Religion" },
+            { name: "Wicca", type: "Religion" },
+            { name: "Sokagakkai", type: "Religion" },
+            { name: "Osho Movement (Rajneeshpuram)", type: "Religion" },
+            { name: "Brahma Kumaris", type: "Religion" },
+            { name: "New Age Movement", type: "Religion" },
+            { name: "Nation of Islam", type: "Religion" },
+            { name: "Eckankar", type: "Religion" },
+            { name: "Raëlism", type: "Religion" },
+            { name: "Hare Krishna (ISKCON)", type: "Religion" },
+            { name: "Cao Đài", type: "Religion" },
+            { name: "Tenrikyo", type: "Religion" }
+        ]
+    },
+    {
+        category: "Christian Denominations",
+        icon: "Users",
+        items: [
+            { name: "Catholicism", type: "Religion" },
+            { name: "Eastern Orthodoxy", type: "Religion" },
+            { name: "Oriental Orthodoxy", type: "Religion" },
+            { name: "Protestantism", type: "Religion" },
+            { name: "Anglicanism", type: "Religion" },
+            { name: "Baptist", type: "Religion" },
+            { name: "Methodism", type: "Religion" },
+            { name: "Lutheranism", type: "Religion" },
+            { name: "Calvinism (Reformed)", type: "Religion" },
+            { name: "Pentecostalism", type: "Religion" },
+            { name: "Evangelicalism", type: "Religion" },
+            { name: "Coptic Orthodox Church", type: "Religion" },
+            { name: "Ethiopian Orthodox Tewahedo Church", type: "Religion" }
+        ]
+    },
+    {
+        category: "Islamic Sects & Movements",
+        icon: "Users",
+        items: [
+            { name: "Sunni Islam", type: "Religion" },
+            { name: "Shia Islam", type: "Religion" },
+            { name: "Ibadi Islam", type: "Religion" },
+            { name: "Sufism", type: "Religion" },
+            { name: "Wahhabism", type: "Religion" },
+            { name: "Salafism", type: "Religion" },
+            { name: "Ahmadiyya", type: "Religion" },
+            { name: "Nation of Islam", type: "Religion" },
+            { name: "Druze", type: "Religion" },
+            { name: "Alawites", type: "Religion" },
+            { name: "Alevism", type: "Religion" }
+        ]
+    },
+    {
+        category: "Buddhist Schools",
+        icon: "Users",
+        items: [
+            { name: "Theravada", type: "Religion" },
+            { name: "Mahayana", type: "Religion" },
+            { name: "Vajrayana (Tibetan)", type: "Religion" },
+            { name: "Zen Buddhism", type: "Religion" },
+            { name: "Pure Land Buddhism", type: "Religion" },
+            { name: "Nichiren Buddhism", type: "Religion" }
+        ]
+    },
+    {
+        category: "Hindu Sects & Paths",
+        icon: "Users",
+        items: [
+            { name: "Vaishnavism", type: "Religion" },
+            { name: "Shaivism", type: "Religion" },
+            { name: "Shaktism", type: "Religion" },
+            { name: "Smartism", type: "Religion" },
+            { name: "Advaita Vedanta", type: "Religion" },
+            { name: "Bhakti Movement", type: "Religion" }
+        ]
+    },
+    {
+        category: "Philosophy & Non-Theism",
+        icon: "BookOpen",
+        items: [
+            { name: "Secular Humanism", type: "Religion" },
+            { name: "Atheism", type: "Religion" },
+            { name: "Agnosticism", type: "Religion" },
+            { name: "Deism", type: "Religion" },
+            { name: "Pantheism", type: "Religion" },
+            { name: "Confucianism", type: "Religion" },
+            { name: "Stoicism", type: "Religion" },
+            { name: "Epicureanism", type: "Religion" },
+            { name: "Existentialism", type: "Religion" }
+        ]
+    }
+];
