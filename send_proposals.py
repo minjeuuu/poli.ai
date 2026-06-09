@@ -5,112 +5,22 @@ import getpass
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
-# Define target recipients (115 organizations)
+# Define target recipients (15 corporate, UN, and policy-technical bodies)
 RECIPIENTS = [
-    # --- IVY LEAGUE & TOP US DEPARTMENTS ---
-    {"org": "Harvard University (Department of Government)", "email": "government@wjh.harvard.edu", "city": "Cambridge, Massachusetts, USA"},
-    {"org": "Harvard Kennedy School (Belfer Center)", "email": "belfer_center@hks.harvard.edu", "city": "Cambridge, Massachusetts, USA"},
-    {"org": "Stanford University (Political Science)", "email": "politicalscience@stanford.edu", "city": "Stanford, California, USA"},
-    {"org": "MIT (Department of Political Science)", "email": "polisci@mit.edu", "city": "Cambridge, Massachusetts, USA"},
-    {"org": "Princeton University (Department of Politics)", "email": "politics@princeton.edu", "city": "Princeton, New Jersey, USA"},
-    {"org": "Yale University (Department of Political Science)", "email": "political.science@yale.edu", "city": "New Haven, Connecticut, USA"},
-    {"org": "Columbia University (Political Science)", "email": "polisci@columbia.edu", "city": "New York, New York, USA"},
-    {"org": "University of Chicago (Political Science)", "email": "political-science@uchicago.edu", "city": "Chicago, Illinois, USA"},
-    {"org": "University of Pennsylvania (Political Science)", "email": "polisci@sas.upenn.edu", "city": "Philadelphia, Pennsylvania, USA"},
-    {"org": "Cornell University (Department of Government)", "email": "government@cornell.edu", "city": "Ithaca, New York, USA"},
-    {"org": "Dartmouth College (Department of Government)", "email": "government.department@dartmouth.edu", "city": "Hanover, New Hampshire, USA"},
-    {"org": "Brown University (Political Science)", "email": "political_science@brown.edu", "city": "Providence, Rhode Island, USA"},
-    {"org": "UC Berkeley (Political Science)", "email": "ps-staff@berkeley.edu", "city": "Berkeley, California, USA"},
-    {"org": "UCLA (Political Science)", "email": "polisci@polisci.ucla.edu", "city": "Los Angeles, California, USA"},
-    {"org": "University of Michigan (Political Science)", "email": "polisci@umich.edu", "city": "Ann Arbor, Michigan, USA"},
-    {"org": "Duke University (Political Science)", "email": "politicalscience@duke.edu", "city": "Durham, North Carolina, USA"},
-    {"org": "Johns Hopkins University (Political Science)", "email": "polisci@jhu.edu", "city": "Baltimore, Maryland, USA"},
-    {"org": "Georgetown University (Department of Government)", "email": "government@georgetown.edu", "city": "Washington, D.C., USA"},
-    {"org": "Northwestern University (Political Science)", "email": "political-science@northwestern.edu", "city": "Evanston, Illinois, USA"},
-    {"org": "NYU (Department of Politics)", "email": "politics@nyu.edu", "city": "New York, New York, USA"},
-    {"org": "Vanderbilt University (Political Science)", "email": "political.science@vanderbilt.edu", "city": "Nashville, Tennessee, USA"},
-    {"org": "University of Virginia (Politics)", "email": "politics@virginia.edu", "city": "Charlottesville, Virginia, USA"},
-    {"org": "Emory University (Political Science)", "email": "polisci@emory.edu", "city": "Atlanta, Georgia, USA"},
-    {"org": "Washington University in St. Louis", "email": "polisci@wustl.edu", "city": "St. Louis, Missouri, USA"},
-    {"org": "Carnegie Mellon University", "email": "sds@andrew.cmu.edu", "city": "Pittsburgh, Pennsylvania, USA"},
-    {"org": "Tufts University (Political Science)", "email": "politicalscience@tufts.edu", "city": "Medford, Massachusetts, USA"},
-    {"org": "Boston University (Political Science)", "email": "polisci@bu.edu", "city": "Boston, Massachusetts, USA"},
-    {"org": "George Washington University (PSC)", "email": "psc@gwu.edu", "city": "Washington, D.C., USA"},
-    {"org": "American University (School of Public Affairs)", "email": "spa@american.edu", "city": "Washington, D.C., USA"},
-    {"org": "Syracuse University (Maxwell School)", "email": "maxwell@syracuse.edu", "city": "Syracuse, New York, USA"},
-
-    # --- TOP EUROPEAN & UK DEPARTMENTS ---
-    {"org": "Oxford University (DPIR)", "email": "enquiries@politics.ox.ac.uk", "city": "Oxford, Oxfordshire, United Kingdom"},
-    {"org": "Cambridge University (POLIS)", "email": "enquiries@polis.cam.ac.uk", "city": "Cambridge, Cambridgeshire, United Kingdom"},
-    {"org": "London School of Economics (LSE)", "email": "gov.enquiries@lse.ac.uk", "city": "London, United Kingdom"},
-    {"org": "University College London (UCL)", "email": "political.science@ucl.ac.uk", "city": "London, United Kingdom"},
-    {"org": "King's College London (DPE)", "email": "dpe@kcl.ac.uk", "city": "London, United Kingdom"},
-    {"org": "University of Edinburgh (PIR)", "email": "pir.enquiries@ed.ac.uk", "city": "Edinburgh, Scotland, United Kingdom"},
-    {"org": "Sciences Po Paris", "email": "contact@sciencespo.fr", "city": "Paris, France"},
-    {"org": "Hertie School (Berlin)", "email": "info@hertie-school.org", "city": "Berlin, Germany"},
-    {"org": "Graduate Institute Geneva (IHEID)", "email": "info@graduateinstitute.ch", "city": "Geneva, Switzerland"},
-    {"org": "ETH Zurich (Center for Comparative Studies)", "email": "cis@gess.ethz.ch", "city": "Zurich, Switzerland"},
-    {"org": "Leiden University (Political Science)", "email": "polsci@fsw.leidenuniv.nl", "city": "Leiden, Netherlands"},
-    {"org": "University of Amsterdam (Political Science)", "email": "polsci@uva.nl", "city": "Amsterdam, Netherlands"},
-    {"org": "Copenhagen University (Department of Political Science)", "email": "polsci@ifs.ku.dk", "city": "Copenhagen, Denmark"},
-    {"org": "Stockholm University (Political Science)", "email": "info@statsvet.su.se", "city": "Stockholm, Sweden"},
-    {"org": "Trinity College Dublin", "email": "politics@tcd.ie", "city": "Dublin, Ireland"},
-    {"org": "University of Oslo", "email": "admin@stv.uio.no", "city": "Oslo, Norway"},
-    {"org": "LMU Munich (Geschwister-Scholl-Institute)", "email": "gsi@gsi.uni-muenchen.de", "city": "Munich, Germany"},
-    {"org": "Heidelberg University", "email": "info@ipw.uni-heidelberg.de", "city": "Heidelberg, Germany"},
-    {"org": "EUI Florence", "email": "sps.enquiries@eui.eu", "city": "Florence, Italy"},
-
-    # --- TOP ASIA-PACIFIC & CANADIAN DEPARTMENTS ---
-    {"org": "University of Toronto (Political Science)", "email": "polsci.info@utoronto.ca", "city": "Toronto, Ontario, Canada"},
-    {"org": "McGill University (Political Science)", "email": "politicalscience.arts@mcgill.ca", "city": "Montreal, Quebec, Canada"},
-    {"org": "UBC Vancouver (Political Science)", "email": "politics.dept@ubc.ca", "city": "Vancouver, British Columbia, Canada"},
-    {"org": "University of Melbourne (SSPS)", "email": "ssps-enquiries@unimelb.edu.au", "city": "Melbourne, Victoria, Australia"},
-    {"org": "Australian National University (ANU)", "email": "bell.school@anu.edu.au", "city": "Canberra, ACT, Australia"},
-    {"org": "University of Sydney (SSPS)", "email": "ssps.enquiries@sydney.edu.au", "city": "Sydney, New South Wales, Australia"},
-    {"org": "National University of Singapore (NUS)", "email": "polbox1@nus.edu.sg", "city": "Singapore"},
-    {"org": "Nanyang Technological University (NTU)", "email": "hss-polisci@ntu.edu.sg", "city": "Singapore"},
-    {"org": "University of Tokyo (Graduate School of Law & Politics)", "email": "office@j.u-tokyo.ac.jp", "city": "Tokyo, Japan"},
-    {"org": "Kyoto University", "email": "kyomu@law.kyoto-u.ac.jp", "city": "Kyoto, Japan"},
-    {"org": "Seoul National University", "email": "politics@snu.ac.kr", "city": "Seoul, South Korea"},
-    {"org": "Yonsei University", "email": "politics@yonsei.ac.kr", "city": "Seoul, South Korea"},
-    {"org": "Tsinghua University (International Relations)", "email": "iis@tsinghua.edu.cn", "city": "Beijing, China"},
-    {"org": "Peking University (School of Government)", "email": "sg@pku.edu.cn", "city": "Beijing, China"},
-    {"org": "Fudan University (SIRPA)", "email": "sirpa@fudan.edu.cn", "city": "Shanghai, China"},
-    {"org": "University of Hong Kong (PPA)", "email": "ppa@hku.hk", "city": "Hong Kong"},
-
-    # --- PUBLIC POLICY THINK TANKS ---
-    {"org": "Brookings Institution", "email": "communications@brookings.edu", "city": "Washington, D.C., USA"},
-    {"org": "RAND Corporation", "email": "randinquiries@rand.org", "city": "Santa Monica, California, USA"},
-    {"org": "Center for Strategic and International Studies (CSIS)", "email": "externalrelations@csis.org", "city": "Washington, D.C., USA"},
-    {"org": "Council on Foreign Relations (CFR)", "email": "communications@cfr.org", "city": "New York, New York, USA"},
-    {"org": "Carnegie Endowment for International Peace", "email": "info@ceip.org", "city": "Washington, D.C., USA"},
-    {"org": "Chatham House (RIIA)", "email": "contact@chathamhouse.org", "city": "London, United Kingdom"},
-    {"org": "American Enterprise Institute (AEI)", "email": "info@aei.org", "city": "Washington, D.C., USA"},
-    {"org": "Heritage Foundation", "email": "info@heritage.org", "city": "Washington, D.C., USA"},
-    {"org": "Cato Institute", "email": "info@cato.org", "city": "Washington, D.C., USA"},
-    {"org": "Center for American Progress (CAP)", "email": "progress@americanprogress.org", "city": "Washington, D.C., USA"},
-    {"org": "Hudson Institute", "email": "info@hudson.org", "city": "Washington, D.C., USA"},
-    {"org": "Peterson Institute (PIIE)", "email": "communications@piie.com", "city": "Washington, D.C., USA"},
-    {"org": "International Institute for Strategic Studies (IISS)", "email": "iiss@iiss.org", "city": "London, United Kingdom"},
-    {"org": "Stockholm International Peace Research Institute (SIPRI)", "email": "sipri@sipri.org", "city": "Stockholm, Sweden"},
-    {"org": "German Marshall Fund (GMF)", "email": "info@gmfus.org", "city": "Washington, D.C., USA"},
-    {"org": "Atlantic Council", "email": "info@atlanticcouncil.org", "city": "Washington, D.C., USA"},
-    {"org": "Woodrow Wilson Center", "email": "info@wilsoncenter.org", "city": "Washington, D.C., USA"},
-    {"org": "Center for New American Security (CNAS)", "email": "info@cnas.org", "city": "Washington, D.C., USA"},
-    {"org": "Urban Institute", "email": "externalaffairs@urban.org", "city": "Washington, D.C., USA"},
-
-    # --- CORPORATE AI, POLICY & DEFENSE LABS ---
-    {"org": "Google Research", "email": "research-inquiries@google.com", "city": "Mountain View, California, USA"},
-    {"org": "Microsoft Research (Social Sciences)", "email": "msr-inquire@microsoft.com", "city": "Redmond, Washington, USA"},
-    {"org": "Anthropic (Policy & Society)", "email": "inquiries@anthropic.com", "city": "San Francisco, California, USA"},
-    {"org": "OpenAI (Policy Research)", "email": "contact@openai.com", "city": "San Francisco, California, USA"},
-    {"org": "Palantir Technologies (Defense & Policy)", "email": "info@palantir.com", "city": "Denver, Colorado, USA"},
-    {"org": "IBM Research (Social Computing)", "email": "ibmres@us.ibm.com", "city": "Yorktown Heights, New York, USA"},
-    {"org": "Meta AI (Policy & Research)", "email": "press@meta.com", "city": "Menlo Park, California, USA"},
-    {"org": "Apple AI (Siri & Policy Research)", "email": "media.help@apple.com", "city": "Cupertino, California, USA"},
-    {"org": "Civic Technologies Lab", "email": "info@civictech.org", "city": "New York, New York, USA"},
-    {"org": "GovTech Singapore", "email": "info@tech.gov.sg", "city": "Singapore"},
+    {"org": "Google Research (Policy & Systems)", "email": "research-inquiries@google.com", "city": "Mountain View, California, USA"},
+    {"org": "Google Corporate Development (Acquisitions)", "email": "corpdev@google.com", "city": "Mountain View, California, USA"},
+    {"org": "United Nations Secretariat (OICT)", "email": "oict@un.org", "city": "New York, New York, USA"},
+    {"org": "United Nations University (UNU)", "email": "unu@unu.edu", "city": "Tokyo, Japan"},
+    {"org": "World Bank (Development Research Group)", "email": "research@worldbank.org", "city": "Washington, D.C., USA"},
+    {"org": "International Monetary Fund (IMF Library)", "email": "library@imf.org", "city": "Washington, D.C., USA"},
+    {"org": "OECD (Directorate for STI)", "email": "dsti.contact@oecd.org", "city": "Paris, France"},
+    {"org": "NATO (Science & Technology Organization)", "email": "nato-sto-contact@sto.nato.int", "city": "Brussels, Belgium"},
+    {"org": "Microsoft Research (Computational Social Sciences)", "email": "msr-inquire@microsoft.com", "city": "Redmond, Washington, USA"},
+    {"org": "OpenAI (Policy Research Division)", "email": "contact@openai.com", "city": "San Francisco, California, USA"},
+    {"org": "Anthropic (Policy & Society Group)", "email": "inquiries@anthropic.com", "city": "San Francisco, California, USA"},
+    {"org": "Palantir Technologies (Product & M&A)", "email": "info@palantir.com", "city": "Denver, Colorado, USA"},
     {"org": "Palantir Government Division", "email": "government@palantir.com", "city": "Washington, D.C., USA"},
+    {"org": "GovTech Singapore", "email": "info@tech.gov.sg", "city": "Singapore"},
     {"org": "Defense Advanced Research Projects Agency (DARPA)", "email": "publicrelations@darpa.mil", "city": "Arlington, Virginia, USA"},
 ]
 
@@ -228,6 +138,32 @@ HTML_TEMPLATE = """<!DOCTYPE html>
       color: #1C1917;
       margin: 0;
     }}
+    .screenshots-header {{
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      font-size: 12px;
+      font-weight: bold;
+      color: #7C2D12;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin: 44px 0 20px 0;
+      border-bottom: 1px solid #E5E2D9;
+      padding-bottom: 8px;
+    }}
+    .screenshot-item {{
+      margin-bottom: 32px;
+    }}
+    .screenshot-caption {{
+      font-size: 14px;
+      font-weight: bold;
+      color: #1C1917;
+      margin-bottom: 8px;
+    }}
+    .screenshot-img {{
+      width: 100%;
+      border: 1px solid #E5E2D9;
+      border-radius: 3px;
+      display: block;
+    }}
     .cta-section {{
       text-align: center;
       margin: 40px 0;
@@ -321,10 +257,30 @@ HTML_TEMPLATE = """<!DOCTYPE html>
       </div>
     </div>
 
-    <p>I have compiled a comprehensive visual catalog documenting all 17 tabs and detail screens—including comparative indicator matrices, active simulation models, and the citation reader—which can be reviewed alongside the complete codebase directly on the repository:</p>
+    <div class="screenshots-header">Visual Portfolio (POLI User Interface)</div>
+    
+    <div class="screenshot-item">
+      <div class="screenshot-caption">1. Central Geopolitical &amp; Regional Briefing Dashboard</div>
+      <img src="https://raw.githubusercontent.com/minjeuuu/POLI/main/screenshots/home_screenshot.png" alt="POLI Dashboard" class="screenshot-img">
+    </div>
+    
+    <div class="screenshot-item">
+      <div class="screenshot-caption">2. POLIverse Interactive Cabinet Structure Builder</div>
+      <img src="https://raw.githubusercontent.com/minjeuuu/POLI/main/screenshots/poliverse_screenshot.png" alt="POLIverse Cabinet Simulator" class="screenshot-img">
+    </div>
+    
+    <div class="screenshot-item">
+      <div class="screenshot-caption">3. Scholar Document Reader &amp; Bibliographic Citation Modal</div>
+      <img src="https://raw.githubusercontent.com/minjeuuu/POLI/main/screenshots/reader_screenshot.png" alt="Scholar Reader &amp; Citations" class="screenshot-img">
+    </div>
+
+    <div class="screenshot-item" style="margin-bottom: 0;">
+      <div class="screenshot-caption">4. Geopolitical Semantic Node Network (Explore Interface)</div>
+      <img src="https://raw.githubusercontent.com/minjeuuu/POLI/main/screenshots/explore_tab_screenshot.png" alt="Explore Node Network" class="screenshot-img">
+    </div>
 
     <div class="cta-section">
-      <a href="https://github.com/minjeuuu/POLI" class="btn">View Project &amp; Visuals on GitHub</a>
+      <a href="https://github.com/minjeuuu/POLI" class="btn">View Code &amp; Full Repository on GitHub</a>
     </div>
 
     <p><strong>Acquisition &amp; Licensing Terms:</strong><br>
