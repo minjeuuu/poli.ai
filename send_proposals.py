@@ -206,6 +206,28 @@ HTML_TEMPLATE = """<!DOCTYPE html>
       margin: 0;
       text-align: justify;
     }}
+    .highlight-box {{
+      background-color: #FAF8F5;
+      border: 1px solid #E5E2D9;
+      border-left: 3px solid #7C2D12;
+      padding: 20px;
+      margin: 28px 0;
+    }}
+    .highlight-title {{
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      font-size: 12px;
+      font-weight: bold;
+      color: #7C2D12;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }}
+    .highlight-desc {{
+      font-size: 15px;
+      line-height: 1.6;
+      color: #1C1917;
+      margin: 0;
+    }}
     .cta-section {{
       text-align: center;
       margin: 40px 0;
@@ -259,11 +281,11 @@ HTML_TEMPLATE = """<!DOCTYPE html>
 
     <p>Dear Members of the Department,</p>
 
-    <p>My name is Matthew Cesar Corpuz. I am an independent software developer and Political Science student based in Baguio City. I am writing to formally present a proposal for the acquisition or site-licensing of POLI (<a href="https://github.com/minjeuuu/POLI" style="color: #7C2D12; text-decoration: underline;">https://github.com/minjeuuu/POLI</a>), a high-density client-side workspace designed for geopolitical simulation, cabinet-building, and academic research curation.</p>
+    <p>My name is Matthew Cesar Corpuz. I am an independent software developer and Political Science student based in Baguio City. I am writing to formally present an acquisition and licensing proposal for POLI (<a href="https://github.com/minjeuuu/POLI" style="color: #7C2D12; text-decoration: underline;">https://github.com/minjeuuu/POLI</a>)—a high-density, professional geopolitical simulation, cabinet-building, and academic research workspace that I single-handedly designed and engineered.</p>
 
-    <p>POLI represents a novel synthesis of political science theory and client-side engineering. I designed the platform to bridge the gap between empirical comparative politics models and structured research workflows. To eliminate the high database and infrastructure overhead typical of digital workspaces, the entire application operates client-side, resulting in zero server maintenance and scaling costs.</p>
+    <p>POLI represents a novel synthesis of political science theory and client-side engineering. I designed and built this application to solve the fragmented workflow of comparative politics research and educational simulation. To eliminate the high database, hosting, and server infrastructure overhead typical of digital workspaces, the entire application operates directly on the client's browser, resulting in zero server maintenance and scaling costs.</p>
 
-    <p>While I am highly motivated to continue directing the development of POLI, as a student I lack the institutional funding and infrastructure required to host and scale the platform. Consequently, I am offering POLI for complete intellectual property acquisition. The purchaser will receive 100% ownership of the codebase, custom relational database engines, statebuilder simulator rulesets, and all associated legal rights.</p>
+    <p>While I am highly motivated to continue directing the development of POLI, as an independent student I lack the institutional funding and infrastructure required to scale and maintain the platform. Consequently, I am offering POLI for complete intellectual property acquisition. As the purchaser, your organization will receive 100% ownership of the codebase, custom relational database engines, simulation rulesets, and all associated legal rights.</p>
 
     <div class="feature-list">
       <div class="feature-item">
@@ -276,7 +298,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
       </div>
       <div class="feature-item">
         <div class="feature-title">3. Scholar Reader &amp; Multi-Format Citation Subsystem</div>
-        <div class="feature-desc">A justified reader layout optimized for research sessions. Includes print stylesheet media queries for dossier exports and a bibliographic compiler supporting over 50 regional academic formats (APSA, Chicago, Bluebook, IEEE, BibTeX, and Harvard).</div>
+        <div class="feature-desc">A justified reader layout optimized for research sessions. Includes print stylesheet media queries for instant dossier exports and a bibliographic compiler supporting over 50 regional academic formats (APSA, Chicago, Bluebook, IEEE, BibTeX, and Harvard).</div>
       </div>
       <div class="feature-item">
         <div class="feature-title">4. Pre-Loaded Relational Taxonomies</div>
@@ -288,14 +310,25 @@ HTML_TEMPLATE = """<!DOCTYPE html>
       </div>
     </div>
 
-    <p>A comprehensive visual catalog documenting all 17 tabs and detail screens—including comparative indicator matrices, active simulation models, and the citation reader—can be reviewed alongside the complete codebase directly on the repository:</p>
+    <div class="highlight-box">
+      <div class="highlight-title">Why POLI is a High-Value Asset for Your Institution</div>
+      <div class="highlight-desc">
+        <ul style="margin: 0; padding-left: 20px; font-family: Georgia, serif; font-size: 15px; line-height: 1.65; color: #1C1917;">
+          <li style="margin-bottom: 8px;"><strong>Interactive Pedagogical Sandbox:</strong> POLI can be instantly deployed as a lab simulator in undergraduate or graduate coursework for comparative politics, public policy, or international relations.</li>
+          <li style="margin-bottom: 8px;"><strong>Cost-Free Deployment:</strong> Because the application runs entirely client-side, your department can support thousands of concurrent students or researchers without incurring server or cloud database maintenance fees.</li>
+          <li style="margin-bottom: 0;"><strong>Proprietary Research Tool:</strong> The underlying PADE relational structure allows your researchers to query, edit, and print custom geopolitical dossiers and bibliographies offline.</li>
+        </ul>
+      </div>
+    </div>
+
+    <p>I have compiled a comprehensive visual catalog documenting all 17 tabs and detail screens—including comparative indicator matrices, active simulation models, and the citation reader—which can be reviewed alongside the complete codebase directly on the repository:</p>
 
     <div class="cta-section">
       <a href="https://github.com/minjeuuu/POLI" class="btn">View Project &amp; Visuals on GitHub</a>
     </div>
 
     <p><strong>Acquisition &amp; Licensing Terms:</strong><br>
-    We value the outright acquisition of POLI and all associated intellectual property at $850,000 USD. Alternatively, we are open to institution-wide site licensing agreements starting at $85,000 USD per annum. I am fully committed to providing 60 days of direct technical transition support and comprehensive documentation to ensure a seamless integration with your existing research or simulation systems.</p>
+    I value the outright acquisition of POLI and all associated intellectual property at $850,000 USD. Alternatively, I am open to institution-wide site licensing agreements starting at $85,000 USD per annum. I am fully committed to providing 60 days of direct technical transition support and comprehensive documentation to ensure a seamless integration with your existing research or simulation systems.</p>
 
     <p>Thank you for your time and consideration of this proposal. If this aligns with your department's technological or research goals, I would welcome the opportunity to schedule a brief technical walkthrough.</p>
 
@@ -312,7 +345,6 @@ HTML_TEMPLATE = """<!DOCTYPE html>
 """
 
 def format_org_name(org):
-    # Formats orgs like "Harvard University (Department of Government)" to split lines
     if "(" in org:
         parts = org.split("(")
         dept = parts[1].replace(")", "").strip()
