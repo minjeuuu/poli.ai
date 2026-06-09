@@ -328,7 +328,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
     </div>
 
     <p><strong>Acquisition &amp; Licensing Terms:</strong><br>
-    I value the outright acquisition of POLI and all associated intellectual property at $850,000 USD. Alternatively, I am open to institution-wide site licensing agreements starting at $85,000 USD per annum. Upon purchase, complete ownership and all legal rights transfer entirely to your organization. The application is fully self-contained, client-side execution ready, and comes with comprehensive code documentation to ensure a clean, independent transition.</p>
+    I value the outright acquisition of POLI and all associated intellectual property at $850,000 USD. Alternatively, I am open to institution-wide site licensing agreements starting at $85,000 USD per annum. Upon purchase, complete ownership and all legal rights transfer entirely to your organization. The application is fully self-contained, client-side execution ready, and comes with comprehensive code documentation to ensure a clean, independent transition. For direct acquisition settlements or licensing payments, my Wise payment link is: <a href="https://wise.com/pay/me/matthewcesarcabaccangc" style="color: #7C2D12; text-decoration: underline;">https://wise.com/pay/me/matthewcesarcabaccangc</a></p>
 
     <p>Thank you for your time and consideration of this proposal. If this aligns with your department's technological or research goals, I would welcome the opportunity to schedule a brief technical walkthrough.</p>
 
