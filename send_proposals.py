@@ -39,7 +39,7 @@ RECIPIENTS = [
     {"org": "OECD (Directorate for STI)", "email": "dsti.contact@oecd.org", "city": "Paris, France"},
 ]
 
-EMAIL_TEMPLATE_SUBJECT = "Formal Proposal: Intellectual Property Acquisition & Site Licensing - POLI Geopolitical Simulation & Research Suite"
+EMAIL_TEMPLATE_SUBJECT = "Formal Proposal: Intellectual Property Acquisition & Site Licensing - POLI Political Science & Curation Workspace"
 
 HTML_TEMPLATE = """<!DOCTYPE html>
 <html>
@@ -193,7 +193,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
   <div class="container">
     <div class="header">
       <div class="app-title">POLI</div>
-      <div class="app-subtitle">Geopolitical Simulation &amp; Scholar Workspace</div>
+      <div class="app-subtitle">Political Science &amp; Research Workspace</div>
     </div>
     
     <div class="recipient-block">
@@ -206,32 +206,40 @@ HTML_TEMPLATE = """<!DOCTYPE html>
 
     <p>Dear Members of the Department,</p>
 
-    <p>My name is Matthew Cesar Corpuz. I am an independent software developer and Political Science student based in Baguio City. I am writing to formally present an acquisition and licensing proposal for POLI (<a href="https://github.com/minjeuuu/POLI" style="color: #7C2D12; text-decoration: underline;">https://github.com/minjeuuu/POLI</a>)—a high-density, professional geopolitical simulation, cabinet-building, and academic research workspace that I single-handedly designed and engineered.</p>
+    <p>My name is Matthew Cesar Corpuz. I am an independent software developer and Political Science student based in Baguio City. I am writing to formally present an acquisition and licensing proposal for POLI (<a href="https://github.com/minjeuuu/POLI" style="color: #7C2D12; text-decoration: underline;">https://github.com/minjeuuu/POLI</a>)—a high-density, professional political science research, curation, and data simulation workspace that I single-handedly designed and engineered.</p>
 
-    <p>POLI represents a novel synthesis of political science theory and client-side engineering. I designed and built this application to solve the fragmented workflow of comparative politics research and educational simulation. To eliminate the high database, hosting, and server infrastructure overhead typical of digital workspaces, the entire application operates directly on the client's browser, resulting in zero server maintenance and scaling costs.</p>
+    <p>POLI represents a novel synthesis of empirical political science taxonomies and client-side engineering. I designed and built this application to solve the fragmented workflow of comparative politics research and document compilation. To eliminate the high database, hosting, and server infrastructure overhead typical of digital workspaces, the entire application operates directly on the client's browser, resulting in zero server maintenance and scaling costs.</p>
 
-    <p>While I am highly motivated to continue directing the development of POLI, as an independent student I lack the institutional funding and infrastructure required to scale and maintain the platform. Consequently, I am offering POLI for complete intellectual property acquisition. As the purchaser, your organization will receive 100% ownership of the codebase, custom relational database engines, simulation rulesets, and all associated legal rights.</p>
+    <p>While I am highly motivated to continue directing the development of POLI, as an independent student I lack the institutional funding and infrastructure required to scale and maintain the platform. Consequently, I am offering POLI for complete intellectual property acquisition. As the purchaser, your organization will receive 100% ownership of the codebase, custom relational database engines, dataset taxonomies, and all associated legal rights.</p>
 
     <div class="feature-list">
       <div class="feature-item">
-        <div class="feature-title">1. Client-Side Relational Database Engine (PADE)</div>
+        <div class="feature-title">1. Multilateral Comparative Matrix Engine</div>
+        <div class="feature-desc">An interactive interface that allows researchers to compare national indicators, bureaucratic parameters, demographic indices, and political structures across multiple countries side-by-side.</div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-title">2. Chronological Almanac &amp; Historical Timeline Archive</div>
+        <div class="feature-desc">A queryable global timeline documenting major treaties, political shifts, and historical profiles, filterable by date ranges, categories, and specific nations.</div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-title">3. Bilingual Scholarly Translation Terminal</div>
+        <div class="feature-desc">A dedicated, side-by-side translation workspace with an integrated terminology glossary database to localize research papers and documentation.</div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-title">4. Dynamic Syllabus Parser &amp; Study Generator</div>
+        <div class="feature-desc">Automatically ingests course syllabus structures, generating comprehensive study plans, conceptual reviews, and interactive study flashcards.</div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-title">5. Pre-Loaded Relational Taxonomies (15+ Specialized Domains)</div>
+        <div class="feature-desc">Built-in schemas and dataset catalogs covering bureaucratic agencies, elections, landmark judicial cases, treaties, political parties, social movements, and university department research portfolios.</div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-title">6. Client-Side Relational Database Engine (PADE)</div>
         <div class="feature-desc">An emulated SQL query engine running over IndexedDB on the client browser. Features a redundant in-memory fallback state machine ensuring zero-crash boots and zero backend database overhead.</div>
       </div>
       <div class="feature-item">
-        <div class="feature-title">2. The POLIverse Simulation Engine</div>
-        <div class="feature-desc">An equation-driven cabinet statebuilder that models governmental appointments, calculating Cabinet Cohesion, Structural Integrity, and Ideological Alignment using structural political science formulas rather than simple heuristics.</div>
-      </div>
-      <div class="feature-item">
-        <div class="feature-title">3. Scholar Reader &amp; Multi-Format Citation Subsystem</div>
-        <div class="feature-desc">A justified reader layout optimized for research sessions. Includes print stylesheet media queries for instant dossier exports and a bibliographic compiler supporting over 50 regional academic formats (APSA, Chicago, Bluebook, IEEE, BibTeX, and Harvard).</div>
-      </div>
-      <div class="feature-item">
-        <div class="feature-title">4. Pre-Loaded Relational Taxonomies</div>
-        <div class="feature-desc">In-depth schemas and data representations covering 15+ specialized geopolitical domains, including state agencies, national elections, judicial cases, treaties, political parties, and social movements.</div>
-      </div>
-      <div class="feature-item">
-        <div class="feature-title">5. High-Density Scholarly UI</div>
-        <div class="feature-desc">A custom, warm off-white (book-like) design system engineered for maximum data density, comparative government matrices, and focused scholarly reading.</div>
+        <div class="feature-title">7. Scholar Reader &amp; Multi-Format Citation Compiler</div>
+        <div class="feature-desc">A justified reader layout optimized for research. Includes print stylesheets for instant dossier exports and a bibliographic compiler supporting over 50 regional academic formats (APSA, Chicago, Bluebook, IEEE, BibTeX, and Harvard).</div>
       </div>
     </div>
 
