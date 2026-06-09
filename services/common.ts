@@ -3,9 +3,9 @@ import { GoogleGenAI } from "@google/genai";
 
 // Centralized API Client Initialization
 const apiKey = process.env.API_KEY || '';
-if (!apiKey) console.warn("POLI Warning: API_KEY not detected in process.env");
+if (!apiKey) console.warn("POLI Warning: API_KEY not detected in process.env. Using placeholder key.");
 
-export const ai = new GoogleGenAI({ apiKey });
+export const ai = new GoogleGenAI({ apiKey: apiKey || 'DUMMY_KEY_NOT_SET' });
 
 export const GLOBAL_CACHE: Record<string, any> = {};
 

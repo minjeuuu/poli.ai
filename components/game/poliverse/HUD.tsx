@@ -19,7 +19,7 @@ interface HUDProps {
 
 export const HUD: React.FC<HUDProps> = ({ metrics, targets }) => {
     return (
-        <div className="bg-stone-900 text-white p-4 flex flex-col h-full border-l border-stone-800 w-72">
+        <div className="bg-stone-900 text-white p-6 flex flex-col h-full w-full">
             <h3 className="text-xs font-bold uppercase tracking-widest text-stone-500 mb-6 flex items-center gap-2">
                 <Activity className="w-4 h-4 text-academic-gold" /> System Diagnostics
             </h3>

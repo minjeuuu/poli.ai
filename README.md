@@ -1,173 +1,135 @@
-# POLI: A Comprehensive Political Science Research, Simulation, & Curation Workspace
+# POLI: A Geopolitical Taxonomy, Cabinet Builder, and Simulation Workspace
 
-Welcome to **POLI** — an academic-grade, local-first platform designed for political scientists, historians, policy analysts, and students. POLI bridges the gap between structured historical data, geopolitical analysis, ideological taxonomies, and interactive simulations.
-
-The project is built as a client-side React SPA paired with a Node/Express backend that proxies public APIs, aggregates real-time academic feeds, and supports offline-first data persistence.
+POLI is an academic-grade, client-first research platform designed for political scientists, policy analysts, historians, and students of statecraft. The system integrates structured historical databases, political ideology taxonomies, and regional news feeds with interactive simulation engines. It operates as a local-first React Single Page Application (SPA) supported by an Express API gateway.
 
 ---
 
-## 🏛️ System Architecture
+## 1. System Architecture
 
-POLI utilizes a client-first, decoupled architecture optimized for responsiveness, visual polish, and data density:
+The application is built upon a decoupled, client-centric architecture optimized for low-latency visual transitions, high-density data representation, and offline operations.
 
 ```mermaid
 graph TD
-    A[Client Browser] -->|Pseudo-SQL| B[POLI Archive Database Engine]
-    A -->|Auth & Persistence| C[Firebase SDK]
-    A -->|API Calls / RSS / News| D[Express Proxy Server]
-    D -->|Real-Time Feeds| E[External APIs: BBC, Guardian, FEC, etc.]
-    A -->|Generative Content| F[Intelligent Context Gateway]
-    F -->|Failover Routing| G[Gemini / DuckDuckGo / OpenRouter Pool]
+    Client[Client Browser] -->|SQL-like Queries| PADE[POLI Archive Database Engine]
+    Client -->|Authentication| Firebase[Firebase SDK]
+    Client -->|RSS / Civic API Requests| Express[Express Proxy Server]
+    Express -->|Real-time Data Aggregation| ExtAPIs[External APIs: BBC, UK Parl., US Treasury]
+    Client -->|Generative Context requests| Gateway[AI Model Gateway]
+    Gateway -->|Fallbacks| ModelPool[Gemini Pro / Flash / Claude Pool]
 ```
 
-### 1. Client-Side Rendering & UI Engine
-* **Framework**: React 19 + TypeScript, using Vite for hot module reloading and code-split asset bundling.
-* **Styling**: Tailwind CSS combined with custom academic typography (Inter, Merriweather, JetBrains Mono) and theme configurations. Supports responsive fluid densities (`Compact` vs `Spacious`), custom border-radii (`None` to `Full`), and localized print stylesheets.
-* **Transitions**: Framer Motion for smooth tab transitions and immersive slide-in detail screen overlays.
+### 1.1 Client-Side Render Engine
+* **Core Technologies**: React 19, TypeScript, and Vite for asset compilation and hot reloading.
+* **Interface Layout**: Styled using custom Tailwind configurations layered with formal typography hierarchies (Inter, Merriweather, JetBrains Mono). The application implements print-safe layouts, fluid spacing densities (Compact vs. Spacious), and user-customizable border radii.
+* **Motion & Transitions**: Framer Motion controls tab transitions and slide-over detail panels.
 
-### 2. Local-First Database Layer (PADE)
-* **Engine**: Custom SQL-over-IndexedDB simulation layer (`services/database.ts`).
-* **Robust Fallback**: If IndexedDB is blocked or unsupported (e.g. restrictive iframe sandboxes, private browsing sessions), the database engine automatically falls back to an **In-Memory Store** to guarantee that the application initializes and boots successfully without blank screens.
-* **Schema**: Matches a structured relational layout across tables: `users`, `saved_items`, `chats`, `messages`, `history_logs`, and `posts`.
+### 1.2 Local Database Layer (PADE)
+* **Design**: The POLI Archive Database Engine (PADE) is a custom SQL simulation built on top of IndexedDB.
+* **Resilience Fallback**: If IndexedDB is blocked (e.g., in sandboxed browser environments or private navigation sessions), the engine transitions to an in-memory database to prevent fatal startup halts.
 
-### 3. Server Integration & Proxying
-* **Backend**: Express server (`server.ts`) acting as an API proxy and asset controller.
-* **Wildcard SPA Routing**: Standard Express wildcard routing ensures that client-side routes are correctly redirected to the entry point `index.html` in production.
-* **Error Aggregation**: Client-side errors are piped back via `/api/log-error` to the server console for immediate runtime debugging.
+### 1.3 Express API Gateway
+* **Routing**: Coordinates requests in `server.ts`. It acts as an RSS parser, static file controller, and error logger.
+* **SPA Redirection**: Implements wildcard routing (`*`) to direct deep-linked client routes back to `index.html` in production.
+* **Client Telemetry**: Collects runtime front-end exceptions via the `/api/log-error` telemetry endpoint.
 
 ---
 
-## 📂 Codebase Directory Layout
+## 2. Directory Layout and File Organization
 
 ```
-poli/
-├── App.tsx                    # Main App entry, state manager, and router
-├── index.tsx                  # ReactDOM bootstrapper wrapped in global ErrorBoundary
-├── index.html                 # Entry HTML template with custom metadata & Tailwind configuration
-├── tsconfig.json              # TypeScript compilation rules
-├── vite.config.ts             # Vite build definitions, process proxies, and aliases
-├── package.json               # Package manifests and script definitions
+/
+├── App.tsx                    # Application entry point, router, and global state
+├── index.tsx                  # ReactDOM bootstrap wrapped in a global ErrorBoundary
+├── index.html                 # Main template template containing styles and configuration
+├── index.css                  # Core stylesheet and font imports
+├── server.ts                  # Express server for API routing and static delivery
 │
-├── components/                # UI Components & Detail Screens
-│   ├── ErrorBoundary.tsx      # Prevents blank screens on rendering crashes
-│   ├── Layout.tsx             # Responsive shell (GlobalHeader + AnimatePresence + Bottom Nav)
-│   ├── AuthScreen.tsx         # Guest and Firebase authorization gate
-│   ├── LaunchScreen.tsx       # Boot animation with high-fidelity canvas SVG assets
-│   ├── tabs/                  # Tab Modules (Home, Almanac, Explore, Countries, Sim, etc.)
-│   ├── country/               # Geography, demographic, economy, and education subcomponents
-│   └── *DetailScreen.tsx      # 15+ specialized academic detail sheets (e.g. University, Religion)
+├── components/                # UI Modules and Interactive Sheets
+│   ├── ErrorBoundary.tsx      # Front-end crash protection and backend error reporting
+│   ├── Layout.tsx             # Shell wrapper (Header, bottom navigation, dynamic themes)
+│   ├── ReaderView.tsx         # Document viewer with built-in multi-format citation generator
+│   ├── tabs/                  # Main Tab components (Home, Almanac, Explore, Games, etc.)
+│   ├── country/               # Geography, demographic, and economic subpanels
+│   └── game/                  # Simulation games (Poliverse cabinet builder, Crisis engine)
 │
-├── services/                  # Business Logic & Integration Layer
-│   ├── database.ts            # Pseudo-SQL IndexedDB Engine with In-Memory fallback
-│   ├── firebaseService.ts     # Firebase Auth and Firestore persistence initializers
-│   ├── homeService.ts         # News aggregation, daily quote, and context loaders
-│   ├── geminiService.ts       # Generative AI calls with fallback options
-│   ├── soundService.ts        # Synthesized sound effects via browser Web Audio API
-│   └── compareService.ts      # Comparative matrix logic
+├── services/                  # Business Logic and Integrations
+│   ├── database.ts            # SQL-over-IndexedDB service with in-memory fallback
+│   ├── firebaseService.ts     # User authentication and Firebase synchronization
+│   ├── common.ts              # Centralized AI client configuration with key protection
+│   └── soundService.ts        # Synthesized sound effects via browser Web Audio API
 │
-├── data/                      # Static Academic & Historical Datasets
-│   ├── personsData.ts         # High-density database of historical/political figures (25K+ lines)
-│   ├── exploreData.ts         # Structural details for political ideologies, organizations, and disciplines
-│   └── homeData.ts            # Fallback trivia and daily briefing metadata
-│
-└── utils/                     # Helper Modules
-    ├── pdfGenerator.ts        # Dossier compilation via jsPDF
-    └── searchLogic.ts         # Real-time search query matching
+└── data/                      # Historical and Theoretical Datasets
+    ├── personsData.ts         # High-density biographies of historical figures (25K+ lines)
+    └── exploreData.ts         # Taxonomy structures for ideologies and academic disciplines
 ```
 
 ---
 
-## 🛠️ Feature Modules
+## 3. Core Functional Modules
 
-### 1. Daily Briefing Curation
-* Fetches current headlines across major global regions using the backend RSS parser (`/api/news`).
-* Aggregates real-time open government data (UK Parliament, USA spending, FEC candidates) through query matching.
-* Dynamically fetches historical events, political trivia, and customizable context based on the user's selected region.
+### 3.1 Geopolitical Feeds and Regional Context
+The workspace aggregates international headlines by parsing RSS feeds from major international journals (BBC, Al Jazeera, Reuters, NYT, DW) through a backend parser. It matches keywords against civic databases (including the UK Parliament Members API, US Spending API, and FEC Candidate lists) to provide real-time geopolitical briefings.
 
-### 2. Deep Academic Dossiers
-POLI hosts interactive, detailed detail screens for over 15 distinct knowledge domains:
-* **Countries**: Detailed view of governance systems, economy models, demographic splits, geography profiles, and military complex structures.
-* **Political Parties**: Platform breakdowns, historical performance charts, and notable leadership lists.
-* **Universities & Religions**: Immersive justified reading pages covering their core tenets, statecraft influence, and geopolitical/historical impact.
-* **Historical Figures**: Biographies presented in a responsive two-column grid (restoring optimal desktop readability) along with career timelines, controversies, and political works.
+### 3.2 Immersive Dossier Readability and Typography
+To facilitate long-form reading, the detail sheets for countries, ideologies, universities, religions, and biographies enforce academic printing standards:
+* **Alignment**: Text paragraphs are strictly set to `text-justify` and `leading-relaxed` to eliminate ragged margins.
+* **Desktop Grid**: Biographies split into a two-column desktop layout that isolates historical text from chronologies.
+* **Visual Density**: Padding values automatically adjust (`p-4 sm:p-8`) based on viewports to avoid layout crowding.
 
----
+### 3.3 Dynamic Citation Engine
+The workspace document reader includes an inline citation utility supporting standard, technical, legal, and regional style guides:
+* **APA & MLA**: Automatically formats author initials, publishing years, and publisher fields according to APA 7th and MLA 9th guidelines.
+* **Legal & Policy**: Generates Bluebook, ALWD, and OSCOLA formats for treaties and government filings.
+* **Metadata Export**: Exports citation tags in BibTeX, RIS, EndNote, and CSL JSON formats for academic bibliographic software (Zotero, Mendeley).
 
-## 🎨 Academic Reading & Typography Standards
-
-To ensure long-form text readability across diverse screen sizes, POLI adheres to print-like typesetting guidelines:
-* **Alignment & Spacing**: Biographies, statecraft guides, and historical records are set with `text-justify` and `leading-relaxed` (or `leading-8`) to prevent ragged edges.
-* **Responsive Spacing**: Dynamic paddings (`p-6 sm:p-8`) shift gracefully between phone viewports and wide tablets.
-* **Double Column Grid**: Desktop viewports split biographies into a clean two-column grid, separating raw historical records from interactive timelines and career checklists.
-* **Print Stylesheets**: A custom media stylesheet disables sidebars, resets background gradients to clean academic white, and forces page breaks between distinct dossier chapters.
+### 3.4 Poliverse: Statecraft Simulation and Cabinet Builder
+The statecraft simulator allows users to construct a government structure by assigning political entities (Ministers, Ideologies, Laws) into cabinet seats.
+* **Scoring Metrics**: As entities are placed, the simulator calculates Structural Integrity, Ideological Alignment, Economic Viability, and Social Cohesion.
+* **Resilient HUD Drawer**: The system diagnostics panel functions as a collapsible overlay. On mobile devices, it collapses into a compact floating drawer to prevent layout crowding of the interactive canvas.
 
 ---
 
-## 🏛️ Simulation Parameters & Crisis Engine
+## 4. Database Schema Specification
 
-The Statebuilder simulation engine uses custom scoring formulas:
-* **Structural Attributes**: Form of government (e.g., Technocracy, Oligarchy), economy model (e.g., Laissez-faire, Planned Economy), and cultural focus (e.g., Secularism, Traditionalism).
-* **Stability Formula**:
-  $$\text{Stability} = \text{Institutions} \times 0.4 + \text{Economy} \times 0.3 + (1.0 - \text{Corruption}) \times 0.3$$
-* **Crisis Handling**: Crises validate nation status arrays (e.g. debt-to-GDP, military funding levels) to trigger custom event resolutions.
+The relational emulation schema consists of five core tables:
 
----
-
-## ⚙️ Database Schema & Resilience Model
-
-The custom `DatabaseService` coordinates a relational SQL-like emulation on top of the browser's IndexedDB.
-
-### Relational Tables
-| Table Name | Key Fields | Description |
+| Table Name | Key Attributes | Description |
 | :--- | :--- | :--- |
-| `users` | `id`, `username`, `email`, `level`, `xp`, `coins` | Manages academic profile progress and stats. |
-| `saved_items` | `id`, `type`, `title`, `subtitle`, `dateAdded` | Bookmarked dossiers and theories. |
-| `chats` | `id`, `participantName`, `unread`, `archived` | Simulated political debates and dialogues. |
-| `messages` | `id`, `conversationId`, `senderId`, `text`, `timestamp` | Message history log for debate simulations. |
-| `posts` | `id`, `type`, `title`, `author`, `likes`, `comments` | In-app bulletin board for academic discussions. |
-
-### Fallback State Machine
-```mermaid
-graph TD
-    A[App Startup] --> B{IndexedDB Available?}
-    B -->|Yes| C[Open DB Connection]
-    C --> D{Tables Exist?}
-    D -->|No| E[Initialize Schema]
-    D -->|Yes| F[Load User Context]
-    B -->|No/Blocked| G[Log Warning]
-    G --> H[Initialize Memory Store]
-    H --> F
-```
+| `users` | `id`, `username`, `email`, `level`, `xp`, `coins` | Manages user credentials, reading stats, and experience logs. |
+| `saved_items` | `id`, `type`, `title`, `subtitle`, `dateAdded` | Bookmarks for historical documents, countries, and ideologies. |
+| `chats` | `id`, `participantName`, `unread`, `archived` | Thread headers for simulated political debates. |
+| `messages` | `id`, `conversationId`, `senderId`, `text`, `timestamp` | Message history within specific debate threads. |
+| `posts` | `id`, `type`, `title`, `author`, `likes`, `comments` | User discussions and peer annotations inside the workspace. |
 
 ---
 
-## 🚀 Getting Started
+## 5. Development and Installation Guide
 
-### 1. Install Dependencies
+### 5.1 Package Installation
+Download the dependencies using npm:
 ```bash
 npm install
 ```
 
-### 2. Environment Configuration
-Duplicate `.env.example` to `.env` and fill in your keys:
+### 5.2 Environment Setup
+Create a `.env` file in the root directory based on `.env.example`:
 ```env
-GEMINI_API_KEY="your-google-gemini-key"
-CLAUDE_API_KEY="your-anthropic-key"
+GEMINI_API_KEY="your-gemini-api-key"
+CLAUDE_API_KEY="your-anthropic-claude-key"
 ```
+*Note: If no API key is specified, the application will boot with local caching and fallback presets instead of crashing.*
 
-### 3. Development Workflow
-Start the Vite developer watcher and Express API server in development mode:
+### 5.3 Local Development Server
+Launch the compiler and Express backend in watcher mode:
 ```bash
 npm run dev
 ```
-Open [http://localhost:3000](http://localhost:3000) in your browser.
+Open [http://localhost:3000](http://localhost:3000) in your web browser.
 
-### 4. Build and Production Run
-Compile frontend assets into standard production-ready HTML/JS/CSS, and bundle the server using `esbuild`:
+### 5.4 Production Packaging
+Compile and bundle the frontend assets and the server wrapper for deployment:
 ```bash
 npm run build
 npm start
 ```
-This serves the optimized static assets directly out of the `dist/` directory.
-
-Enjoy exploring the political universe with POLI.
+This command builds the static distribution files into the `dist/` directory and serves them through the production server.

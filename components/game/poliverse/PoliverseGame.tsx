@@ -18,6 +18,7 @@ export const PoliverseGame: React.FC = () => {
     const [activeSlotId, setActiveSlotId] = useState<string | null>(null);
     const [activeFilter, setActiveFilter] = useState<EntityType | null>(null);
     const [won, setWon] = useState(false);
+    const [hudOpen, setHudOpen] = useState(true);
 
     // Data
     const allEntities = useMemo(() => getAllGameEntities(), []);
@@ -110,11 +111,41 @@ export const PoliverseGame: React.FC = () => {
             {/* MAIN GAME AREA */}
             <div className="flex-1 overflow-hidden flex relative">
                 
-                {/* HUD */}
-                <HUD metrics={metrics} targets={{ integrity: scenario.targetIntegrity, alignment: scenario.targetAlignment }} />
+                {/* HUD Trigger Button (when closed) */}
+                {!hudOpen && (
+                    <button 
+                        onClick={() => setHudOpen(true)}
+                        className="absolute left-4 top-4 z-40 p-3 bg-stone-900 hover:bg-stone-800 text-white rounded-xl shadow-lg border border-stone-700 flex items-center gap-2 font-mono text-xs uppercase tracking-wider transition-all"
+                    >
+                        <BrainCircuit className="w-4 h-4 text-academic-gold" />
+                        <span>Diagnostics</span>
+                    </button>
+                )}
+
+                {/* HUD PANEL (Responsive Drawer) */}
+                <div className={`
+                    transition-all duration-300 ease-flow
+                    absolute md:relative z-50 md:z-20
+                    left-0 top-0 bottom-0 h-full
+                    bg-stone-900 border-r border-stone-800
+                    flex flex-col
+                    ${hudOpen ? 'translate-x-0 w-72' : '-translate-x-full md:translate-x-0 md:w-0'}
+                `}>
+                    <div className="flex-1 min-h-0 relative">
+                        {/* Collapse Button inside HUD */}
+                        <button 
+                            onClick={() => setHudOpen(false)}
+                            className="absolute top-4 right-4 p-1.5 hover:bg-stone-800 rounded-lg text-stone-400 hover:text-white transition-colors z-30"
+                            title="Collapse HUD"
+                        >
+                            <X className="w-4 h-4" />
+                        </button>
+                        <HUD metrics={metrics} targets={{ integrity: scenario.targetIntegrity, alignment: scenario.targetAlignment }} />
+                    </div>
+                </div>
 
                 {/* CANVAS */}
-                <div className="flex-1 p-8 overflow-y-auto bg-[url('https://www.transparenttextures.com/patterns/graphy.png')]">
+                <div className="flex-1 p-4 md:p-8 overflow-y-auto bg-[url('https://www.transparenttextures.com/patterns/graphy.png')] relative z-10">
                     <div className="max-w-5xl mx-auto">
                         <div className="mb-6 p-6 bg-white dark:bg-stone-900 border-l-4 border-academic-accent dark:border-indigo-500 rounded-r-xl shadow-sm">
                             <h3 className="text-sm font-bold uppercase tracking-widest text-stone-400 mb-2">Briefing</h3>

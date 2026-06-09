@@ -306,25 +306,207 @@ const ReaderView: React.FC<ReaderViewProps> = ({ title, author, onClose, onNavig
   useEffect(() => {
       const year = new Date().getFullYear();
       let text = '';
-      const t = title || 'Untitled';
-      const a = author ;
+      const t = title || 'Untitled Document';
+      const a = author || 'Anonymous Scholar';
       const d = new Date().toLocaleDateString();
+      const url = `http://localhost:3000/archive/${encodeURIComponent(t)}`;
       
-      // Extensive format logic (Simulated for brevity of regex)
+      // Parse author name for initials and last name
+      let lastName = a;
+      let firstNameInitials = '';
+      let upperAuthor = a.toUpperCase();
+      
+      const authorParts = a.split(' ');
+      if (authorParts.length > 1) {
+          lastName = authorParts[authorParts.length - 1];
+          firstNameInitials = authorParts.slice(0, -1).map(p => p.charAt(0) + '.').join(' ');
+      }
+
       switch (citationFormat) {
-          case 'APA': text = `${a}. (${year}). *${t}*. POLI Archives.`; break;
-          case 'MLA': text = `${a}. *${t}*. POLI Archives, ${year}.`; break;
-          case 'Chicago': text = `${a}. "${t}." POLI Archives. Last modified ${year}.`; break;
-          case 'Harvard': text = `${a} (${year}) *${t}*. POLI Archives.`; break;
-          case 'IEEE': text = `[1] ${a}, *${t}*. POLI Archives, ${year}.`; break;
-          case 'Bluebook': text = `${t}, by ${a} (POLI Archives ${year}).`; break;
-          case 'OSCOLA': text = `${a}, *${t}* (POLI Archives ${year})`; break;
-          case 'BibTeX': text = `@misc{poli_${year},\n  author = {${a}},\n  title = {${t}},\n  year = {${year}},\n  publisher = {POLI Archives}\n}`; break;
-          case 'RIS': text = `TY  - BOOK\nAU  - ${a}\nTI  - ${t}\nPY  - ${year}\nPB  - POLI Archives\nER  -`; break;
-          case 'Wikipedia': text = `{{cite web |title=${t} |author=${a} |url=poli://archive |accessdate=${d}}}`; break;
-          case 'Nature': text = `${a}. ${t}. *POLI Arch.* (2024).`; break;
-          case 'Science': text = `${a}, ${t} (POLI Archives, ${year}).`; break;
-          default: text = `${a}. ${t}. POLI Archives (${year}). [Format: ${citationFormat}]`;
+          case 'APA': 
+              text = `${lastName}, ${firstNameInitials} (${year}). *${t}*. POLI Archives. ${url}`; 
+              break;
+          case 'APA6': 
+              text = `${lastName}, ${firstNameInitials} (${year}). *${t}*. City: POLI Archives.`; 
+              break;
+          case 'MLA': 
+              text = `${lastName}, ${a.includes(' ') ? authorParts.slice(0, -1).join(' ') : ''}. *${t}*. POLI Archives, ${year}, ${url}.`; 
+              break;
+          case 'MLA8': 
+              text = `${lastName}, ${a.includes(' ') ? authorParts.slice(0, -1).join(' ') : ''}. *${t}*. POLI Archives, ${year}.`; 
+              break;
+          case 'Chicago': 
+              text = `${lastName}, ${a.includes(' ') ? authorParts.slice(0, -1).join(' ') : ''}. *${t}*. City: POLI Archives, ${year}.`; 
+              break;
+          case 'ChicagoAD': 
+              text = `${lastName}, ${a.includes(' ') ? authorParts.slice(0, -1).join(' ') : ''}. ${year}. *${t}*. City: POLI Archives.`; 
+              break;
+          case 'Harvard': 
+              text = `${lastName}, ${firstNameInitials} ${year}, *${t}*, POLI Archives, City.`; 
+              break;
+          case 'Turabian': 
+              text = `${lastName}, ${a.includes(' ') ? authorParts.slice(0, -1).join(' ') : ''}. *${t}*. City: POLI Archives, ${year}.`; 
+              break;
+          case 'IEEE': 
+              text = `[1] ${firstNameInitials} ${lastName}, *${t}*. City: POLI Archives, ${year}.`; 
+              break;
+          case 'AMA': 
+              text = `1. ${lastName} ${firstNameInitials.replace(/\./g, '')}. *${t}*. City: POLI Archives; ${year}.`; 
+              break;
+          case 'Vancouver': 
+              text = `1. ${lastName} ${firstNameInitials.replace(/\./g, '')}. ${t}. City: POLI Archives; ${year}.`; 
+              break;
+          case 'ACS': 
+              text = `${lastName}, ${firstNameInitials} *${t}*; POLI Archives: City, ${year}.`; 
+              break;
+          case 'CSE': 
+              text = `${lastName} ${firstNameInitials.replace(/\./g, '')}. ${year}. ${t}. City: POLI Archives.`; 
+              break;
+          case 'NLM': 
+              text = `${lastName} ${firstNameInitials.replace(/\./g, '')}. ${t}. City: POLI Archives; ${year}.`; 
+              break;
+          case 'AIP': 
+              text = `${firstNameInitials} ${lastName}, *${t}* (POLI Archives, City, ${year}).`; 
+              break;
+          case 'ASCE': 
+              text = `${lastName}, ${firstNameInitials} (${year}). *${t}*, POLI Archives, City.`; 
+              break;
+          case 'ASME': 
+              text = `${lastName}, ${firstNameInitials}, ${year}, *${t}*, POLI Archives, City.`; 
+              break;
+          case 'Nature': 
+              text = `${lastName}, ${firstNameInitials} ${t}. *POLI Arch.* ${year}.`; 
+              break;
+          case 'Science': 
+              text = `${firstNameInitials} ${lastName}, *${t}* (POLI Archives, ${year}).`; 
+              break;
+          case 'Lancet': 
+              text = `${lastName} ${firstNameInitials.replace(/\./g, '')}. ${t}. *POLI Arch.* ${year}.`; 
+              break;
+          case 'PLOS': 
+              text = `${lastName} ${firstNameInitials} (${year}) ${t}. POLI Archives.`; 
+              break;
+          case 'BioMed': 
+              text = `${lastName} ${firstNameInitials}: ${t}. *POLI Arch* ${year}.`; 
+              break;
+          case 'Cell': 
+              text = `${lastName}, ${firstNameInitials} (${year}). ${t}. POLI Archives.`; 
+              break;
+          case 'Bluebook': 
+              text = `${t}, by ${a} (POLI Archives ${year}).`; 
+              break;
+          case 'ALWD': 
+              text = `${a}, *${t}* (POLI Archives ${year}).`; 
+              break;
+          case 'OSCOLA': 
+              text = `${a}, *${t}* (POLI Archives ${year})`; 
+              break;
+          case 'APSA': 
+              text = `${lastName}, ${a.includes(' ') ? authorParts.slice(0, -1).join(' ') : ''}. ${year}. *${t}*. City: POLI Archives.`; 
+              break;
+          case 'McGill': 
+              text = `${a}, *${t}* (City: POLI Archives, ${year}).`; 
+              break;
+          case 'AGLC': 
+              text = `${a}, *${t}* (POLI Archives, ${year})`; 
+              break;
+          case 'Greenbook': 
+              text = `${a}, *${t}* (POLI Archives, ${year}).`; 
+              break;
+          case 'Indigo': 
+              text = `${a}, *${t}* (POLI Archives ${year}).`; 
+              break;
+          case 'Maroon': 
+              text = `${a}, *${t}* (POLI Archives ${year}).`; 
+              break;
+          case 'ASA': 
+              text = `${lastName}, ${a.includes(' ') ? authorParts.slice(0, -1).join(' ') : ''}. ${year}. *${t}*. City: POLI Archives.`; 
+              break;
+          case 'AAA': 
+              text = `${lastName}, ${a.includes(' ') ? authorParts.slice(0, -1).join(' ') : ''}. ${year}. *${t}*. City: POLI Archives.`; 
+              break;
+          case 'MHRA': 
+              text = `${a}, *${t}* (City: POLI Archives, ${year}).`; 
+              break;
+          case 'LSA': 
+              text = `${lastName}, ${a.includes(' ') ? authorParts.slice(0, -1).join(' ') : ''}. ${year}. ${t}. City: POLI Archives.`; 
+              break;
+          case 'SBL': 
+              text = `${a}, *${t}* (City: POLI Archives, ${year}).`; 
+              break;
+          case 'Oxford': 
+              text = `${lastName}, ${firstNameInitials}, *${t}* (City, POLI Archives, ${year})`; 
+              break;
+          case 'Cambridge': 
+              text = `${lastName}, ${firstNameInitials} (${year}). *${t}*. City: POLI Archives.`; 
+              break;
+          case 'ABNT': 
+              text = `${upperAuthor}. *${t}*. City: POLI Archives, ${year}.`; 
+              break;
+          case 'DIN': 
+              text = `${upperAuthor}: *${t}*. City : POLI Archives, ${year}`; 
+              break;
+          case 'GOST': 
+              text = `${lastName} ${firstNameInitials} ${t}. – City: POLI Archives, ${year}.`; 
+              break;
+          case 'ISO690': 
+              text = `${upperAuthor}. *${t}*. City: POLI Archives, ${year}. Available from: ${url}`; 
+              break;
+          case 'GB7714': 
+              text = `${lastName} ${firstNameInitials.replace(/\./g, '')}. ${t}[M]. City: POLI Archives, ${year}.`; 
+              break;
+          case 'SIST': 
+              text = `${lastName} ${firstNameInitials}. ${t}. City: POLI Archives, ${year}.`; 
+              break;
+          case 'JIS': 
+              text = `${lastName} ${firstNameInitials}: ${t}, POLI Archives, ${year}.`; 
+              break;
+          case 'KS': 
+              text = `${lastName} ${firstNameInitials}, ${t}, City: POLI Archives, ${year}.`; 
+              break;
+          case 'NBN': 
+              text = `${lastName}, ${firstNameInitials}, ${t}, City: POLI Archives, ${year}.`; 
+              break;
+          case 'NP': 
+              text = `${lastName}, ${firstNameInitials} – *${t}*. City: POLI Archives, ${year}.`; 
+              break;
+          case 'UNE': 
+              text = `${lastName}, ${firstNameInitials}. *${t}*. City: POLI Archives, ${year}.`; 
+              break;
+          case 'UNI': 
+              text = `${lastName}, ${firstNameInitials}, *${t}*, City, POLI Archives, ${year}.`; 
+              break;
+          case 'BibTeX': 
+              text = `@book{${lastName.toLowerCase()}${year},\n  author = {${a}},\n  title = {${t}},\n  year = {${year}},\n  publisher = {POLI Archives},\n  url = {${url}}\n}`; 
+              break;
+          case 'RIS': 
+              text = `TY  - BOOK\nAU  - ${a}\nTI  - ${t}\nPY  - ${year}\nPB  - POLI Archives\nUR  - ${url}\nER  -`; 
+              break;
+          case 'EndNote': 
+              text = `%0 Book\n%A ${a}\n%T ${t}\n%D ${year}\n%I POLI Archives\n%U ${url}`; 
+              break;
+          case 'JSON': 
+              text = JSON.stringify({
+                  type: "book",
+                  title: t,
+                  author: [{ family: lastName, given: a.includes(' ') ? authorParts.slice(0, -1).join(' ') : '' }],
+                  issued: { "date-parts": [[year]] },
+                  publisher: "POLI Archives",
+                  URL: url
+              }, null, 2); 
+              break;
+          case 'Wikipedia': 
+              text = `{{cite book |last=${lastName} |first=${a.includes(' ') ? authorParts.slice(0, -1).join(' ') : ''} |title=${t} |year=${year} |publisher=POLI Archives |url=${url} |accessdate=${d}}}`; 
+              break;
+          case 'Reddit': 
+              text = `**${lastName}**, ${firstNameInitials} (${year}). *[${t}](${url})*. POLI Archives.`; 
+              break;
+          case 'X': 
+              text = `“${t}” by ${a} (via POLI Archives, ${year}) ${url}`; 
+              break;
+          default: 
+              text = `${lastName}, ${firstNameInitials} (${year}). *${t}*. POLI Archives.`; 
+              break;
       }
       setGeneratedCitation(text);
       setCitationCopied(false);
@@ -612,53 +794,57 @@ const ReaderView: React.FC<ReaderViewProps> = ({ title, author, onClose, onNavig
 
        {/* CITATION MODAL */}
        {showCitation && (
-           <div className={`absolute top-16 right-4 md:right-16 w-full max-w-sm bg-stone-900 text-white border border-stone-700 rounded-2xl shadow-2xl z-50 flex flex-col max-h-[80vh] animate-in zoom-in-95 origin-top-right`}>
-               <div className="flex justify-between items-center p-4 border-b border-white/10">
-                   <h3 className="text-xs font-bold uppercase tracking-widest text-academic-gold flex items-center gap-2">
-                       <Quote className="w-3 h-3" /> Citation Generator
-                   </h3>
-                   <button onClick={() => setShowCitation(false)}><X className="w-4 h-4 text-stone-400 hover:text-white" /></button>
-               </div>
-               
-               <div className="p-4 border-b border-white/10">
-                   <div className="relative">
-                       <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3 h-3 text-stone-500" />
-                       <input 
-                        type="text" 
-                        placeholder="Search format (e.g. IEEE, Harvard)..."
-                        className="w-full bg-black/30 border border-stone-700 rounded-lg pl-8 pr-3 py-2 text-xs text-white placeholder-stone-500 focus:border-academic-gold outline-none"
-                        value={citationSearch}
-                        onChange={(e) => setCitationSearch(e.target.value)}
-                       />
+           <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
+               <div className="w-full max-w-lg bg-stone-900 text-white border border-stone-850 rounded-2xl shadow-2xl flex flex-col max-h-[85vh] animate-in zoom-in-95 duration-200 overflow-hidden">
+                   <div className="flex justify-between items-center p-4 border-b border-white/10">
+                       <h3 className="text-xs font-bold uppercase tracking-widest text-academic-gold flex items-center gap-2">
+                           <Quote className="w-4 h-4" /> Citation Generator
+                       </h3>
+                       <button onClick={() => setShowCitation(false)} className="p-1.5 hover:bg-white/10 rounded-full transition-colors">
+                           <X className="w-4 h-4 text-stone-400 hover:text-white" />
+                       </button>
                    </div>
-               </div>
-               
-               <div className="flex-1 overflow-y-auto p-2 custom-scrollbar">
-                   <div className="grid grid-cols-2 gap-2">
-                       {filteredCitations.map(fmt => (
-                           <button
-                               key={fmt.id}
-                               onClick={() => setCitationFormat(fmt.id)}
-                               className={`px-3 py-2 text-[10px] font-bold uppercase tracking-wider rounded-md transition-colors border text-left flex flex-col ${citationFormat === fmt.id ? 'bg-white text-black border-white' : 'bg-transparent text-stone-400 border-stone-800 hover:border-stone-600 hover:bg-white/5'}`}
-                           >
-                               <span>{fmt.id}</span>
-                               <span className="opacity-50 text-[8px]">{fmt.name}</span>
-                           </button>
-                       ))}
+                   
+                   <div className="p-4 border-b border-white/10">
+                       <div className="relative">
+                           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-stone-500" />
+                           <input 
+                            type="text" 
+                            placeholder="Search format (e.g. IEEE, Harvard, APSA)..."
+                            className="w-full bg-black/30 border border-stone-700 rounded-lg pl-9 pr-3 py-2 text-sm text-white placeholder-stone-500 focus:border-academic-gold outline-none"
+                            value={citationSearch}
+                            onChange={(e) => setCitationSearch(e.target.value)}
+                           />
+                       </div>
                    </div>
-               </div>
-
-               <div className="p-4 bg-black/50 border-t border-white/10">
-                   <div className="p-3 bg-stone-800/50 rounded-lg border border-white/5 mb-3 font-mono text-[10px] text-stone-300 break-words leading-relaxed text-justify">
-                       {generatedCitation}
+                   
+                   <div className="flex-1 overflow-y-auto p-4 custom-scrollbar">
+                       <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                           {filteredCitations.map(fmt => (
+                               <button
+                                   key={fmt.id}
+                                   onClick={() => setCitationFormat(fmt.id)}
+                                   className={`px-3 py-2 text-[10px] font-bold uppercase tracking-wider rounded-md transition-colors border text-left flex flex-col justify-between h-12 ${citationFormat === fmt.id ? 'bg-white text-black border-white shadow-lg' : 'bg-transparent text-stone-400 border-stone-800 hover:border-stone-600 hover:bg-white/5'}`}
+                               >
+                                   <span>{fmt.id}</span>
+                                   <span className="opacity-60 text-[8px] truncate max-w-full">{fmt.name}</span>
+                               </button>
+                           ))}
+                       </div>
                    </div>
-                   <button 
-                       onClick={handleCopyCitation}
-                       className="w-full py-3 bg-academic-accent text-white font-bold uppercase text-xs tracking-widest rounded-lg hover:bg-indigo-600 transition-colors flex items-center justify-center gap-2"
-                   >
-                       {citationCopied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
-                       {citationCopied ? 'Copied to Clipboard' : 'Copy Citation'}
-                   </button>
+    
+                   <div className="p-4 bg-black/50 border-t border-white/10">
+                       <div className="p-3 bg-stone-800/50 rounded-lg border border-white/5 mb-3 font-mono text-xs text-stone-300 break-words leading-relaxed text-justify select-all">
+                           {generatedCitation}
+                       </div>
+                       <button 
+                           onClick={handleCopyCitation}
+                           className="w-full py-3 bg-academic-accent text-white font-bold uppercase text-xs tracking-widest rounded-lg hover:bg-indigo-600 transition-colors flex items-center justify-center gap-2 shadow-lg"
+                       >
+                           {citationCopied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                           {citationCopied ? 'Copied to Clipboard' : 'Copy Citation'}
+                       </button>
+                   </div>
                </div>
            </div>
        )}
