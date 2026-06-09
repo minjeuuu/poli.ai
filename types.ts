@@ -231,6 +231,10 @@ export interface UserPreferences {
     showBreadcrumbs?: boolean;
     animateTransitions?: boolean;
     geminiApiKey?: string;
+    aiProvider?: 'Gemini' | 'Claude' | 'Groq' | 'OpenRouter' | 'Ollama';
+    aiModel?: string;
+    aiApiKey?: string;
+    aiApiUrl?: string;
 }
 
 export const DEFAULT_PREFS: UserPreferences = {
@@ -292,7 +296,11 @@ export const DEFAULT_PREFS: UserPreferences = {
     cacheSize: 124,
     apiEndpoint: 'https://api.poli.ai/v1',
     debugLogging: false,
-    geminiApiKey: ''
+    geminiApiKey: '',
+    aiProvider: 'Gemini',
+    aiModel: 'gemini-3-pro-preview',
+    aiApiKey: '',
+    aiApiUrl: ''
 };
 
 export interface DetailedStats {

@@ -4,32 +4,49 @@ import { generateMockData } from "./mockDataHelper";
 import firebaseConfig from "../firebase-applet-config.json";
 
 // Centralized API Client Initialization
-const getApiKey = () => {
-    let key = '';
+const getAISettings = () => {
+    let provider = 'Gemini';
+    let model = 'gemini-3-pro-preview';
+    let apiKey = '';
+    let apiUrl = '';
+
     if (typeof window !== 'undefined') {
-        key = localStorage.getItem('poli_gemini_api_key') || '';
+        provider = localStorage.getItem('poli_ai_provider') || 'Gemini';
+        model = localStorage.getItem('poli_ai_model') || (provider === 'Gemini' ? 'gemini-3-pro-preview' : 'llama3');
+        apiKey = localStorage.getItem('poli_ai_api_key') || '';
+        apiUrl = localStorage.getItem('poli_ai_api_url') || '';
+        
+        if (provider === 'Gemini' && !apiKey) {
+            apiKey = localStorage.getItem('poli_gemini_api_key') || '';
+        }
     }
-    if (!key) {
-        key = (process.env.API_KEY || process.env.GEMINI_API_KEY || '');
+
+    if (!apiKey) {
+        if (provider === 'Gemini') {
+            apiKey = (process.env.API_KEY || process.env.GEMINI_API_KEY || firebaseConfig.apiKey || '');
+        } else if (provider === 'Claude') {
+            apiKey = (process.env.CLAUDE_API_KEY || '');
+        } else if (provider === 'Groq') {
+            apiKey = (process.env.GROQ_API_KEY || '');
+        } else if (provider === 'OpenRouter') {
+            apiKey = (process.env.OPENROUTER_API_KEY || '');
+        }
     }
-    if (!key) {
-        key = firebaseConfig.apiKey || '';
-    }
-    return key;
+
+    return { provider, model, apiKey, apiUrl };
 };
 
 let currentKey = '';
 let aiInstance: GoogleGenAI | null = null;
 
 const getAI = () => {
-    const key = getApiKey();
-    if (!aiInstance || key !== currentKey) {
-        currentKey = key;
+    const { apiKey } = getAISettings();
+    if (!aiInstance || apiKey !== currentKey) {
+        currentKey = apiKey;
         try {
-            aiInstance = new GoogleGenAI({ apiKey: key || 'PLACEHOLDER_KEY' });
+            aiInstance = new GoogleGenAI({ apiKey: apiKey || 'PLACEHOLDER_KEY' });
         } catch (e) {
             console.error("GoogleGenAI initialization failed:", e);
-            // Fallback stub
             aiInstance = { models: { generateContent: () => { throw e; } } } as any;
         }
     }
@@ -62,33 +79,133 @@ export const withCache = async <T>(key: string, fetcher: () => Promise<T>): Prom
 };
 
 /**
- * Robust wrapper for AI content generation with automatic retries.
- * Handles 503s, 429s, and network blips with exponential backoff + jitter.
+ * Unified wrapper for AI content generation across multiple providers with retries.
  */
 export const generateWithRetry = async (params: any, retries = 3) => {
+    const { provider, model: selectedModel, apiKey, apiUrl } = getAISettings();
+    const finalModel = selectedModel || params.model;
+    const prompt = typeof params.contents === 'string' ? params.contents : JSON.stringify(params.contents);
+    const system = params.system || "You are an expert political science and history AI assistant. Return raw formatted data strictly following instructions.";
+
+    if (provider === 'Gemini') {
+        for (let i = 0; i <= retries; i++) {
+            try {
+                const geminiParams = {
+                    ...params,
+                    model: finalModel
+                };
+                return await ai.models.generateContent(geminiParams);
+            } catch (e: any) {
+                const isLast = i === retries;
+                const msg = e.message || JSON.stringify(e);
+                console.warn(`Gemini generation failed (Attempt ${i + 1}/${retries + 1}):`, msg);
+                
+                const isPermanent = msg.includes("API_KEY") || 
+                                    msg.includes("API key") || 
+                                    msg.includes("PERMISSION_DENIED") || 
+                                    msg.includes("blocked") || 
+                                    msg.includes("403") ||
+                                    msg.includes("API_KEY_SERVICE_BLOCKED");
+                
+                if (isPermanent || isLast) throw e;
+                
+                const delay = 1000 * Math.pow(2, i) + (Math.random() * 1000);
+                await new Promise(resolve => setTimeout(resolve, delay));
+            }
+        }
+    }
+
+    let endpoint = "";
+    let headers: Record<string, string> = { "Content-Type": "application/json" };
+    let body: any = {};
+
+    if (provider === 'Claude') {
+        endpoint = "https://api.anthropic.com/v1/messages";
+        headers["x-api-key"] = apiKey;
+        headers["anthropic-version"] = "2023-06-01";
+        headers["dangerously-allow-browser"] = "true";
+        body = {
+            model: finalModel || "claude-3-5-sonnet-20240620",
+            max_tokens: 4096,
+            system,
+            messages: [{ role: "user", content: prompt }]
+        };
+    } else if (provider === 'Groq') {
+        endpoint = "https://api.groq.com/openai/v1/chat/completions";
+        headers["Authorization"] = `Bearer ${apiKey}`;
+        body = {
+            model: finalModel || "llama-3.3-70b-versatile",
+            messages: [
+                { role: "system", content: system },
+                { role: "user", content: prompt }
+            ],
+            temperature: 0.2
+        };
+        if (params.config?.responseMimeType === "application/json") {
+            body.response_format = { type: "json_object" };
+        }
+    } else if (provider === 'OpenRouter') {
+        endpoint = "https://openrouter.ai/api/v1/chat/completions";
+        headers["Authorization"] = `Bearer ${apiKey}`;
+        headers["HTTP-Referer"] = "https://poli.ai";
+        headers["X-Title"] = "Poli AI";
+        body = {
+            model: finalModel || "meta-llama/llama-3-8b-instruct:free",
+            messages: [
+                { role: "system", content: system },
+                { role: "user", content: prompt }
+            ],
+            temperature: 0.2
+        };
+    } else if (provider === 'Ollama') {
+        const baseUrl = (apiUrl || "http://localhost:11434").replace(/\/$/, "");
+        endpoint = `${baseUrl}/v1/chat/completions`;
+        body = {
+            model: finalModel || "llama3",
+            messages: [
+                { role: "system", content: system },
+                { role: "user", content: prompt }
+            ],
+            temperature: 0.2
+        };
+        if (params.config?.responseMimeType === "application/json") {
+            body.response_format = { type: "json_object" };
+        }
+    }
+
     for (let i = 0; i <= retries; i++) {
         try {
-            return await ai.models.generateContent(params);
+            const res = await fetch(endpoint, {
+                method: "POST",
+                headers,
+                body: JSON.stringify(body)
+            });
+
+            if (!res.ok) {
+                const errText = await res.text();
+                throw new Error(`AI Provider ${provider} returned ${res.status}: ${errText}`);
+            }
+
+            const data = await res.json();
+            let text = "";
+
+            if (provider === 'Claude') {
+                text = data.content?.[0]?.text || "";
+            } else {
+                text = data.choices?.[0]?.message?.content || "";
+            }
+
+            return { text };
         } catch (e: any) {
             const isLast = i === retries;
-            const msg = e.message || JSON.stringify(e);
-            console.warn(`Gemini generation failed (Attempt ${i + 1}/${retries + 1}):`, msg);
-            
-            const isPermanent = msg.includes("API_KEY") || 
-                                msg.includes("API key") || 
-                                msg.includes("PERMISSION_DENIED") || 
-                                msg.includes("blocked") || 
-                                msg.includes("403") ||
-                                msg.includes("API_KEY_SERVICE_BLOCKED");
-            
-            if (isPermanent || isLast) throw e;
-            
-            // Exponential backoff: 1s, 2s, 4s... plus random jitter
+            console.warn(`Provider ${provider} failed (Attempt ${i + 1}/${retries + 1}):`, e.message || e);
+            if (isLast) throw e;
             const delay = 1000 * Math.pow(2, i) + (Math.random() * 1000);
             await new Promise(resolve => setTimeout(resolve, delay));
         }
     }
-    throw new Error("Gemini generation failed after retries");
+
+    throw new Error(`${provider} generation failed after retries`);
 };
 
 import { generateWithClaude } from "./claudeService";

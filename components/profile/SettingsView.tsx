@@ -57,18 +57,38 @@ const Select = ({ value, options, onChange }: any) => (
 export const SettingsView: React.FC<SettingsViewProps> = ({ prefs, onUpdate }) => {
     const [activeSection, setActiveSection] = useState('appearance');
     const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
-    const [geminiKey, setGeminiKey] = useState(() => {
+    const [showCustomAI, setShowCustomAI] = useState(false);
+    const [aiProvider, setAiProvider] = useState<'Gemini' | 'Claude' | 'Groq' | 'OpenRouter' | 'Ollama'>(() => {
         if (typeof window !== 'undefined') {
-            return prefs.geminiApiKey || localStorage.getItem('poli_gemini_api_key') || '';
+            return (localStorage.getItem('poli_ai_provider') as any) || 'Gemini';
         }
-        return prefs.geminiApiKey || '';
+        return 'Gemini';
+    });
+    const [aiModel, setAiModel] = useState(() => {
+        if (typeof window !== 'undefined') {
+            return localStorage.getItem('poli_ai_model') || '';
+        }
+        return '';
+    });
+    const [aiApiKey, setAiApiKey] = useState(() => {
+        if (typeof window !== 'undefined') {
+            return localStorage.getItem('poli_ai_api_key') || '';
+        }
+        return '';
+    });
+    const [aiApiUrl, setAiApiUrl] = useState(() => {
+        if (typeof window !== 'undefined') {
+            return localStorage.getItem('poli_ai_api_url') || '';
+        }
+        return '';
     });
 
     React.useEffect(() => {
-        if (prefs.geminiApiKey !== undefined) {
-            setGeminiKey(prefs.geminiApiKey || '');
-        }
-    }, [prefs.geminiApiKey]);
+        if (prefs.aiProvider !== undefined) setAiProvider(prefs.aiProvider || 'Gemini');
+        if (prefs.aiModel !== undefined) setAiModel(prefs.aiModel || '');
+        if (prefs.aiApiKey !== undefined) setAiApiKey(prefs.aiApiKey || '');
+        if (prefs.aiApiUrl !== undefined) setAiApiUrl(prefs.aiApiUrl || '');
+    }, [prefs.aiProvider, prefs.aiModel, prefs.aiApiKey, prefs.aiApiUrl]);
 
     React.useEffect(() => {
         const handler = (e: any) => {
@@ -145,24 +165,115 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ prefs, onUpdate }) =
                             {deferredPrompt ? 'Install App' : 'How to Install'}
                         </button>
                     </SettingRow>
-                    <SettingRow label="Gemini API Key" desc="Provide your Google Gemini API Key to enable real-time AI generation. Leave empty to use offline mock fallbacks.">
-                        <input 
-                            type="password" 
-                            placeholder="AIzaSy..."
-                            value={geminiKey}
-                            onChange={(e) => {
-                                const newKey = e.target.value;
-                                setGeminiKey(newKey);
-                                if (typeof window !== 'undefined') {
-                                    localStorage.setItem('poli_gemini_api_key', newKey);
-                                }
-                            }}
-                            onBlur={() => {
-                                update('geminiApiKey', geminiKey);
-                            }}
-                            className="p-2 bg-stone-100 dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-lg text-xs font-mono text-stone-700 dark:text-stone-300 outline-none focus:border-academic-accent w-48"
-                        />
+                    <SettingRow 
+                        label="AI Service Status" 
+                        desc="POLI uses a pre-configured public API key. High-availability online generation is active by default. No setup or IT skills required."
+                    >
+                        <div className="flex flex-col items-end gap-2">
+                            <div className="flex items-center gap-2 px-3 py-1.5 bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-900 rounded-full shadow-sm">
+                                <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
+                                <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-700 dark:text-emerald-400">Connected & Free</span>
+                            </div>
+                            <button 
+                                type="button"
+                                onClick={() => setShowCustomAI(!showCustomAI)}
+                                className="text-[10px] font-bold uppercase tracking-wider text-stone-400 hover:text-academic-accent dark:hover:text-indigo-400 underline transition-colors"
+                            >
+                                {showCustomAI ? 'Hide Custom Provider' : 'Custom AI Provider (Optional)'}
+                            </button>
+                        </div>
                     </SettingRow>
+
+                    {showCustomAI && (
+                        <div className="p-4 bg-stone-50 dark:bg-stone-900/40 rounded-xl border border-stone-200 dark:border-stone-800/80 space-y-4 my-2 animate-in slide-in-from-top-2 duration-300">
+                            <div className="flex justify-between items-center pb-2 border-b border-stone-200 dark:border-stone-800">
+                                <span className="text-xs font-bold uppercase tracking-widest text-academic-gold">Custom AI Config</span>
+                            </div>
+                            
+                            <SettingRow label="AI Service Provider" desc="Select your preferred AI engine fallback.">
+                                <select 
+                                    value={aiProvider}
+                                    onChange={(e) => {
+                                        const val = e.target.value as any;
+                                        setAiProvider(val);
+                                        localStorage.setItem('poli_ai_provider', val);
+                                        update('aiProvider', val);
+                                    }}
+                                    className="p-2 bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-lg text-xs font-bold text-stone-700 dark:text-stone-300 outline-none cursor-pointer"
+                                >
+                                    <option value="Gemini">Google Gemini</option>
+                                    <option value="Claude">Anthropic Claude</option>
+                                    <option value="Groq">Groq (Llama/Qwen)</option>
+                                    <option value="OpenRouter">OpenRouter (Free Models)</option>
+                                    <option value="Ollama">Ollama (Local Offline)</option>
+                                </select>
+                            </SettingRow>
+
+                            {aiProvider !== 'Ollama' && (
+                                <SettingRow 
+                                    label="Custom API Key" 
+                                    desc={`Enter your custom ${aiProvider} API Key.`}
+                                >
+                                    <input 
+                                        type="password"
+                                        placeholder="Paste key here..."
+                                        value={aiApiKey}
+                                        onChange={(e) => {
+                                            const val = e.target.value;
+                                            setAiApiKey(val);
+                                            localStorage.setItem('poli_ai_api_key', val);
+                                        }}
+                                        onBlur={() => update('aiApiKey', aiApiKey)}
+                                        className="p-2 bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-lg text-xs font-mono text-stone-700 dark:text-stone-300 outline-none w-48"
+                                    />
+                                </SettingRow>
+                            )}
+
+                            <SettingRow 
+                                label="Custom AI Model" 
+                                desc="Specify target model ID (leave empty for default fallback)."
+                            >
+                                <input 
+                                    type="text"
+                                    placeholder={
+                                        aiProvider === 'Gemini' ? 'gemini-3-pro-preview' :
+                                        aiProvider === 'Claude' ? 'claude-3-5-sonnet-20240620' :
+                                        aiProvider === 'Groq' ? 'llama-3.3-70b-versatile' :
+                                        aiProvider === 'OpenRouter' ? 'meta-llama/llama-3-8b-instruct:free' : 'llama3'
+                                    }
+                                    value={aiModel}
+                                    onChange={(e) => {
+                                        const val = e.target.value;
+                                        setAiModel(val);
+                                        localStorage.setItem('poli_ai_model', val);
+                                    }}
+                                    onBlur={() => update('aiModel', aiModel)}
+                                    className="p-2 bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-lg text-xs font-mono text-stone-700 dark:text-stone-300 outline-none w-48"
+                                />
+                            </SettingRow>
+
+                            {aiProvider === 'Ollama' && (
+                                <SettingRow 
+                                    label="Local Endpoint URL" 
+                                    desc="The local server port where Ollama API is exposed."
+                                >
+                                    <input 
+                                        type="text"
+                                        placeholder="http://localhost:11434"
+                                        value={aiApiUrl}
+                                        onChange={(e) => {
+                                            const val = e.target.value;
+                                            setAiApiUrl(val);
+                                            localStorage.setItem('poli_ai_api_url', val);
+                                        }}
+                                        onBlur={() => update('aiApiUrl', aiApiUrl)}
+                                        className="p-2 bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-lg text-xs font-mono text-stone-700 dark:text-stone-300 outline-none w-48"
+                                    />
+                                </SettingRow>
+                            )}
+                        </div>
+                    )}
+
                     <SettingRow label="Primary Language" desc="Main interface language (Uses Google Translate engine).">
                         <Select value={prefs.language} options={LANGUAGES} onChange={(v: string) => update('language', v)} />
                     </SettingRow>
