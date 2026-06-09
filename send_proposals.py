@@ -5,23 +5,38 @@ import getpass
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
-# Define target recipients (15 corporate, UN, and policy-technical bodies)
+# Define target recipients (25 corporate tech, AI research labs, defense and global intergovernmental bodies)
 RECIPIENTS = [
+    # --- PREMIER AI RESEARCH LABS & TECH DEVELOPERS ---
     {"org": "Google Research (Policy & Systems)", "email": "research-inquiries@google.com", "city": "Mountain View, California, USA"},
+    {"org": "Google DeepMind (Inquiries)", "email": "deepmind-inquiries@google.com", "city": "London, United Kingdom"},
     {"org": "Google Corporate Development (Acquisitions)", "email": "corpdev@google.com", "city": "Mountain View, California, USA"},
-    {"org": "United Nations Secretariat (OICT)", "email": "oict@un.org", "city": "New York, New York, USA"},
-    {"org": "United Nations University (UNU)", "email": "unu@unu.edu", "city": "Tokyo, Japan"},
-    {"org": "World Bank (Development Research Group)", "email": "research@worldbank.org", "city": "Washington, D.C., USA"},
-    {"org": "International Monetary Fund (IMF Library)", "email": "library@imf.org", "city": "Washington, D.C., USA"},
-    {"org": "OECD (Directorate for STI)", "email": "dsti.contact@oecd.org", "city": "Paris, France"},
-    {"org": "NATO (Science & Technology Organization)", "email": "nato-sto-contact@sto.nato.int", "city": "Brussels, Belgium"},
-    {"org": "Microsoft Research (Computational Social Sciences)", "email": "msr-inquire@microsoft.com", "city": "Redmond, Washington, USA"},
     {"org": "OpenAI (Policy Research Division)", "email": "contact@openai.com", "city": "San Francisco, California, USA"},
     {"org": "Anthropic (Policy & Society Group)", "email": "inquiries@anthropic.com", "city": "San Francisco, California, USA"},
+    {"org": "NVIDIA Research (AI & Systems)", "email": "info@nvidia.com", "city": "Santa Clara, California, USA"},
+    {"org": "Hugging Face (Research & Policy)", "email": "contact@huggingface.co", "city": "New York, New York, USA"},
+    {"org": "Scale AI (Federal & Defense Division)", "email": "info@scale.com", "city": "San Francisco, California, USA"},
+    {"org": "Mistral AI (Research Division)", "email": "contact@mistral.ai", "city": "Paris, France"},
+    {"org": "Cohere (AI Research & Platform)", "email": "info@cohere.com", "city": "Toronto, Ontario, Canada"},
+    {"org": "Microsoft Research (Computational Social Sciences)", "email": "msr-inquire@microsoft.com", "city": "Redmond, Washington, USA"},
+    {"org": "Amazon Science (AWS AI Research)", "email": "aws-inquiries@amazon.com", "city": "Seattle, Washington, USA"},
+    {"org": "Meta AI (Research & Public Policy)", "email": "press@meta.com", "city": "Menlo Park, California, USA"},
+    {"org": "Apple AI (Siri & Machine Learning)", "email": "media.help@apple.com", "city": "Cupertino, California, USA"},
+    {"org": "IBM Research (Social Computing & Networks)", "email": "ibmres@us.ibm.com", "city": "Yorktown Heights, New York, USA"},
+
+    # --- DEFENSE, GOVTECH & CIVIC LABS ---
     {"org": "Palantir Technologies (Product & M&A)", "email": "info@palantir.com", "city": "Denver, Colorado, USA"},
     {"org": "Palantir Government Division", "email": "government@palantir.com", "city": "Washington, D.C., USA"},
-    {"org": "GovTech Singapore", "email": "info@tech.gov.sg", "city": "Singapore"},
     {"org": "Defense Advanced Research Projects Agency (DARPA)", "email": "publicrelations@darpa.mil", "city": "Arlington, Virginia, USA"},
+    {"org": "GovTech Singapore", "email": "info@tech.gov.sg", "city": "Singapore"},
+    {"org": "Civic Technologies Lab", "email": "info@civictech.org", "city": "New York, New York, USA"},
+
+    # --- GLOBAL INTERGOVERNMENTAL BODIES ---
+    {"org": "United Nations Secretariat (OICT)", "email": "oict@un.org", "city": "New York, New York, USA"},
+    {"org": "United Nations University (UNU)", "email": "unu@unu.edu", "city": "Tokyo, Japan"},
+    {"org": "World Bank (Development Economics Research)", "email": "research@worldbank.org", "city": "Washington, D.C., USA"},
+    {"org": "International Monetary Fund (IMF Library)", "email": "library@imf.org", "city": "Washington, D.C., USA"},
+    {"org": "OECD (Directorate for STI)", "email": "dsti.contact@oecd.org", "city": "Paris, France"},
 ]
 
 EMAIL_TEMPLATE_SUBJECT = "Formal Proposal: Intellectual Property Acquisition & Site Licensing - POLI Geopolitical Simulation & Research Suite"
@@ -138,32 +153,6 @@ HTML_TEMPLATE = """<!DOCTYPE html>
       color: #1C1917;
       margin: 0;
     }}
-    .screenshots-header {{
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      font-size: 12px;
-      font-weight: bold;
-      color: #7C2D12;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      margin: 44px 0 20px 0;
-      border-bottom: 1px solid #E5E2D9;
-      padding-bottom: 8px;
-    }}
-    .screenshot-item {{
-      margin-bottom: 32px;
-    }}
-    .screenshot-caption {{
-      font-size: 14px;
-      font-weight: bold;
-      color: #1C1917;
-      margin-bottom: 8px;
-    }}
-    .screenshot-img {{
-      width: 100%;
-      border: 1px solid #E5E2D9;
-      border-radius: 3px;
-      display: block;
-    }}
     .cta-section {{
       text-align: center;
       margin: 40px 0;
@@ -257,30 +246,10 @@ HTML_TEMPLATE = """<!DOCTYPE html>
       </div>
     </div>
 
-    <div class="screenshots-header">Visual Portfolio (POLI User Interface)</div>
-    
-    <div class="screenshot-item">
-      <div class="screenshot-caption">1. Central Geopolitical &amp; Regional Briefing Dashboard</div>
-      <img src="https://raw.githubusercontent.com/minjeuuu/POLI/main/screenshots/home_screenshot.png" alt="POLI Dashboard" class="screenshot-img">
-    </div>
-    
-    <div class="screenshot-item">
-      <div class="screenshot-caption">2. POLIverse Interactive Cabinet Structure Builder</div>
-      <img src="https://raw.githubusercontent.com/minjeuuu/POLI/main/screenshots/poliverse_screenshot.png" alt="POLIverse Cabinet Simulator" class="screenshot-img">
-    </div>
-    
-    <div class="screenshot-item">
-      <div class="screenshot-caption">3. Scholar Document Reader &amp; Bibliographic Citation Modal</div>
-      <img src="https://raw.githubusercontent.com/minjeuuu/POLI/main/screenshots/reader_screenshot.png" alt="Scholar Reader &amp; Citations" class="screenshot-img">
-    </div>
-
-    <div class="screenshot-item" style="margin-bottom: 0;">
-      <div class="screenshot-caption">4. Geopolitical Semantic Node Network (Explore Interface)</div>
-      <img src="https://raw.githubusercontent.com/minjeuuu/POLI/main/screenshots/explore_tab_screenshot.png" alt="Explore Node Network" class="screenshot-img">
-    </div>
+    <p>A comprehensive visual catalog documenting all 17 tabs and detail screens—including comparative indicator matrices, active simulation models, and the citation reader—can be reviewed alongside the complete codebase directly on the repository:</p>
 
     <div class="cta-section">
-      <a href="https://github.com/minjeuuu/POLI" class="btn">View Code &amp; Full Repository on GitHub</a>
+      <a href="https://github.com/minjeuuu/POLI" class="btn">View Project &amp; Visuals on GitHub</a>
     </div>
 
     <p><strong>Acquisition &amp; Licensing Terms:</strong><br>
